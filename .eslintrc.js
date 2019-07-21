@@ -42,6 +42,7 @@ module.exports = {
     /* TypeScript */
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/explicit-member-accessibility": "off",
     /* Imports */
     "import/prefer-default-export": "off",
     /* JavaScript */

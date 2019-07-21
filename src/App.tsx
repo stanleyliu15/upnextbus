@@ -2,7 +2,7 @@ import { registerRootComponent } from "expo";
 import React from "react";
 import { View, Text } from "react-native";
 
-export function App(): JSX.Element {
+export function App() {
   return (
     <View>
       <Text>App</Text>
@@ -10,4 +10,5 @@ export function App(): JSX.Element {
   );
 }
 
+// @ts-ignore
 export default registerRootComponent(App);
