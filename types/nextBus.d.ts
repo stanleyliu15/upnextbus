@@ -14,7 +14,7 @@ declare namespace NextBus {
   interface Direction {
     id: string;
     name: string;
-    shortName?: string;
+    shortName: string;
     useForUI: boolean;
     stopIds: string[];
   }

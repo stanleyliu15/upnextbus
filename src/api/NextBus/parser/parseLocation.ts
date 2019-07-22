@@ -1,6 +1,6 @@
-const parseLocation = (lat: string, lng: string): Geo.Location => ({
+const parseLocation = (lat: string, lon: string): Geo.Location => ({
   lat: parseFloat(lat),
-  lng: parseFloat(lng)
+  lon: parseFloat(lon)
 });
 
 export default parseLocation;

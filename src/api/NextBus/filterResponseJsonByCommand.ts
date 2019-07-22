@@ -9,7 +9,7 @@ export default (command: NextBusAPI.Command, responseJson: any): any => {
   const responseContent = responseJson[COMMAND_CONTENT_KEY_MAP[command]];
 
   if (command === "agencyList") {
-    // the api can return agencies with no data or too much data
+    // the api can return agencies that should not be returned
     return responseContent.filter((agency: NextBusAPI.Agency) => {
       const { tag: agencyId } = agency;
       if (AGENCY_ID_BLACKLIST.includes(agencyId)) {
