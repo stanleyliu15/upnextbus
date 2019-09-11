@@ -1,4 +1,4 @@
-import { arrayify } from "../../../utils/utils";
+import { arrayify } from "../../../utils";
 import parsePrediction from "./parsePrediction";
 
 const parseDirectionP = (directionP: NextBusAPI.DirectionP): NextBus.DirectionP => ({

@@ -1,4 +1,4 @@
-import { arrayify } from "../../../utils/utils";
+import { arrayify } from "../../../utils";
 import parseStop from "./parseStop";
 import parseDirection from "./parseDirection";
 import parsePath from "./parsePath";

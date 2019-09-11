@@ -1,4 +1,4 @@
-import { parseBoolean, arrayify } from "../../../utils/utils";
+import { parseBoolean, arrayify } from "../../../utils";
 
 const parseDirection = (direction: NextBusAPI.Direction): NextBus.Direction => ({
   id: direction.tag,

@@ -1,5 +1,5 @@
 import parseError from "./parser/parseError";
-import { NextBusAPIError } from "../../utils/errors";
+import { NextBusAPIError } from "../../errors";
 
 /**
  * Checks if the json response contains any error

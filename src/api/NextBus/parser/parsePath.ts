@@ -1,4 +1,4 @@
-import { arrayify } from "../../../utils/utils";
+import { arrayify } from "../../../utils";
 import parseLocation from "./parseLocation";
 
 const parsePath = (path: NextBusAPI.Path): NextBus.Path => ({

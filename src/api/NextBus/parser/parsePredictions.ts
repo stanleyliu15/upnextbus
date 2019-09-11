@@ -1,4 +1,4 @@
-import { arrayify } from "../../../utils/utils";
+import { arrayify } from "../../../utils";
 import parseServiceAlert from "./parseServiceAlert";
 import parseDirectionP from "./parseDirectionP";
 

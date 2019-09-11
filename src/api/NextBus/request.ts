@@ -4,7 +4,7 @@ import checkResponseJsonForError from "./checkResponseJsonForError";
 import formatResponseContentByCommand from "./formatResponseContentByCommand";
 import filterResponseJsonByCommand from "./filterResponseJsonByCommand";
 import parseResponseContentByCommand from "./parseResponseContentByCommand";
-import { objectToQueryParameters } from "../../utils/utils";
+import { objectToQueryParameters } from "../../utils";
 
 const request = async (
   command: NextBusAPI.Command,

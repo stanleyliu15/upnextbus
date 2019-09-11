@@ -1,4 +1,4 @@
-import { objectToQueryParameters, parseBoolean, arrayify } from "../src/utils/utils";
+import { objectToQueryParameters, parseBoolean, arrayify } from "../src/utils";
 
 describe("objectToQueryParameters", () => {
   test("converts an object to query parameters", () => {

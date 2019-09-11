@@ -1,8 +1,9 @@
 import { API_URL } from "./constants";
+import { objectToQueryParameters } from "../../utils";
+import { GeoLocation } from "../../../types";
 import extractNearestAgencyIdFromResponseJson from "./extractNearestAgencyIdFromResponseJson";
-import { objectToQueryParameters } from "../../utils/utils";
 
-const getNearestAgencyIdByLocation = async (location: Geo.Location) => {
+const getNearestAgencyIdByLocation = async (location: GeoLocation) => {
   const queryParameters = `?preds=byLoc&${objectToQueryParameters(location)}`;
   const url = `${API_URL}${queryParameters}`;
 

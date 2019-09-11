@@ -1,4 +1,4 @@
-import { parseBoolean } from "../../../utils/utils";
+import { parseBoolean } from "../../../utils";
 
 const parsePrediction = (predictionParam: NextBusAPI.Prediction): NextBus.Prediction => ({
   directionId: predictionParam.dirTag,

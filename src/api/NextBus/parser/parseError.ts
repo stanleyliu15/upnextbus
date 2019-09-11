@@ -1,4 +1,4 @@
-import { parseBoolean } from "../../../utils/utils";
+import { parseBoolean } from "../../../utils";
 
 const parseError = (errorParam: NextBusAPI.Error | NextBusAPI.Error[]): NextBus.Error => {
   // api returns duplicate errors as array on certain inputs
