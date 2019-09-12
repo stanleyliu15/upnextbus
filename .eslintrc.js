@@ -46,7 +46,9 @@ module.exports = {
     "@typescript-eslint/no-empty-interface": "off",
     /* Imports */
     "import/prefer-default-export": "off",
-    /* JavaScript */
-    "func-names": "off"
+    "import/no-extraneous-dependencies": "off",
+    /* Other */
+    "func-names": "off",
+    "no-shadow": "off"
   }
 };
