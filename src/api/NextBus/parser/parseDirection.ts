@@ -5,7 +5,9 @@ const parseDirection = (direction: NextBusAPI.Direction): NextBus.Direction => (
   name: direction.title,
   shortName: direction.name === "" ? null : direction.name,
   useForUI: parseBoolean(direction.useForUI),
-  stopIds: arrayify(direction.stop).map((tagObject: NextBusAPI.TagObject) => tagObject.tag)
+  stopIds: arrayify(direction.stop).map((tagObject: NextBusAPI.TagObject) => tagObject.tag),
+  // parseRoute handles setting the stops
+  stops: []
 });
 
 export default parseDirection;

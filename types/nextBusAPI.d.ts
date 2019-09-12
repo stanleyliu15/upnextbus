@@ -148,4 +148,18 @@ declare namespace NextBusAPI {
     stopLabels: string;
     useShortTitles?: string;
   }
+
+  interface ResponseJson {
+    [key: string]:
+      | Agency
+      | Agency[]
+      | RouteConfig
+      | Route
+      | Route[]
+      | Predictions
+      | Predictions[]
+      | Error
+      | Error[];
+    copyright: string;
+  }
 }

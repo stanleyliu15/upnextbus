@@ -1,28 +1,26 @@
 import { API_URL } from "./constants";
 import buildQueryOptionsByCommand from "./buildQueryOptionsByCommand";
-import checkResponseJsonForError from "./checkResponseJsonForError";
-import formatResponseContentByCommand from "./formatResponseContentByCommand";
-import filterResponseJsonByCommand from "./filterResponseJsonByCommand";
-import parseResponseContentByCommand from "./parseResponseContentByCommand";
+import processResponseJsonForParseByCommand from "./processResponseJsonForParseByCommand";
+import parseResponseDataByCommand from "./parseResponseDataByCommand";
 import { objectToQueryParameters } from "../../utils";
 
 const request = async (
   command: NextBusAPI.Command,
-  queryOptionsParam: NextBus.QueryOptions
+  queryOptions: NextBus.QueryOptions = {},
+  parseOptions: NextBus.ParseOptions = {}
 ): Promise<any> => {
-  const queryOptions = buildQueryOptionsByCommand(command, queryOptionsParam);
-  const queryParameters = objectToQueryParameters(queryOptions);
+  const builtQueryOptions = buildQueryOptionsByCommand(command, queryOptions);
+  const queryParameters = objectToQueryParameters(builtQueryOptions);
   const url = `${API_URL}?${queryParameters}`;
 
   try {
     const response = await fetch(url);
-    const responseJson = await response.json();
-    checkResponseJsonForError(responseJson);
-    const responseContent = filterResponseJsonByCommand(command, responseJson);
-    const formattedResponseContent = formatResponseContentByCommand(command, responseContent);
-    const parsedResponseContent = parseResponseContentByCommand(command, formattedResponseContent);
+    const responseJson: NextBusAPI.ResponseJson = await response.json();
 
-    return parsedResponseContent;
+    const responseData = processResponseJsonForParseByCommand(command, responseJson);
+    const responseDataParsed = parseResponseDataByCommand(command, responseData, parseOptions);
+
+    return responseDataParsed;
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error(error);

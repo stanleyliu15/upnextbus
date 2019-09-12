@@ -1,7 +1,7 @@
 export const API_URL = "http://webservices.nextbus.com/service/publicJSONFeed";
 
 /**
- * List of agency tag's currently known to either:
+ * List of agency tag's or id's currently known to either:
  *  - contain no route information
  *  - contain too much route information
  *    NextBus API has a hard limit of 100 routes, if an agency exceeds that amount, it returns an Error
@@ -17,7 +17,7 @@ export const API_URL = "http://webservices.nextbus.com/service/publicJSONFeed";
  *  dta, configdev - expose development data
  *
  */
-export const AGENCY_ID_BLACKLIST = [
+export const AGENCY_ID_FILTERS = [
   "bruinbus",
   "rutgers",
   "rutgers-newark",
@@ -27,18 +27,26 @@ export const AGENCY_ID_BLACKLIST = [
   "configdev"
 ];
 
+export const COMMANDS = {
+  agencyList: "agencyList",
+  routeConfig: "routeConfig",
+  routeList: "routeList",
+  predictions: "predictions",
+  predictionsForMultiStops: "predictions"
+};
+
 /**
- * Command Content Key Map
- * to be used primary to get only the data that is needed from the response json
- * key - command used by the NextBus API
- * value - content key used to extract the underlying data
+ * Command Path Map
+ * A Map of the command with the path to the property containing the data
+ * key: string - command used by the NextBus API
+ * value: string - path used to extract the underlying data
  *
  * Example: A request to NextBusAPI where command is agencyList should return
- *      { agency: [...], copyright: "..." }
- *      The underlying data is inside agency so in this case:
- *      the content key is "agency"
+ *  { agency: [...], copyright: "..." }
+ *  The underlying data is inside agency so in this case:
+ *  the data path is "agency"
  */
-export const COMMAND_CONTENT_KEY_MAP = {
+export const COMMAND_PATH_MAP = {
   agencyList: "agency",
   routeConfig: "route",
   routeList: "route",

@@ -17,6 +17,7 @@ declare namespace NextBus {
     shortName: string;
     useForUI: boolean;
     stopIds: string[];
+    stops: Stop[];
   }
 
   interface RouteInfo {
@@ -32,7 +33,6 @@ declare namespace NextBus {
     color: string;
     oppositeColor: string;
     boundingBox: BoundingBox;
-    stops: Stop[];
     directions: Direction[];
     paths?: Path[];
   }
@@ -42,7 +42,7 @@ declare namespace NextBus {
     lookupId?: number;
     name: string;
     shortName?: string;
-    location: GeoLocation;
+    location: Geo.Location;
   }
 
   interface ServiceAlert {
@@ -59,15 +59,10 @@ declare namespace NextBus {
     stopId: string;
     agencyName: string;
     routeName: string;
+    directionNames: string[];
     stopName: string;
-    directionFallbackName?: string;
-    directionPs?: DirectionP[];
-    serviceAlerts?: ServiceAlert[];
-  }
-
-  interface DirectionP {
-    name: string;
     predictionList: Prediction[];
+    serviceAlerts: ServiceAlert[];
   }
 
   interface Prediction {
@@ -91,6 +86,7 @@ declare namespace NextBus {
 
   interface StopLabel {
     routeId: string;
+    directionId: string;
     stopId: string;
   }
 
@@ -106,7 +102,6 @@ declare namespace NextBus {
     queryOptions: NextBus.QueryOptions
   ) => NextBusAPI.QueryOptions;
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface AgenciesQueryOptions {}
 
   interface RoutesQueryOptions {
@@ -127,4 +122,12 @@ declare namespace NextBus {
     agencyId: string;
     stopLabels: StopLabel[];
   }
+
+  type ParseOptions = PredictionsParseOptions | PredictionsListParseOptions;
+
+  interface PredictionsParseOptions {
+    listLimit?: number;
+  }
+
+  interface PredictionsListParseOptions extends PredictionsFilterOptions {}
 }

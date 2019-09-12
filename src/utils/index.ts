@@ -1,10 +1,6 @@
 import isNil from "lodash/isNil";
 import startCase from "lodash/startCase";
 
-export * from "./geolocation/getBoundingBox";
-export * from "./geolocation/getDistanceBetween";
-export * from "./geolocation/boundingBoxesIntersects";
-
 /**
  * Converts an object to a query parameters
  * @param {object} o A object to be converted to query parameters
