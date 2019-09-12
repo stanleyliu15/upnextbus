@@ -1,4 +1,4 @@
-import { API_URL } from "./constants";
+import { API_URL } from "./config";
 import buildQueryOptionsByCommand from "./buildQueryOptionsByCommand";
 import processResponseJsonForParseByCommand from "./processResponseJsonForParseByCommand";
 import parseResponseDataByCommand from "./parseResponseDataByCommand";
