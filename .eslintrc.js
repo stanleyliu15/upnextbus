@@ -49,6 +49,7 @@ module.exports = {
     "import/no-extraneous-dependencies": "off",
     /* Other */
     "func-names": "off",
-    "no-shadow": "off"
+    "no-shadow": "off",
+    "global-require": "off"
   }
 };
