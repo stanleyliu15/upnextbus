@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
 import { Image } from "react-native";
 import { AppLoading, registerRootComponent } from "expo";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 
+import configureStore from "./store";
 import RootScreen from "./screens/RootScreen";
 import fonts from "./config/fonts";
 import images from "./config/images";
@@ -33,7 +36,14 @@ export function App() {
   }
 
   if (ready) {
-    return <RootScreen />;
+    const { store, persistor } = configureStore();
+    return (
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <RootScreen />
+        </PersistGate>
+      </Provider>
+    );
   }
 
   return <AppLoading startAsync={prepareApp} onFinish={handleFinish} onError={console.error} />;

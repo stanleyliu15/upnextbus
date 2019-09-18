@@ -1,8 +1,6 @@
-import * as Location from "expo-location";
-import * as Permissions from "expo-permissions";
-
-import { NextBusAPI } from "../api";
-import { LocationPermissionDeniedError, NextBusNoNearbyError } from "../errors";
+import { getLocationAsync } from "./location-service";
+import NextBusAPI from "../api/NextBus/api";
+import { NextBusNoNearbyError } from "../errors";
 import { GeoLocation } from "../../types";
 import * as Geolocation from "../utils/geolocation";
 
@@ -57,28 +55,13 @@ const getNearestStopLabels = (
   return stopLabels;
 };
 
-const getLocationAsync = async (): Promise<GeoLocation> => {
-  const { status } = await Permissions.askAsync(Permissions.LOCATION);
-
-  if (status === "granted") {
-    const { coords } = await Location.getCurrentPositionAsync({});
-
-    return {
-      lat: coords.latitude,
-      lon: coords.longitude
-    };
-  }
-
-  throw new LocationPermissionDeniedError();
-};
-
 export interface NearbyPredictionListConfig {
   agencyId: string;
   routes?: NextBus.Route[];
   maxStopDistance?: number;
 }
 
-const getNearbyPredictionsList = async (
+export const getNearbyPredictionsList = async (
   { agencyId, routes = [], maxStopDistance = 5 }: NearbyPredictionListConfig,
   parseOptions: NextBus.PredictionsListParseOptions
 ): Promise<NextBus.Predictions[]> => {
@@ -95,5 +78,3 @@ const getNearbyPredictionsList = async (
     throw error;
   }
 };
-
-export default getNearbyPredictionsList;

@@ -42,7 +42,7 @@ declare namespace NextBus {
     lookupId?: number;
     name: string;
     shortName?: string;
-    location: Geo.Location;
+    location: GeoLocation;
   }
 
   interface ServiceAlert {
@@ -129,5 +129,5 @@ declare namespace NextBus {
     listLimit?: number;
   }
 
-  interface PredictionsListParseOptions extends PredictionsFilterOptions {}
+  interface PredictionsListParseOptions extends PredictionsParseOptions {}
 }
