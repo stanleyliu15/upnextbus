@@ -44,6 +44,7 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/explicit-member-accessibility": "off",
     "@typescript-eslint/no-empty-interface": "off",
+    "@typescript-eslint/no-unused-vars": "off",
     /* Imports */
     "import/prefer-default-export": "off",
     "import/no-extraneous-dependencies": "off",

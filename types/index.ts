@@ -21,3 +21,11 @@ export interface GeoBoundingBox {
   lonMin: number;
   lonMax: number;
 }
+
+declare module "react-navigation-tabs/lib/typescript/src/types" {
+  export interface TabBarIconProps {
+    focused: boolean;
+    tintColor?: string;
+    horizontal?: boolean;
+  }
+}

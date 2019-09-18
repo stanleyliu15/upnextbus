@@ -34,6 +34,8 @@ const darkColors: AppColors = {
   secondaryDark: lightColors.secondaryDark
 };
 
+// TODO: inverse colors support
+
 /**
  * Helper to get palette from the theme color
  * @param themeColor

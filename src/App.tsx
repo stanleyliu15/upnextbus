@@ -5,11 +5,14 @@ import { Image } from "react-native";
 import { AppLoading, registerRootComponent } from "expo";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
+import { useScreens } from "react-native-screens";
 
 import configureStore from "./store";
 import RootScreen from "./screens/RootScreen";
 import fonts from "./config/fonts";
 import images from "./config/images";
+
+useScreens();
 
 function cacheFonts(fonts) {
   return fonts.map(font => Font.loadAsync(font));
