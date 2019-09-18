@@ -1,11 +1,11 @@
+import { selectAgencyId } from "./actions";
 import {
-  selectAgencyId,
   getAgenciesAsync,
   getRoutesAsync,
   getPredictionsAsync,
   getNearbyPredictionListAsync,
   getNearestAgencyIdByLocationAsync
-} from "./actions";
+} from "./async-actions";
 import { ThunkDispatch, ThunkResult } from "../../types";
 import { getLocationAsync } from "../../../services/location-service";
 import * as NextBusService from "../../../services/nextbus-service";
