@@ -1,11 +1,11 @@
-import { selectAgencyId } from "./actions";
 import {
+  selectAgencyId,
   getAgenciesAsync,
   getRoutesAsync,
   getPredictionsAsync,
   getNearbyPredictionListAsync,
   getNearestAgencyIdByLocationAsync
-} from "./async-actions";
+} from "./actions";
 import { ThunkDispatch, ThunkResult } from "../../types";
 import { getLocationAsync } from "../../../services/location-service";
 import * as NextBusService from "../../../services/nextbus-service";
@@ -70,6 +70,7 @@ export function getNearbyPredictionsList(): ThunkResult<Promise<void>> {
       },
       settings: { maxStopDistance, predictionListLimit }
     } = getState();
+
     dispatch(getNearbyPredictionListAsync.request());
     try {
       const predictionsList = await NextBusService.getNearbyPredictionsList(

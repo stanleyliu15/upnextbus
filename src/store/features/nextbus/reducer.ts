@@ -3,58 +3,48 @@ import { createReducer } from "typesafe-actions";
 
 import { NextBusState } from "./types";
 import * as actions from "./actions";
-import * as asyncActions from "./async-actions";
 
 const reducer = combineReducers<NextBusState>({
   agencies: combineReducers({
     loading: createReducer(false as boolean)
-      .handleAction(asyncActions.getAgenciesAsync.request, (state, action) => true)
+      .handleAction(actions.getAgenciesAsync.request, (state, action) => true)
       .handleAction(
-        [asyncActions.getAgenciesAsync.success, asyncActions.getAgenciesAsync.failure],
+        [actions.getAgenciesAsync.success, actions.getAgenciesAsync.failure],
         (state, action) => false
       ),
-    data: createReducer([]).handleAction(asyncActions.getAgenciesAsync.success, (state, action) => {
+    data: createReducer([]).handleAction(actions.getAgenciesAsync.success, (state, action) => {
       return action.payload;
     }),
-    error: createReducer(null).handleAction(
-      asyncActions.getAgenciesAsync.failure,
-      (state, action) => {
-        return action.payload;
-      }
-    )
+    error: createReducer(null).handleAction(actions.getAgenciesAsync.failure, (state, action) => {
+      return action.payload;
+    })
   }),
   routes: combineReducers({
     loading: createReducer(false as boolean)
-      .handleAction(asyncActions.getRoutesAsync.request, (state, action) => true)
+      .handleAction(actions.getRoutesAsync.request, (state, action) => true)
       .handleAction(
-        [asyncActions.getRoutesAsync.success, asyncActions.getRoutesAsync.failure],
+        [actions.getRoutesAsync.success, actions.getRoutesAsync.failure],
         (state, action) => false
       ),
-    data: createReducer([]).handleAction(asyncActions.getRoutesAsync.success, (state, action) => {
+    data: createReducer([]).handleAction(actions.getRoutesAsync.success, (state, action) => {
       return action.payload;
     }),
-    error: createReducer(null).handleAction(
-      asyncActions.getRoutesAsync.failure,
-      (state, action) => {
-        return action.payload;
-      }
-    )
+    error: createReducer(null).handleAction(actions.getRoutesAsync.failure, (state, action) => {
+      return action.payload;
+    })
   }),
   predictions: combineReducers({
     loading: createReducer(false as boolean)
-      .handleAction(asyncActions.getPredictionsAsync.request, (state, action) => true)
+      .handleAction(actions.getPredictionsAsync.request, (state, action) => true)
       .handleAction(
-        [asyncActions.getPredictionsAsync.success, asyncActions.getPredictionsAsync.failure],
+        [actions.getPredictionsAsync.success, actions.getPredictionsAsync.failure],
         (state, action) => false
       ),
-    data: createReducer(null).handleAction(
-      asyncActions.getPredictionsAsync.success,
-      (state, action) => {
-        return action.payload;
-      }
-    ),
+    data: createReducer(null).handleAction(actions.getPredictionsAsync.success, (state, action) => {
+      return action.payload;
+    }),
     error: createReducer(null).handleAction(
-      asyncActions.getPredictionsAsync.failure,
+      actions.getPredictionsAsync.failure,
       (state, action) => {
         return action.payload;
       }
@@ -62,22 +52,22 @@ const reducer = combineReducers<NextBusState>({
   }),
   nearbyPredictionsList: combineReducers({
     loading: createReducer(false as boolean)
-      .handleAction(asyncActions.getNearbyPredictionListAsync.request, (state, action) => true)
+      .handleAction(actions.getNearbyPredictionListAsync.request, (state, action) => true)
       .handleAction(
         [
-          asyncActions.getNearbyPredictionListAsync.success,
-          asyncActions.getNearbyPredictionListAsync.failure
+          actions.getNearbyPredictionListAsync.success,
+          actions.getNearbyPredictionListAsync.failure
         ],
         (state, action) => false
       ),
     data: createReducer([]).handleAction(
-      asyncActions.getNearbyPredictionListAsync.success,
+      actions.getNearbyPredictionListAsync.success,
       (state, action) => {
         return action.payload;
       }
     ),
     error: createReducer(null).handleAction(
-      asyncActions.getNearbyPredictionListAsync.failure,
+      actions.getNearbyPredictionListAsync.failure,
       (state, action) => {
         return action.payload;
       }
@@ -85,22 +75,22 @@ const reducer = combineReducers<NextBusState>({
   }),
   nearestAgencyIdByLocation: combineReducers({
     loading: createReducer(false as boolean)
-      .handleAction(asyncActions.getNearestAgencyIdByLocationAsync.request, (state, action) => true)
+      .handleAction(actions.getNearestAgencyIdByLocationAsync.request, (state, action) => true)
       .handleAction(
         [
-          asyncActions.getNearestAgencyIdByLocationAsync.success,
-          asyncActions.getNearestAgencyIdByLocationAsync.failure
+          actions.getNearestAgencyIdByLocationAsync.success,
+          actions.getNearestAgencyIdByLocationAsync.failure
         ],
         (state, action) => false
       ),
     data: createReducer(null).handleAction(
-      asyncActions.getNearestAgencyIdByLocationAsync.success,
+      actions.getNearestAgencyIdByLocationAsync.success,
       (state, action) => {
         return action.payload;
       }
     ),
     error: createReducer(null).handleAction(
-      asyncActions.getNearestAgencyIdByLocationAsync.failure,
+      actions.getNearestAgencyIdByLocationAsync.failure,
       (state, action) => {
         return action.payload;
       }
