@@ -62,7 +62,7 @@ export interface NearbyPredictionListConfig {
 }
 
 export const getNearbyPredictionsList = async (
-  { agencyId, routes = [], maxStopDistance = 5 }: NearbyPredictionListConfig,
+  { agencyId, routes = [], maxStopDistance = 1 }: NearbyPredictionListConfig,
   parseOptions: NextBus.PredictionsListParseOptions
 ): Promise<NextBus.Predictions[]> => {
   try {

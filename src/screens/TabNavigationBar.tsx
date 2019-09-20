@@ -7,8 +7,8 @@ import {
   BottomTabBarOptions,
   TabBarIconProps
 } from "react-navigation-tabs/lib/typescript/src/types";
-import { Theme } from "../styles/types";
 
+import { Theme } from "../styles";
 import NearbyScreen from "./NearbyScreen";
 
 const routeConfigs = {
@@ -22,10 +22,10 @@ const IconMap = {
 function createBottomNavigatorConfigs(theme: Theme) {
   const tabBarOptions: BottomTabBarOptions = {
     showLabel: false,
-    activeBackgroundColor: theme.palette.primaryLight,
-    inactiveBackgroundColor: theme.palette.white,
-    activeTintColor: theme.palette.primaryDark,
-    inactiveTintColor: theme.palette.disabled
+    activeBackgroundColor: theme.primaryLight,
+    inactiveBackgroundColor: theme.white,
+    activeTintColor: theme.primaryDark,
+    inactiveTintColor: theme.disabled
   };
 
   const defaultNavigationOptions = ({ navigation }) => {

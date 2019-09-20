@@ -33,4 +33,4 @@ export const titleCase = (s: string) => (isNil(s) ? s : startCase(s.toLowerCase(
 
 export const removeExtraWhitespace = (s: string) => s.replace(/\s+/g, " ").trim();
 
-export const normalizeName = (s: string): string => s.replace(/_/g, " ").replace(/-/g, " - ");
+export const normalizeRouteId = (s: string): string => s.replace(/_/g, " ").replace(/-/g, " - ");
