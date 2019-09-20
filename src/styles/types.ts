@@ -9,7 +9,10 @@ export interface BaseColors {
   white: string;
   black: string;
   light: string;
+  lighter: string;
   dark: string;
+  darker: string;
+  shadow: string;
 }
 
 export interface StatusColors {
@@ -26,22 +29,30 @@ export interface AppColors {
   secondary: string;
   secondaryLight: string;
   secondaryDark: string;
+
+  text: string;
+  textLight: string;
+  textLighter: string;
+  textLightest: string;
+  background: string;
 }
 
 export interface Palette extends BaseColors, StatusColors, AppColors {}
 
 export interface Space {
-  zero: number;
-  nano: number;
-  small: number;
-  medium: number;
-  large: number;
-  xLarge: number;
-  xxLarge: number;
-  xxxLarge: number;
+  zero: string;
+  nano: string;
+  small: string;
+  medium: string;
+  large: string;
+  xLarge: string;
+  xxLarge: string;
+  xxxLarge: string;
+  massive: string;
 }
 
 export interface FontSize {
+  nano: number;
   small: number;
   medium: number;
   large: number;
@@ -57,9 +68,9 @@ export interface FontFamily {
   bold: string;
 }
 
-export interface Theme {
-  palette: Palette;
-  space: Space;
-  fontSize: FontSize;
-  fontFamily: FontFamily;
+export interface Border {
+  corner: string;
+  circular: string;
 }
+
+export interface Theme extends Palette {}

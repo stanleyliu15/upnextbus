@@ -1,10 +1,11 @@
 import { FontSize, FontFamily } from "./types";
 
 export const fontSize: FontSize = {
-  small: 12,
-  medium: 16,
-  large: 20,
-  xLarge: 24,
+  nano: 10,
+  small: 14,
+  medium: 18,
+  large: 22,
+  xLarge: 28,
   xxLarge: 32,
   xxxLarge: 40
 };
