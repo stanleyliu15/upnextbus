@@ -1,17 +1,17 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { FlatList, RefreshControl } from "react-native";
-import { ThemeContext } from "styled-components";
+import { ThemeContext } from "styled-components/native";
 
 import { ErrorInfo } from "../components/molecules";
 import { Loader } from "../components/atoms";
-import { getNearbyPredictionsList, nearbyPredictionListSelector } from "../store/features/nextbus";
+import { getNearbyPredictionsList, selectNearbyPredictionList } from "../store/features/nextbus";
 import { PredictionsItem } from "../components/organisms/Nearby";
 import SafeArea from "../layouts/SafeArea";
 
 function NearbyScreen(props) {
   const dispatch = useDispatch();
-  const nearby = useSelector(nearbyPredictionListSelector);
+  const nearby = useSelector(selectNearbyPredictionList);
   const theme = useContext(ThemeContext);
   const [firstRender, setFirstRender] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -27,12 +27,17 @@ function NearbyScreen(props) {
 
   const handleRefresh = () => setRefreshing(true);
 
-  if (nearby.loading) {
+  if (nearby.loading && firstRender) {
     return <Loader />;
   }
 
   if (nearby.error) {
-    return <ErrorInfo message={nearby.error.message} />;
+    return (
+      <ErrorInfo
+        message={nearby.error.message}
+        onRetry={() => dispatch(getNearbyPredictionsList())}
+      />
+    );
   }
 
   return (

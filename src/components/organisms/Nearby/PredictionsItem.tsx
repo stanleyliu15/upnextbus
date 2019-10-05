@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 
 import { Text } from "../../atoms";
-import { normalizeRouteId } from "../../../utils";
+import { normalizeRouteName } from "../../../utils";
 import { space, border, fontFamily, fontSize } from "../../../styles";
 
 interface Props {
@@ -16,7 +16,7 @@ export function PredictionsItem({ predictions }: Props) {
     <Wrapper>
       <Container>
         <GeneralSection>
-          <RouteName>{normalizeRouteId(routeId)}</RouteName>
+          <RouteName>{normalizeRouteName(routeId)}</RouteName>
           <DirectionContainer>
             {directionNames.map(directionName => (
               <DirectionName key={directionName}>{directionName}</DirectionName>
@@ -28,7 +28,7 @@ export function PredictionsItem({ predictions }: Props) {
         <PredictionTimeSection>
           {predictionList.length ? (
             predictionList.map(prediction => (
-              <PredictionTime key={prediction.epochTime}>
+              <PredictionTime key={prediction.tripId}>
                 <PredictionMinute>{prediction.minutes}</PredictionMinute>
                 <PredictionUnit>min</PredictionUnit>
               </PredictionTime>
@@ -43,14 +43,14 @@ export function PredictionsItem({ predictions }: Props) {
 }
 
 const Wrapper = styled.View`
-  background-color: ${({ theme }) => theme.background};
+  background-color: ${({ theme }) => theme.backgroundLight};
   padding: ${space.medium};
 `;
 
 const Container = styled.View`
   display: flex;
   flex-direction: row;
-  border-radius: ${border.corner};
+  border-radius: ${border.round};
   border: 0.33px solid ${({ theme }) => theme.lighter};
 `;
 
@@ -77,13 +77,13 @@ const DirectionContainer = styled.View`
 `;
 
 const DirectionName = styled(Text)`
-  font-size: ${fontSize.small};
+  font-size: ${fontSize.primary};
   color: ${({ theme }) => theme.shadow};
 `;
 
 const StopName = styled(Text)`
   margin-top: ${space.large};
-  font-size: ${fontSize.small};
+  font-size: ${fontSize.primary};
   color: ${({ theme }) => theme.shadow};
 `;
 
