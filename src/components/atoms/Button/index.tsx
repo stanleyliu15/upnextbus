@@ -7,6 +7,6 @@ const Component = Platform.OS === "ios" ? TouchableOpacity : TouchableNativeFeed
 
 export const Button = styled(Component)`
   padding: ${space.xLarge} ${space.massive};
-  border: 1px solid ${({ theme }) => theme.light};
-  border-radius: ${border.circular};
+  border-radius: ${border.round};
+  background-color: ${({ theme }) => theme.primary};
 `;

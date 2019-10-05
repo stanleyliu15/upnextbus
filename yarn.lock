@@ -3201,6 +3201,11 @@ expo-sqlite@~6.0.0:
     "@types/websql" "^0.0.27"
     lodash "^4.17.11"
 
+expo-store-review@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/expo-store-review/-/expo-store-review-1.0.0.tgz#3b47e808700e6c3a398446be87e28876ada67703"
+  integrity sha512-EbuEN56DOvmIboXQALVdCHbrjoLADmmvtGm5EQuK5CjmZGvbnw1ZcpI6YvCGIWRwxEkw2phazRb+v5AZMSpELw==
+
 expo-web-browser@~6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/expo-web-browser/-/expo-web-browser-6.0.0.tgz#63a59d4c02cd7ba47faa6a2eb04decb1a1ab2a32"
@@ -6809,6 +6814,13 @@ react-native-web@^0.11.4:
     ws "^1.1.5"
     xmldoc "^0.4.0"
     yargs "^9.0.0"
+
+react-navigation-stack@^1.9.3:
+  version "1.9.3"
+  resolved "https://registry.yarnpkg.com/react-navigation-stack/-/react-navigation-stack-1.9.3.tgz#956a41796878d82c4db506075afea5e3cef64120"
+  integrity sha512-MwQ55tfTJ5LhSdCHc8EMAH3bVinJ1hTLYhyxx7KgnReUl4BZ9s/Qn0fKC95BgSefAeunEphQPLHNNBygDN6uKw==
+  dependencies:
+    prop-types "^15.7.2"
 
 react-navigation-tabs@^2.5.3:
   version "2.5.3"

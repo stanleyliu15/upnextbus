@@ -35,6 +35,8 @@ export interface AppColors {
   textLighter: string;
   textLightest: string;
   background: string;
+  backgroundDark: string;
+  backgroundLight: string;
 }
 
 export interface Palette extends BaseColors, StatusColors, AppColors {}
@@ -52,6 +54,8 @@ export interface Space {
 }
 
 export interface FontSize {
+  primary: number;
+
   nano: number;
   small: number;
   medium: number;
@@ -69,8 +73,8 @@ export interface FontFamily {
 }
 
 export interface Border {
-  corner: string;
-  circular: string;
+  round: string;
+  full: string;
 }
 
 export interface Theme extends Palette {}

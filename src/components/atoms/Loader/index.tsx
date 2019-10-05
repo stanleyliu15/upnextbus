@@ -1,6 +1,4 @@
-import React from "react";
 import styled from "styled-components/native";
-import { ActivityIndicator, ActivityIndicatorProps } from "react-native";
 
 export type Props = Omit<ActivityIndicatorProps, "size"> & {
   large?: boolean;
@@ -8,16 +6,13 @@ export type Props = Omit<ActivityIndicatorProps, "size"> & {
 
 // TODO: custom loader
 
-export const Loader = ({ large = true, ...props }: Props) => {
-  return (
-    <Wrapper>
-      <ActivityIndicator size={large ? "large" : "small"} {...props} />
-    </Wrapper>
-  );
-};
-
-const Wrapper = styled.View`
+export const Loader = styled.ActivityIndicator.attrs(props => ({
+  color: props.color || props.theme.primary,
+  size: props.size || "large"
+}))`
   flex: 1;
   justify-content: center;
   align-items: center;
+
+  background-color: ${({ theme }) => theme.background};
 `;

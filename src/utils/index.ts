@@ -1,5 +1,6 @@
 import isNil from "lodash/isNil";
 import startCase from "lodash/startCase";
+import { useState, useCallback } from "react";
 
 /**
  * Converts an object to a query parameters
@@ -33,4 +34,15 @@ export const titleCase = (s: string) => (isNil(s) ? s : startCase(s.toLowerCase(
 
 export const removeExtraWhitespace = (s: string) => s.replace(/\s+/g, " ").trim();
 
-export const normalizeRouteId = (s: string): string => s.replace(/_/g, " ").replace(/-/g, " - ");
+export const normalizeRouteName = (s: string): string => s.replace(/_/g, " ").replace(/-/g, " - ");
+
+export function useToggle(initialState: boolean = false) {
+  const [toggled, setToggled] = useState(initialState);
+  const toggle = useCallback(() => setToggled(value => !value), []);
+
+  return [toggled, toggle] as const; // use of `as const` for correct type inference
+}
+
+export const enumKeyFromValue = (en, val) => {
+  return Object.keys(en).filter(v => en[v] === val)[0];
+};

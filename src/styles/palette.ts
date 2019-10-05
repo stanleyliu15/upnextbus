@@ -33,7 +33,9 @@ export const lightColors: AppColors = {
   textLight: "#555",
   textLighter: "#777",
   textLightest: "#999",
-  background: "#fff"
+  background: "#f4f4f4",
+  backgroundDark: "",
+  backgroundLight: "#fff"
 };
 
 export const darkColors: AppColors = {
@@ -48,5 +50,8 @@ export const darkColors: AppColors = {
   textLight: "#d3d3d3",
   textLighter: "#e0e0e0",
   textLightest: "#ededed",
-  background: "#000"
+  background: "#333",
+
+  backgroundDark: "",
+  backgroundLight: "#444"
 };

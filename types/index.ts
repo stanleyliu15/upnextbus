@@ -1,6 +1,9 @@
+import { GestureResponderEvent } from "react-native";
+import { NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation";
+
 import { Theme } from "../src/styles";
 
-declare module "styled-components" {
+declare module "styled-components/native" {
   export interface DefaultTheme extends Theme {}
 }
 
@@ -10,6 +13,10 @@ declare module "react-navigation-tabs/lib/typescript/src/types" {
     tintColor?: string;
     horizontal?: boolean;
   }
+}
+
+export interface OnPressHandler {
+  (event: GestureResponderEvent): void;
 }
 
 export interface Point {
@@ -34,4 +41,8 @@ export interface GeoBoundingBox {
   latMax: number;
   lonMin: number;
   lonMax: number;
+}
+
+export interface NavigationProps {
+  navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }

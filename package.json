@@ -13,6 +13,8 @@
   "private": true,
   "dependencies": {
     "expo": "^34.0.4",
+    "expo-constants": "~6.0.0",
+    "expo-store-review": "^1.0.0",
     "lodash": "^4.17.15",
     "polished": "^3.4.1",
     "react": "^16.9.0",
@@ -23,6 +25,7 @@
     "react-native-screens": "1.0.0-alpha.22",
     "react-native-web": "^0.11.4",
     "react-navigation": "^4.0.5",
+    "react-navigation-stack": "^1.9.3",
     "react-navigation-tabs": "^2.5.3",
     "react-redux": "^7.1.1",
     "redux": "^4.0.4",

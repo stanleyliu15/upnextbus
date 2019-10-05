@@ -20,6 +20,10 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      // TODO: add play store url
+      "playStoreUrl": ""
     }
   }
 }
