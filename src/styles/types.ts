@@ -12,7 +12,6 @@ export interface BaseColors {
   lighter: string;
   dark: string;
   darker: string;
-  shadow: string;
 }
 
 export interface StatusColors {

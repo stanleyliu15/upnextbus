@@ -5,13 +5,18 @@ import { ThemeContext } from "styled-components/native";
 
 import { ErrorInfo } from "../components/molecules";
 import { Loader } from "../components/atoms";
-import { getNearbyPredictionsList, selectNearbyPredictionList } from "../store/features/nextbus";
+import {
+  getNearbyPredictionsList,
+  selectNearbyPredictionList,
+  selectFilterRouteIds
+} from "../store/features/nextbus";
 import { PredictionsItem } from "../components/organisms/Nearby";
 import SafeArea from "../layouts/SafeArea";
 
 function NearbyScreen(props) {
   const dispatch = useDispatch();
   const nearby = useSelector(selectNearbyPredictionList);
+  const filterRouteIds = useSelector(selectFilterRouteIds);
   const theme = useContext(ThemeContext);
   const [firstRender, setFirstRender] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -40,10 +45,11 @@ function NearbyScreen(props) {
     );
   }
 
+  const data = nearby.data.filter(prediction => filterRouteIds.includes(prediction.routeId));
   return (
     <SafeArea>
       <FlatList
-        data={nearby.data}
+        data={data}
         keyExtractor={(item: NextBus.Predictions) => `${item.routeId}-${item.stopId}`}
         renderItem={({ item }) => <PredictionsItem predictions={item} />}
         refreshControl={

@@ -8,8 +8,6 @@ import { SelectItem, SaveButton } from "../../../components/organisms/Settings";
 import { ThemeColor } from "../../../styles";
 import SafeArea from "../../../layouts/SafeArea";
 
-const THEME_COLORS = [ThemeColor.LIGHT, ThemeColor.DARK];
-
 export default function() {
   const dispatch = useDispatch();
   const themeColor = useSelector(selectThemeColor);
@@ -19,7 +17,7 @@ export default function() {
   return (
     <SafeArea>
       <ScrollView>
-        {THEME_COLORS.map(themeColor => (
+        {Object.values(ThemeColor).map(themeColor => (
           <SelectItem
             key={themeColor}
             name={capitalize(themeColor)}

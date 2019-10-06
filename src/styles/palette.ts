@@ -10,8 +10,7 @@ export const baseColors: BaseColors = {
   light: "#999",
   lighter: "#d3d3d3",
   dark: "#333",
-  darker: "#222",
-  shadow: "#484848"
+  darker: "#222"
 };
 
 export const statusColors: StatusColors = {

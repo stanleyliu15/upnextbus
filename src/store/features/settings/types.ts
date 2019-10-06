@@ -1,9 +1,8 @@
 import { ThemeColor } from "../../../styles/types";
 
 export enum RouteNameOption {
-  "Identifier" = "id",
-  "Name" = "name",
-  "Short Name" = "shortName"
+  "Identifier" = "routeId",
+  "Name" = "routeName"
 }
 
 export interface SettingsState {

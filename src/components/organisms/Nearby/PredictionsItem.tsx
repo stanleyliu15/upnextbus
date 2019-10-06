@@ -1,22 +1,25 @@
 import React from "react";
 import styled from "styled-components/native";
+import { useSelector } from "react-redux";
 
 import { Text } from "../../atoms";
 import { normalizeRouteName } from "../../../utils";
 import { space, border, fontFamily, fontSize } from "../../../styles";
+import { selectRouteNameOption } from "../../../store/features/settings";
 
 interface Props {
   predictions: NextBus.Predictions;
 }
 
 export function PredictionsItem({ predictions }: Props) {
-  const { routeId, directionNames, stopName, predictionList } = predictions;
+  const { directionNames, stopName, predictionList } = predictions;
+  const routeNameOption = useSelector(selectRouteNameOption);
 
   return (
     <Wrapper>
       <Container>
         <GeneralSection>
-          <RouteName>{normalizeRouteName(routeId)}</RouteName>
+          <RouteName>{normalizeRouteName(predictions[routeNameOption])}</RouteName>
           <DirectionContainer>
             {directionNames.map(directionName => (
               <DirectionName key={directionName}>{directionName}</DirectionName>
@@ -27,8 +30,9 @@ export function PredictionsItem({ predictions }: Props) {
         <VerticalSeperator />
         <PredictionTimeSection>
           {predictionList.length ? (
-            predictionList.map(prediction => (
-              <PredictionTime key={prediction.tripId}>
+            predictionList.map((prediction, index) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <PredictionTime key={index}>
                 <PredictionMinute>{prediction.minutes}</PredictionMinute>
                 <PredictionUnit>min</PredictionUnit>
               </PredictionTime>
@@ -43,11 +47,12 @@ export function PredictionsItem({ predictions }: Props) {
 }
 
 const Wrapper = styled.View`
-  background-color: ${({ theme }) => theme.backgroundLight};
   padding: ${space.medium};
 `;
 
 const Container = styled.View`
+  background-color: ${({ theme }) => theme.backgroundLight};
+
   display: flex;
   flex-direction: row;
   border-radius: ${border.round};
@@ -78,13 +83,13 @@ const DirectionContainer = styled.View`
 
 const DirectionName = styled(Text)`
   font-size: ${fontSize.primary};
-  color: ${({ theme }) => theme.shadow};
+  color: ${({ theme }) => theme.textLighter};
 `;
 
 const StopName = styled(Text)`
   margin-top: ${space.large};
   font-size: ${fontSize.primary};
-  color: ${({ theme }) => theme.shadow};
+  color: ${({ theme }) => theme.textLighter};
 `;
 
 const DashDash = styled(Text)`
