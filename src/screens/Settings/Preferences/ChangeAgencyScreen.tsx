@@ -41,6 +41,7 @@ function ChangeAgencyScreen({ navigation }: NavigationProps) {
         renderItem={({ item }) => (
           <SelectItem
             name={item.name}
+            description={item.region}
             selected={item.id === agencyId}
             onSelect={() => setAgencyId(item.id)}
           />

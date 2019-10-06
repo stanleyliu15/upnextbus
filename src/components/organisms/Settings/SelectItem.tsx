@@ -4,14 +4,16 @@ import { Feather } from "@expo/vector-icons";
 
 import { Text } from "../../atoms";
 import { space } from "../../../styles";
+import { Description } from "./settingsStyles";
 
 type SelectItemProps = {
   name: string;
+  description?: string;
   selected: boolean;
   onSelect: VoidFunction;
 };
 
-export const SelectItem = function({ name, selected, onSelect }: SelectItemProps) {
+export const SelectItem = function({ name, description, selected, onSelect }: SelectItemProps) {
   const theme = useContext(ThemeContext);
 
   return (
@@ -22,7 +24,10 @@ export const SelectItem = function({ name, selected, onSelect }: SelectItemProps
         ) : (
           <Feather name="circle" size={20} color={theme.light} />
         )}
-        <Text iconSpace>{name}</Text>
+        <Item>
+          <Text iconSpace>{name}</Text>
+          {description && <Description iconSpace>{description}</Description>}
+        </Item>
       </HighlightContent>
     </HighlightButton>
   );
@@ -41,5 +46,11 @@ const HighlightButton = styled.TouchableHighlight`
 const HighlightContent = styled.View`
   display: flex;
   flex-direction: row;
-  /* justify-content: space-between; */
+
+  align-items: center;
+`;
+
+const Item = styled.View`
+  display: flex;
+  justify-content: center;
 `;

@@ -59,7 +59,7 @@ export const Property = styled(Text)`
 `;
 
 export const Description = styled(Text)`
-  flex-shrink: 1;
+  /* flex-shrink: 1; */
   color: ${({ theme }) => theme.textLight};
   font-size: ${fontSize.small};
 `;
