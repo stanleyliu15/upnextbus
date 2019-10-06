@@ -73,7 +73,7 @@ const VerticalSeperator = styled.View`
 `;
 
 const RouteName = styled(Text)`
-  font-size: ${fontSize.xxLarge};
+  font-size: ${fontSize.large};
   font-family: ${fontFamily.bold};
 `;
 
