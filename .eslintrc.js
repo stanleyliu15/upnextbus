@@ -22,11 +22,11 @@ module.exports = {
     "plugin:import/typescript",
     "plugin:jest/recommended",
     "plugin:@typescript-eslint/recommended",
+    "@react-native-community",
     /* use prettier as the main code formatter so anything pretty should always be last */
     "prettier/@typescript-eslint",
     "plugin:prettier/recommended",
-    "prettier/react",
-    "@react-native-community"
+    "prettier/react"
   ],
   rules: {
     /* React */

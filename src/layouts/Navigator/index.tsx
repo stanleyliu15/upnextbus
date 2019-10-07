@@ -10,6 +10,7 @@ import {
 
 import { Theme, space } from "../../styles";
 import NearbyScreen from "../../screens/NearbyScreen";
+import DetailScreen from "../../screens/DetailScreen";
 import SettingsNavigator from "./SettingsNavigator";
 
 function configureBottomNavigatorConfigs(theme: Theme) {
@@ -39,7 +40,7 @@ function configureBottomNavigatorConfigs(theme: Theme) {
   };
 
   return {
-    initialRouteName: "Settings",
+    initialRouteName: "Detail",
     tabBarOptions,
     defaultNavigationOptions
   };
@@ -65,7 +66,8 @@ function TabNavigationBar() {
 
   const routeConfigs = {
     Nearby: NearbyScreen,
-    Settings: SettingsNavigator(defaultNavigationOptions)
+    Settings: SettingsNavigator(defaultNavigationOptions),
+    Detail: DetailScreen
   };
   const TabNavigator = createBottomTabNavigator(
     routeConfigs,
