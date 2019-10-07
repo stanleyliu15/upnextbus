@@ -25,7 +25,8 @@ module.exports = {
     /* use prettier as the main code formatter so anything pretty should always be last */
     "prettier/@typescript-eslint",
     "plugin:prettier/recommended",
-    "prettier/react"
+    "prettier/react",
+    "@react-native-community"
   ],
   rules: {
     /* React */
@@ -53,5 +54,6 @@ module.exports = {
     "func-names": "off",
     "no-shadow": "off",
     "global-require": "off"
-  }
+  },
+  root: true
 };
