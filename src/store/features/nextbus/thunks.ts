@@ -2,7 +2,6 @@ import {
   selectAgencyId,
   getAgenciesAsync,
   getRoutesAsync,
-  getPredictionsAsync,
   getNearbyPredictionListAsync,
   getNearestAgencyIdByLocationAsync
 } from "./actions";
@@ -35,28 +34,6 @@ export function getRoutes(): ThunkResult<Promise<void>> {
       dispatch(getRoutesAsync.success(agencies));
     } catch (error) {
       dispatch(getRoutesAsync.failure(error));
-    }
-  };
-}
-
-export function getPredictions(
-  agencyId: string,
-  routeId: string,
-  stopId: string
-): ThunkResult<Promise<void>> {
-  return async function(dispatch: ThunkDispatch, getState) {
-    const {
-      settings: { predictionListLimit }
-    } = getState();
-    dispatch(getPredictionsAsync.request());
-    try {
-      const predictions = await NextBusAPI.getPredictions(
-        { agencyId, routeId, stopId },
-        { listLimit: predictionListLimit }
-      );
-      dispatch(getPredictionsAsync.success(predictions));
-    } catch (error) {
-      dispatch(getPredictionsAsync.failure(error));
     }
   };
 }
@@ -96,5 +73,13 @@ export function getNearestAgencyIdByLocation(): ThunkResult<Promise<void>> {
     } catch (error) {
       dispatch(getNearestAgencyIdByLocationAsync.failure(error));
     }
+  };
+}
+
+export function getNearestAgencyIdByLocationAndRoutes(): ThunkResult<Promise<void>> {
+  return (dispatch: ThunkDispatch, getState) => {
+    return dispatch(getNearestAgencyIdByLocation()).then(() => {
+      return dispatch(getRoutes());
+    });
   };
 }

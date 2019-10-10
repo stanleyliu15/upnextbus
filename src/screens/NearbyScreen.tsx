@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { FlatList, RefreshControl } from "react-native";
+import { FlatList, RefreshControl, GestureResponderEvent } from "react-native";
 import { ThemeContext } from "styled-components/native";
 
 import { ErrorInfo } from "../components/molecules";
@@ -8,18 +8,20 @@ import { Loader } from "../components/atoms";
 import {
   getNearbyPredictionsList,
   selectNearbyPredictionList,
-  selectFilterRouteIds
+  selectFilterRouteIds,
+  selectRoutes
 } from "../store/features/nextbus";
 import { PredictionsItem } from "../components/organisms/Nearby";
 import SafeArea from "../layouts/SafeArea";
 
-function NearbyScreen(props) {
+function NearbyScreen({ navigation }) {
   const dispatch = useDispatch();
   const nearby = useSelector(selectNearbyPredictionList);
   const filterRouteIds = useSelector(selectFilterRouteIds);
   const theme = useContext(ThemeContext);
   const [firstRender, setFirstRender] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const { data: routes } = useSelector(selectRoutes);
 
   useEffect(() => {
     if (firstRender) {
@@ -51,7 +53,28 @@ function NearbyScreen(props) {
       <FlatList
         data={data}
         keyExtractor={(item: NextBus.Predictions) => `${item.routeId}-${item.stopId}`}
-        renderItem={({ item }) => <PredictionsItem predictions={item} />}
+        renderItem={({ item }) => (
+          <PredictionsItem
+            predictions={item}
+            onPredictionsPress={(event: GestureResponderEvent): void => {
+              const route = routes.find(route => route.id === item.routeId);
+              const { directions } = route;
+              const direction = directions.find(dir => {
+                return dir.stops.some(stop => stop.id === item.stopId);
+              });
+              const stop = direction.stops.find(stop => {
+                return stop.id === item.stopId;
+              });
+              navigation.navigate("DetailScreen", {
+                predictions: item,
+                route,
+                directions,
+                direction,
+                stop
+              });
+            }}
+          />
+        )}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}

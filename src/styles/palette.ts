@@ -49,8 +49,8 @@ export const darkColors: AppColors = {
   textLight: "#d3d3d3",
   textLighter: "#e0e0e0",
   textLightest: "#ededed",
-  background: "#333",
 
+  background: "#333",
   backgroundDark: "",
   backgroundLight: "#444"
 };

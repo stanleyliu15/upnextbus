@@ -1,3 +1,5 @@
+import { GeoLocation } from ".";
+
 /**
  * Typings for my version of the Nextbus API
  */
@@ -59,7 +61,8 @@ declare namespace NextBus {
     stopId: string;
     agencyName: string;
     routeName: string;
-    directionNames: string[];
+    directionName: string;
+    directionIds: string[];
     stopName: string;
     predictionList: Prediction[];
     serviceAlerts: ServiceAlert[];

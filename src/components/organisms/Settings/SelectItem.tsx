@@ -11,13 +11,24 @@ type SelectItemProps = {
   description?: string;
   selected: boolean;
   onSelect: VoidFunction;
+  fixedHeight?: boolean;
 };
 
-export const SelectItem = function({ name, description, selected, onSelect }: SelectItemProps) {
+export const SelectItem = function({
+  name,
+  description,
+  selected,
+  onSelect,
+  fixedHeight = true
+}: SelectItemProps) {
   const theme = useContext(ThemeContext);
 
   return (
-    <HighlightButton onPress={onSelect} underlayColor={theme.backgroundLight}>
+    <HighlightButton
+      onPress={onSelect}
+      underlayColor={theme.backgroundLight}
+      fixedHeight={fixedHeight}
+    >
       <HighlightContent>
         {selected ? (
           <Feather name="check-circle" size={20} color={theme.primary} />
@@ -25,7 +36,9 @@ export const SelectItem = function({ name, description, selected, onSelect }: Se
           <Feather name="circle" size={20} color={theme.light} />
         )}
         <Item>
-          <Text iconSpace>{name}</Text>
+          <Text iconSpace numberOfLines={fixedHeight ? 1 : 0}>
+            {name}
+          </Text>
           {description && <Description iconSpace>{description}</Description>}
         </Item>
       </HighlightContent>
@@ -37,7 +50,7 @@ const SELECT_ITEM_HEIGHT = "60px";
 
 const HighlightButton = styled.TouchableHighlight`
   padding: ${space.xxxLarge};
-  height: ${SELECT_ITEM_HEIGHT};
+  height: ${({ fixedHeight }) => (fixedHeight ? SELECT_ITEM_HEIGHT : "auto")};
 
   border-bottom-width: 0.25px;
   border-bottom-color: ${({ theme }) => theme.lighter};

@@ -14,5 +14,5 @@ export const selectAgency = (state: RootState) => {
   const agencies = selectAgencies(state);
   const agencyId = selectSelectedAgencyId(state);
 
-  return agencies.data.filter(agency => agency.id === agencyId)[0];
+  return agencies.data.find(agency => agency.id === agencyId);
 };

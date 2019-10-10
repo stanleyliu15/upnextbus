@@ -11,7 +11,10 @@ import configureStore from "./src/store";
 import RootScreen from "./src/screens/RootScreen";
 import fonts from "./src/config/fonts";
 import images from "./src/config/images";
-import { getAgencies, getNearestAgencyIdByLocation } from "./src/store/features/nextbus";
+import { getAgencies, getNearestAgencyIdByLocationAndRoutes } from "./src/store/features/nextbus";
+
+// TODO: fix warnings later
+console.disableYellowBox = true;
 
 useScreens();
 
@@ -31,6 +34,7 @@ function cacheImages(images) {
 }
 
 export default function() {
+  // TODO: test app works on fresh store
   const { store, persistor } = configureStore();
   const [ready, setReady] = useState(false);
   const handleFinish = () => setReady(true);
@@ -43,8 +47,9 @@ export default function() {
       await Promise.all([
         ...fontAssets,
         ...imageAssets,
+        // TODO: fetch only if empty
         store.dispatch(getAgencies()),
-        store.dispatch(getNearestAgencyIdByLocation())
+        store.dispatch(getNearestAgencyIdByLocationAndRoutes())
       ]);
 
       handleFinish();

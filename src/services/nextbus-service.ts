@@ -4,7 +4,7 @@ import { NextBusNoNearbyError } from "../errors";
 import { GeoLocation } from "../../types";
 import * as Geolocation from "../utils/geolocation";
 
-const getNearestStop = (
+export const getNearestStop = (
   stops: NextBus.Stop[],
   location: GeoLocation,
   maxStopDistance: number

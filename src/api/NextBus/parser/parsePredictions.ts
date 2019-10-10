@@ -6,17 +6,28 @@ const parsePredictions = (
   predictions: NextBusAPI.Predictions,
   parseOptions: NextBus.PredictionsParseOptions
 ): NextBus.Predictions => {
+  const directions = arrayify(predictions.direction);
+
   return {
     routeId: predictions.routeTag,
     stopId: predictions.stopTag,
     agencyName: predictions.agencyTitle,
     routeName: predictions.routeTitle,
     stopName: predictions.stopTitle,
-    directionNames: predictions.dirTitleBecauseNoPredictions
+    directionIds: predictions.dirTitleBecauseNoPredictions
+      ? []
+      : directions.reduce((directionIds, directionP) => {
+          return directionIds.concat(arrayify(directionP.prediction)[0].dirTag);
+        }, []),
+    directionName: predictions.dirTitleBecauseNoPredictions
       ? arrayify(titleCase(predictions.dirTitleBecauseNoPredictions))
-      : arrayify(predictions.direction).map(directionP => titleCase(directionP.title)),
+      : directions.reduce(
+          (directionName, directionP, index) =>
+            `${directionName}${index > 0 ? "\n" : ""}${titleCase(directionP.title)}`,
+          ""
+        ),
     predictionList: predictions.direction
-      ? arrayify(predictions.direction)
+      ? directions
           .reduce(
             (predictionList, directionP) => predictionList.concat(arrayify(directionP.prediction)),
             []

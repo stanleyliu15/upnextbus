@@ -26,11 +26,11 @@ function configureBottomNavigatorConfigs(theme: Theme) {
     return {
       tabBarIcon: ({ tintColor }: TabBarIconProps) => {
         const { routeName } = navigation.state;
-        if (routeName === "Nearby") {
+        if (routeName === "NearbyScreen") {
           return <MaterialCommunityIcons name="near-me" size={25} color={tintColor} />;
         }
 
-        if (routeName === "Settings") {
+        if (routeName === "SettingsScreen") {
           return <Entypo name="cog" size={25} color={tintColor} />;
         }
 
@@ -40,7 +40,7 @@ function configureBottomNavigatorConfigs(theme: Theme) {
   };
 
   return {
-    initialRouteName: "Detail",
+    initialRouteName: "NearbyScreen",
     tabBarOptions,
     defaultNavigationOptions
   };
@@ -65,9 +65,9 @@ function TabNavigationBar() {
   };
 
   const routeConfigs = {
-    Nearby: NearbyScreen,
-    Settings: SettingsNavigator(defaultNavigationOptions),
-    Detail: DetailScreen
+    NearbyScreen,
+    DetailScreen,
+    SettingsScreen: SettingsNavigator(defaultNavigationOptions)
   };
   const TabNavigator = createBottomTabNavigator(
     routeConfigs,

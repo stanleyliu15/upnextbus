@@ -41,24 +41,6 @@ const reducer = combineReducers<NextBusState>({
         return null;
       })
   }),
-  predictions: combineReducers({
-    loading: createReducer(false as boolean)
-      .handleAction(actions.getPredictionsAsync.request, (state, action) => true)
-      .handleAction(
-        [actions.getPredictionsAsync.success, actions.getPredictionsAsync.failure],
-        (state, action) => false
-      ),
-    data: createReducer(null).handleAction(actions.getPredictionsAsync.success, (state, action) => {
-      return action.payload;
-    }),
-    error: createReducer(null)
-      .handleAction(actions.getPredictionsAsync.failure, (state, action) => {
-        return action.payload;
-      })
-      .handleAction(actions.getPredictionsAsync.request, (state, action) => {
-        return null;
-      })
-  }),
   nearbyPredictionsList: combineReducers({
     loading: createReducer(false as boolean)
       .handleAction(actions.getNearbyPredictionListAsync.request, (state, action) => true)

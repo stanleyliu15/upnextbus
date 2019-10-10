@@ -32,12 +32,6 @@ export const getRoutesAsync = createAsyncAction(
   "@nextbus/GET_ROUTES_FAILURE"
 )<undefined, NextBus.Route[], Error>();
 
-export const getPredictionsAsync = createAsyncAction(
-  "@nextbus/GET_PREDICTIONS_REQUEST",
-  "@nextbus/GET_PREDICTIONS_SUCCESS",
-  "@nextbus/GET_PREDICTIONS_FAILURE"
-)<undefined, NextBus.Predictions, Error>();
-
 export const getNearbyPredictionListAsync = createAsyncAction(
   "@nextbus/GET_NEARBY_PREDICTION_LIST_REQUEST",
   "@nextbus/GET_NEARBY_PREDICTION_LIST_SUCCESS",
