@@ -2,3 +2,4 @@
 // export { default as ... } from './'
 
 export * from "./ErrorInfo";
+export * from "./CircleIconButton";

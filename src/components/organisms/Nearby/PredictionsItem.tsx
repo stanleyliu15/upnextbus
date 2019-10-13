@@ -29,11 +29,10 @@ type Props = {
 export function PredictionsItem({ predictions, onPredictionsPress = null }: Props) {
   const { directionName, stopName, predictionList } = predictions;
   const routeNameOption = useSelector(selectRouteNameOption);
-  const theme = useContext(ThemeContext);
 
   return (
     <Wrapper>
-      <Container onPress={onPredictionsPress} underlayColor={theme.background}>
+      <Container onPress={onPredictionsPress}>
         <Main>
           <GeneralSection>
             <RouteName>{normalizeRouteName(predictions[routeNameOption])}</RouteName>

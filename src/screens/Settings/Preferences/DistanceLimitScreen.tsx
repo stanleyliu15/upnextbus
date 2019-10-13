@@ -21,12 +21,13 @@ export default function({ navigation }: NavigationProps) {
   return (
     <SafeArea>
       <ScrollView>
-        {DISTANCE_LIMITS.map(limit => (
+        {DISTANCE_LIMITS.map((limit, index) => (
           <SelectItem
             key={limit}
             name={`${limit} miles`}
             selected={limit === selectedDistanceLimit}
             onSelect={() => setSelectedDistanceLimit(limit)}
+            lastItem={index === DISTANCE_LIMITS.length - 1}
           />
         ))}
       </ScrollView>

@@ -10,14 +10,14 @@ export const filterRouteIds = createAction(
   action => (routeIds: string[]) => action(routeIds)
 );
 
-export const favoriteRouteId = createAction(
-  "@nextbus/FAVORITE_ROUTE_ID",
-  action => (routeId: string) => action(routeId)
+export const favorite = createAction(
+  "@nextbus/FAVORITE",
+  action => (routeId: string, stopId: string) => action({ routeId, stopId })
 );
 
-export const unfavoriteRouteId = createAction(
-  "@nextbus/UNFAVORITE_ROUTE_ID",
-  action => (routeId: string) => action(routeId)
+export const unfavorite = createAction(
+  "@nextbus/UNFAVORITE",
+  action => (routeId: string, stopId: string) => action({ routeId, stopId })
 );
 
 export const getAgenciesAsync = createAsyncAction(

@@ -33,13 +33,15 @@ export const lightColors: AppColors = {
   textLighter: "#777",
   textLightest: "#999",
   background: "#f4f4f4",
-  backgroundDark: "",
-  backgroundLight: "#fff"
+  backgroundDark: "#e0e0e0",
+  backgroundDarker: "#c0c0c0",
+  backgroundLight: "#fff",
+  backgroundLighter: ""
 };
 
 export const darkColors: AppColors = {
   primary: lighten(0.2, lightColors.primary),
-  primaryLight: lighten(0.2, lightColors.primaryLight),
+  primaryLight: lighten(0.025, lightColors.primaryLight),
   primaryDark: lighten(0.2, lightColors.primaryDark),
   secondary: lightColors.secondary,
   secondaryLight: lightColors.secondaryLight,
@@ -50,7 +52,9 @@ export const darkColors: AppColors = {
   textLighter: "#e0e0e0",
   textLightest: "#ededed",
 
-  background: "#333",
-  backgroundDark: "",
-  backgroundLight: "#444"
+  background: "#444",
+  backgroundDark: "#333",
+  backgroundDarker: "#222",
+  backgroundLight: "#555",
+  backgroundLighter: ""
 };

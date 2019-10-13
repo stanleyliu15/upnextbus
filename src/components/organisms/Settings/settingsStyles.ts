@@ -12,7 +12,8 @@ export const LinkButton = styled.TouchableHighlight`
   justify-content: center;
 
   border-radius: ${border.round};
-  padding: ${space.small} ${space.medium} ${space.small} ${space.xLarge};
+  padding-right: ${space.medium};
+  padding-left: ${space.xLarge};
 `;
 
 export const Section = styled.View`
@@ -54,10 +55,6 @@ export const PropertyAndDescription = styled.View`
   margin-left: ${({ iconSpace }) => (iconSpace ? space.large : 0)};
 `;
 
-export const Property = styled(Text)`
-  font-family: ${fontFamily.semiBold};
-`;
-
 export const Description = styled(Text)`
   /* flex-shrink: 1; */
   color: ${({ theme }) => theme.textLight};
@@ -65,7 +62,8 @@ export const Description = styled(Text)`
 `;
 
 export const ValueColumn = styled.View`
-  flex: 1;
+  flex: ${({ prioritizePropertySpace }) => (prioritizePropertySpace ? "0 0 auto" : 1)}
+
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;

@@ -48,7 +48,7 @@ function FilterRoutesScreen({ navigation }: NavigationProps) {
       <FlatList
         data={routes.data}
         keyExtractor={(item: NextBus.Route) => item.id}
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <SelectItem
             name={normalizeRouteName(item.name)}
             selected={routeIds.includes(item.id)}
@@ -59,6 +59,7 @@ function FilterRoutesScreen({ navigation }: NavigationProps) {
                 setRouteIds(routeIds.concat(item.id));
               }
             }}
+            lastItem={index === routes.data.length - 1}
           />
         )}
         extraData={routeIds}

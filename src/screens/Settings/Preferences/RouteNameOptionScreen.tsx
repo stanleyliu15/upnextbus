@@ -19,16 +19,18 @@ export default function({ navigation }: NavigationProps) {
     navigation.goBack();
   };
 
+  const keys = Object.keys(RouteNameOption);
   return (
     <SafeArea>
       <ScrollView>
-        {Object.keys(RouteNameOption).map(option => {
+        {keys.map((option, index) => {
           return (
             <SelectItem
               key={option}
               name={option}
               selected={RouteNameOption[option] === selectedRouteNameOption}
               onSelect={() => setSelectedRouteNameOption(RouteNameOption[option])}
+              lastItem={index === keys.length - 1}
             />
           );
         })}

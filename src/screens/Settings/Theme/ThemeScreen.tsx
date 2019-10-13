@@ -13,16 +13,17 @@ export default function() {
   const themeColor = useSelector(selectThemeColor);
   const [selectedThemeColor, setSelectedThemeColor] = useState(themeColor);
   const handleSave = () => dispatch(setThemeColor(selectedThemeColor));
-
+  const themeColors = Object.values(ThemeColor);
   return (
     <SafeArea>
       <ScrollView>
-        {Object.values(ThemeColor).map(themeColor => (
+        {themeColors.map((themeColor, index) => (
           <SelectItem
             key={themeColor}
             name={capitalize(themeColor)}
             selected={themeColor === selectedThemeColor}
             onSelect={() => setSelectedThemeColor(themeColor)}
+            lastItem={index === themeColors.length - 1}
           />
         ))}
       </ScrollView>

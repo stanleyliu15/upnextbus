@@ -2,16 +2,19 @@ import React, { useContext } from "react";
 import styled, { ThemeContext } from "styled-components/native";
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import { createAppContainer } from "react-navigation";
-import { createBottomTabNavigator } from "react-navigation-tabs";
+import { createBottomTabNavigator, createTabNavigator } from "react-navigation-tabs";
 import {
   BottomTabBarOptions,
   TabBarIconProps
 } from "react-navigation-tabs/lib/typescript/src/types";
+import { createStackNavigator } from "react-navigation-stack";
 
 import { Theme, space } from "../../styles";
 import NearbyScreen from "../../screens/NearbyScreen";
 import DetailScreen from "../../screens/DetailScreen";
 import SettingsNavigator from "./SettingsNavigator";
+
+// TODO: clean things up moving to one screen
 
 function configureBottomNavigatorConfigs(theme: Theme) {
   const tabBarOptions: BottomTabBarOptions = {
@@ -42,7 +45,9 @@ function configureBottomNavigatorConfigs(theme: Theme) {
   return {
     initialRouteName: "NearbyScreen",
     tabBarOptions,
-    defaultNavigationOptions
+    defaultNavigationOptions,
+    mode: "modal",
+    headerMode: "none"
   };
 }
 
@@ -54,8 +59,9 @@ function TabNavigationBar() {
   const theme: Theme = useContext(ThemeContext);
   const defaultNavigationOptions = {
     headerStyle: {
-      backgroundColor: theme.background,
-      bottomBorderWidth: 0
+      backgroundColor: theme.backgroundLight,
+      bottomBorderWidth: 0,
+      borderBottomWidth: 0
     },
     headerTitleStyle: {
       color: theme.text

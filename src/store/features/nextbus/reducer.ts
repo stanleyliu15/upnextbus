@@ -92,11 +92,11 @@ const reducer = combineReducers<NextBusState>({
   selectedAgencyId: createReducer(null).handleAction(actions.selectAgencyId, (state, action) => {
     return action.payload;
   }),
-  favoriteRouteIds: createReducer([])
-    .handleAction(actions.favoriteRouteId, (state, action) => {
+  favorites: createReducer([])
+    .handleAction(actions.favorite, (state, action) => {
       return [...state, action.payload];
     })
-    .handleAction(actions.unfavoriteRouteId, (state, action) => {
+    .handleAction(actions.unfavorite, (state, action) => {
       return state.filter(routeId => routeId === action.payload);
     }),
   routeIdFilters: createReducer([]).handleAction(actions.filterRouteIds, (state, action) => {

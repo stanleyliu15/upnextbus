@@ -18,6 +18,7 @@ console.disableYellowBox = true;
 
 useScreens();
 
+// TODO: customize
 const AppLoader = styled.ActivityIndicator``;
 
 function cacheFonts(fonts) {

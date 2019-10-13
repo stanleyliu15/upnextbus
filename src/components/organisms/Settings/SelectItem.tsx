@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { GestureResponderEvent } from "react-native";
 import styled, { ThemeContext } from "styled-components/native";
 import { Feather } from "@expo/vector-icons";
 
@@ -10,8 +11,9 @@ type SelectItemProps = {
   name: string;
   description?: string;
   selected: boolean;
-  onSelect: VoidFunction;
+  onSelect: (event: GestureResponderEvent) => void;
   fixedHeight?: boolean;
+  lastItem?: boolean;
 };
 
 export const SelectItem = function({
@@ -19,16 +21,13 @@ export const SelectItem = function({
   description,
   selected,
   onSelect,
-  fixedHeight = true
+  fixedHeight = true,
+  lastItem = true
 }: SelectItemProps) {
   const theme = useContext(ThemeContext);
 
   return (
-    <HighlightButton
-      onPress={onSelect}
-      underlayColor={theme.backgroundLight}
-      fixedHeight={fixedHeight}
-    >
+    <HighlightButton onPress={onSelect} fixedHeight={fixedHeight} lastItem={lastItem}>
       <HighlightContent>
         {selected ? (
           <Feather name="check-circle" size={20} color={theme.primary} />
@@ -48,12 +47,18 @@ export const SelectItem = function({
 
 const SELECT_ITEM_HEIGHT = "60px";
 
-const HighlightButton = styled.TouchableHighlight`
+const HighlightButton = styled.TouchableHighlight.attrs(props => ({
+  ...props,
+  underlayColor: props.theme.backgroundDark
+}))`
   padding: ${space.xxxLarge};
   height: ${({ fixedHeight }) => (fixedHeight ? SELECT_ITEM_HEIGHT : "auto")};
 
-  border-bottom-width: 0.25px;
-  border-bottom-color: ${({ theme }) => theme.lighter};
+  ${({ lastItem, theme }) => {
+    if (!lastItem) {
+      return `border-bottom-width: 0.25px; border-bottom-color: ${theme.lighter}`;
+    }
+  }};
 `;
 
 const HighlightContent = styled.View`

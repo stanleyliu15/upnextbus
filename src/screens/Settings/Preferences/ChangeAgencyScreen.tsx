@@ -38,12 +38,13 @@ function ChangeAgencyScreen({ navigation }: NavigationProps) {
       <FlatList
         data={agencies.data}
         keyExtractor={(item: NextBus.Agency) => item.id}
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <SelectItem
             name={item.name}
             description={item.region}
             selected={item.id === agencyId}
             onSelect={() => setAgencyId(item.id)}
+            lastItem={index === agencies.data.length - 1}
           />
         )}
         extraData={agencyId}

@@ -24,12 +24,13 @@ export default function({ navigation }: NavigationProps) {
   return (
     <SafeArea>
       <ScrollView>
-        {PREDICTION_LIST_LIMITS.map(limit => (
+        {PREDICTION_LIST_LIMITS.map((limit, index) => (
           <SelectItem
             key={limit}
             name={limit}
             selected={limit === selectedListLimit}
             onSelect={() => setSelectedListLimit(limit)}
+            lastItem={index === PREDICTION_LIST_LIMITS.length - 1}
           />
         ))}
       </ScrollView>
