@@ -15,7 +15,9 @@ const commandParser = {
     predictionsList: NextBusAPI.Predictions[],
     parseOptions: NextBus.PredictionsListParseOptions
   ): NextBus.Predictions[] =>
-    predictionsList.map(predictions => p.parsePredictions(predictions, parseOptions))
+    predictionsList.map(predictions => p.parsePredictions(predictions, parseOptions)),
+  vehicleLocations: (vehiclesConfig: NextBusAPI.VehiclesConfig): NextBus.VehiclesConfig =>
+    p.parseVehiclesConfig(vehiclesConfig)
 };
 
 /**

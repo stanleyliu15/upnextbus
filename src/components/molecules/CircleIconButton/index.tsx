@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 
 import { border } from "../../../styles";
+import { Button } from "../../atoms";
 
 const Wrapper = styled.View`
   justify-content: center;
@@ -9,10 +10,15 @@ const Wrapper = styled.View`
   flex: 1;
 `;
 
-export const CircularIconButton = styled.TouchableHighlight.attrs(props => ({
+export const CircularIconButton = styled(Button).attrs(props => ({
   underlayColor: props.theme.background,
-  children: <Wrapper {...props}>{props.children}</Wrapper>
+  children: <Wrapper>{props.children}</Wrapper>,
+  ...props
 }))`
+  padding: 0;
+  border-radius: 0;
+  background-color: ${({ theme }) => theme.background};
+
   justify-content: center;
   align-items: center;
 

@@ -4,13 +4,16 @@
  * Documentation:
  * https://www.nextbus.com/xmlFeedDocs/NextBusXMLFeed.pdf
  */
+import { GeoLocation } from ".";
+
 declare namespace NextBusAPI {
   type Command =
     | "agencyList"
     | "routeConfig"
     | "routeList"
     | "predictions"
-    | "predictionsForMultiStops";
+    | "predictionsForMultiStops"
+    | "vehicleLocations";
 
   type ServiceAlertPriority = "Low" | "Normal" | "High" | "Critical";
 
@@ -107,6 +110,25 @@ declare namespace NextBusAPI {
     message?: ServiceAlert | ServiceAlert[];
   }
 
+  interface Vehicle {
+    id: string;
+    routeTag: string;
+    dirTag: string;
+    lat: string;
+    lon: string;
+    predictable: string;
+    speedKmHr: string;
+    heading: string;
+    secsSinceReport: string;
+  }
+
+  interface VehiclesConfig {
+    vehicle: Vehicle | Vehicle[];
+    lastTime: {
+      time: string;
+    };
+  }
+
   interface Error {
     content: string;
     shouldRetry: string;
@@ -117,7 +139,8 @@ declare namespace NextBusAPI {
     | RoutesQueryOptions
     | RouteInfosQueryOptions
     | PredictionsQueryOptions
-    | PredictionsListQueryOptions;
+    | PredictionsListQueryOptions
+    | VehiclesQueryOptions;
 
   interface BaseQueryOptions {
     command: NextBusAPI.Command;
@@ -149,6 +172,12 @@ declare namespace NextBusAPI {
     useShortTitles?: string;
   }
 
+  interface VehiclesQueryOptions extends BaseQueryOptions {
+    a: string;
+    r: string;
+    t?: string;
+  }
+
   interface ResponseJson {
     [key: string]:
       | Agency
@@ -158,8 +187,14 @@ declare namespace NextBusAPI {
       | Route[]
       | Predictions
       | Predictions[]
+      | Vehicle
+      | Vehicle[]
       | Error
       | Error[];
+    // Only exists on VehicleLocations command
+    lastTime?: {
+      time: string;
+    };
     copyright: string;
   }
 }

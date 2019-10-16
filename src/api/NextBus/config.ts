@@ -13,26 +13,18 @@ export const API_URL = "http://webservices.nextbus.com/service/publicJSONFeed";
  * The List:
  *  bruinbus - contains no information
  *  lametro, ttc - contains too much information
- *  rutgers, rutgers-newark - never seems to finish initialization
  *  dta, configdev - expose development data
  *
  */
-export const AGENCY_ID_FILTERS = [
-  "bruinbus",
-  "rutgers",
-  "rutgers-newark",
-  "lametro",
-  "ttc",
-  "dta",
-  "configdev"
-];
+export const AGENCY_ID_FILTERS = ["bruinbus", "lametro", "ttc", "dta", "configdev"];
 
 export const COMMANDS = {
   agencyList: "agencyList",
   routeConfig: "routeConfig",
   routeList: "routeList",
   predictions: "predictions",
-  predictionsForMultiStops: "predictions"
+  predictionsForMultiStops: "predictions",
+  vehicleLocations: "vehicleLocations"
 };
 
 /**
@@ -51,5 +43,6 @@ export const COMMAND_PATH_MAP = {
   routeConfig: "route",
   routeList: "route",
   predictions: "predictions",
-  predictionsForMultiStops: "predictions"
+  predictionsForMultiStops: "predictions",
+  vehicleLocations: "vehicle"
 };

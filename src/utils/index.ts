@@ -1,6 +1,6 @@
 import isNil from "lodash/isNil";
 import startCase from "lodash/startCase";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 
 /**
  * Converts an object to a query parameters
@@ -46,3 +46,21 @@ export function useToggle(initialState: boolean = false) {
 export const enumKeyFromValue = (enumParam, enumValue) => {
   return Object.keys(enumParam).find(key => enumParam[key] === enumValue);
 };
+
+export function useInterval(callback, delay) {
+  const savedCallback = useRef();
+
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+    if (delay !== null) {
+      const id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
+}

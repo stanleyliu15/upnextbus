@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { Linking, ScrollView } from "react-native";
-import { ThemeContext } from "styled-components/native";
+import styled, { ThemeContext } from "styled-components/native";
 import { useSelector } from "react-redux";
 import * as StoreReview from "expo-store-review";
 import Constants from "expo-constants";
-import { Feather, FontAwesome5 } from "@expo/vector-icons";
+import { Feather, FontAwesome5, AntDesign } from "@expo/vector-icons";
 import capitalize from "lodash/capitalize";
 
 import { LinkItem } from "../../components/organisms/Settings";
@@ -20,17 +20,28 @@ import { selectAgency } from "../../store/features/nextbus";
 import { Title } from "../../components/atoms";
 import { enumKeyFromValue } from "../../utils";
 import { NavigationProps } from "../../../types";
+import { CloseButton } from "../DetailScreen";
+import { space } from "../../styles";
 
-function SettingsScreen({ navigation: { navigate } }: NavigationProps) {
+const MyCloseButton = styled(CloseButton)`
+  top: ${space.large};
+`;
+
+function SettingsScreen({ navigation }: NavigationProps) {
+  const { navigate } = navigation;
   const theme = useContext(ThemeContext);
   const settings = useSelector(selectSettings);
   const agency = useSelector(selectAgency);
+  // const backToDetailScreen = () => {
+  //   navigation.goBack("detailsScreenKey");
+  // };
 
   return (
     <SafeArea>
       <ScrollView>
         <Section>
           <Title>Settings</Title>
+          {/* <MyCloseButton onPress={backToDetailScreen} /> */}
         </Section>
         <Section>
           <GroupTitle>Preferences</GroupTitle>
@@ -80,7 +91,7 @@ function SettingsScreen({ navigation: { navigate } }: NavigationProps) {
           <SectionContent>
             <LinkItem
               title="Rate Us"
-              icon={<Feather name="star" size={25} color={theme.primary} />}
+              icon={<AntDesign name="star" size={25} color={theme.primary} />}
               description="help us on the store!"
               onPress={() => StoreReview.requestReview()}
               externalLink
@@ -93,7 +104,7 @@ function SettingsScreen({ navigation: { navigate } }: NavigationProps) {
           <SectionContent>
             <LinkItem
               title="Contact Us"
-              description="tell us what you think"
+              description="tell us what you think!"
               icon={<Feather name="mail" size={22.5} color={theme.text} />}
               onPress={() => Linking.openURL("mailto://upnextbus@gmail.com")}
               externalLink

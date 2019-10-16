@@ -1,6 +1,5 @@
-import React, { useContext } from "react";
+import React from "react";
 import { GestureResponderEvent } from "react-native";
-import { ThemeContext } from "styled-components/native";
 import { useSelector } from "react-redux";
 
 import { normalizeRouteName } from "../../../utils";

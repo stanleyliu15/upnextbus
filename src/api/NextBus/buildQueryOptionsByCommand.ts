@@ -5,7 +5,8 @@ const commandQueryOptionsBuilder = {
   routeConfig: b.buildQueryOptionsForRoutes,
   routeList: b.buildQueryOptionsForRouteInfos,
   predictions: b.buildQueryOptionsForPredictions,
-  predictionsForMultiStops: b.buildQueryOptionsForPredictionsList
+  predictionsForMultiStops: b.buildQueryOptionsForPredictionsList,
+  vehicleLocations: b.buildQueryOptionsForVehicles
 };
 
 /**

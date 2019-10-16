@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
 import { GestureResponderEvent, View } from "react-native";
-import styled, { ThemeContext } from "styled-components/native";
+import styled from "styled-components/native";
 import { useSelector, useDispatch } from "react-redux";
 import { FontAwesome, Feather } from "@expo/vector-icons";
 
@@ -23,10 +23,12 @@ type Props = {
   onDirectionPress?: (event: GestureResponderEvent) => void;
   onStopPress?: (event: GestureResponderEvent) => void;
   onRefreshPress: (event: GestureResponderEvent) => void;
+  canRefresh: boolean;
 };
 
 export function DetailItem({
   predictions,
+  canRefresh,
   onDirectionPress = undefined,
   onStopPress = undefined,
   onRefreshPress
@@ -66,7 +68,7 @@ export function DetailItem({
         prioritizePropertySpace
       />
       <RefreshAndTimes>
-        <Refresh onPress={onRefreshPress} />
+        <Refresh onPress={canRefresh && onRefreshPress} />
         <PredictionTime>
           {predictionList.length > 0 ? (
             <>

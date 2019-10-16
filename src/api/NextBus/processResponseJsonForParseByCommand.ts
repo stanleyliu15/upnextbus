@@ -18,6 +18,10 @@ const extractResponseData = (
   command: NextBusAPI.Command,
   responseJson: NextBusAPI.ResponseJson
 ): any => {
+  if (command === COMMANDS.vehicleLocations) {
+    return responseJson;
+  }
+
   const path = COMMAND_PATH_MAP[command];
   return responseJson[path];
 };
@@ -26,6 +30,17 @@ const uniformalizeResponseData = (command: NextBusAPI.Command, responseData: any
   if (command === COMMANDS.predictions) {
     return responseData;
   }
+
+  if (command === COMMANDS.vehicleLocations) {
+    return {
+      // eslint-disable-next-line no-prototype-builtins
+      vehicles: responseData.hasOwnProperty(COMMAND_PATH_MAP[command])
+        ? arrayify(responseData[COMMAND_PATH_MAP[command]])
+        : [],
+      lastTime: responseData.lastTime
+    };
+  }
+
   return arrayify(responseData);
 };
 

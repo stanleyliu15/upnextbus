@@ -1,10 +1,17 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { FlatList, RefreshControl, GestureResponderEvent } from "react-native";
-import { ThemeContext } from "styled-components/native";
+import {
+  FlatList,
+  RefreshControl,
+  GestureResponderEvent,
+  View,
+  TouchableOpacity
+} from "react-native";
+import styled, { ThemeContext } from "styled-components/native";
+import { Entypo, Feather } from "@expo/vector-icons";
 
-import { ErrorInfo } from "../components/molecules";
-import { Loader } from "../components/atoms";
+import { Loader, Button } from "../components/atoms";
+import { ErrorInfo, FloatingButton, CircularIconButton } from "../components/molecules";
 import {
   getNearbyPredictionsList,
   selectNearbyPredictionList,
@@ -19,22 +26,28 @@ function NearbyScreen({ navigation }) {
   const nearby = useSelector(selectNearbyPredictionList);
   const filterRouteIds = useSelector(selectFilterRouteIds);
   const theme = useContext(ThemeContext);
-  const [firstRender, setFirstRender] = useState(true);
+  const firstUpdate = useRef(true);
   const [refreshing, setRefreshing] = useState(false);
   const { data: routes } = useSelector(selectRoutes);
 
   useEffect(() => {
-    if (firstRender) {
-      dispatch(getNearbyPredictionsList()).then(() => setFirstRender(false));
+    if (firstUpdate.current) {
+      dispatch(getNearbyPredictionsList());
+      firstUpdate.current = false;
     }
     if (refreshing) {
-      dispatch(getNearbyPredictionsList()).then(() => setRefreshing(false));
+      dispatch(getNearbyPredictionsList()).then(() => {
+        setRefreshing(false);
+      });
     }
-  }, [dispatch, firstRender, refreshing]);
+  }, [dispatch, refreshing]);
 
   const handleRefresh = () => setRefreshing(true);
 
-  if (nearby.loading && firstRender) {
+  // const openSettings = () =>
+  //   navigation.navigate({ routeName: "SettingsScreen", key: "detailsScreenKey" });
+
+  if (nearby.loading && firstUpdate.current) {
     return <Loader />;
   }
 
@@ -47,9 +60,16 @@ function NearbyScreen({ navigation }) {
     );
   }
 
-  const data = nearby.data.filter(prediction => filterRouteIds.includes(prediction.routeId));
+  const data =
+    filterRouteIds.length === 0
+      ? nearby.data
+      : nearby.data.filter(prediction => filterRouteIds.includes(prediction.routeId));
+
   return (
     <SafeArea>
+      <FloatingButton onPress={handleRefresh} iconSize={28} position="bottom-left">
+        <Feather name="refresh-cw" size={28} color={theme.primary} />
+      </FloatingButton>
       <FlatList
         data={data}
         keyExtractor={(item: NextBus.Predictions) => `${item.routeId}-${item.stopId}`}

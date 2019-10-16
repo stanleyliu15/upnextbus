@@ -4,7 +4,7 @@ import { Entypo } from "@expo/vector-icons";
 import { Dimensions } from "react-native";
 import { getInset, getStatusBarHeight } from "react-native-safe-area-view";
 
-import { Text, Button, Strong } from "../../atoms";
+import { Text, Strong } from "../../atoms";
 import { space, border, fontFamily, fontSize } from "../../../styles";
 
 export const Wrapper = styled.View``;

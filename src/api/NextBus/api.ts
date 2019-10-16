@@ -12,7 +12,10 @@ const NextBusAPI = {
     queryOptions: NextBus.PredictionsListQueryOptions,
     parseOptions: NextBus.PredictionsListParseOptions
   ): Promise<NextBus.Predictions[]> =>
-    request("predictionsForMultiStops", queryOptions, parseOptions)
+    request("predictionsForMultiStops", queryOptions, parseOptions),
+  getVehiclesConfig: (
+    queryOptions: NextBus.VehiclesQueryOptions
+  ): Promise<NextBus.VehiclesConfig> => request("vehicleLocations", queryOptions)
 };
 
 export default NextBusAPI;

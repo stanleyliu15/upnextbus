@@ -93,12 +93,24 @@ declare namespace NextBus {
     stopId: string;
   }
 
+  interface Vehicle {
+    id: string;
+    routeId: string;
+    directionId: string;
+    location: GeoLocation;
+    secondsSinceRecord: number;
+    predictable: boolean;
+    heading: number;
+    speed: number;
+  }
+
   type QueryOptions =
     | AgenciesQueryOptions
     | RoutesQueryOptions
     | RouteInfosQueryOptions
     | PredictionsQueryOptions
-    | PredictionsListQueryOptions;
+    | PredictionsListQueryOptions
+    | VehiclesQueryOptions;
 
   type QueryOptionsBuilder = (
     command: NextBusAPI.Command,
@@ -124,6 +136,17 @@ declare namespace NextBus {
   interface PredictionsListQueryOptions {
     agencyId: string;
     stopLabels: StopLabel[];
+  }
+
+  interface VehiclesConfig {
+    vehicles: Vehicle[];
+    lastTime: string;
+  }
+
+  interface VehiclesQueryOptions {
+    agencyId: string;
+    routeId: string;
+    lastTime?: string;
   }
 
   type ParseOptions = PredictionsParseOptions | PredictionsListParseOptions;
