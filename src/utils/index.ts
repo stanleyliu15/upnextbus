@@ -64,3 +64,35 @@ export function useInterval(callback, delay) {
     }
   }, [delay]);
 }
+
+export const useTimer = () => {
+  const [seconds, setSeconds] = useState(0);
+  const [active, setActive] = useState(false);
+
+  function start() {
+    setActive(true);
+  }
+
+  function stop() {
+    setActive(false);
+  }
+
+  function restart() {
+    setSeconds(0);
+    setActive(true);
+  }
+
+  useEffect(() => {
+    let interval = null;
+    if (active) {
+      interval = setInterval(() => {
+        setSeconds(seconds => seconds + 1);
+      }, 1000);
+    } else if (!active) {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [active, seconds]);
+
+  return { seconds, startTimer: start, stopTimer: stop, restartTimer: restart };
+};

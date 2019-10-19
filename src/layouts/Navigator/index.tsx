@@ -1,87 +1,50 @@
 import React, { useContext } from "react";
-import styled, { ThemeContext } from "styled-components/native";
-import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import { createAppContainer } from "react-navigation";
-import { createBottomTabNavigator, createTabNavigator } from "react-navigation-tabs";
-import {
-  BottomTabBarOptions,
-  TabBarIconProps
-} from "react-navigation-tabs/lib/typescript/src/types";
+
 import { createStackNavigator } from "react-navigation-stack";
-
-import { Theme, space } from "../../styles";
-import NearbyScreen from "../../screens/NearbyScreen";
-import DetailScreen from "../../screens/DetailScreen";
+import { ThemeContext } from "styled-components/native";
 import SettingsNavigator from "./SettingsNavigator";
+import DetailNavigator from "./DetailNavigator";
+import NearbyScreen from "../../screens/NearbyScreen";
+import { Theme } from "../../styles";
+import { BackIcon } from "./styles";
 
-// TODO: clean things up moving to one screen
-
-function configureBottomNavigatorConfigs(theme: Theme) {
-  const tabBarOptions: BottomTabBarOptions = {
-    showLabel: false,
-    activeBackgroundColor: theme.background,
-    inactiveBackgroundColor: theme.background,
-    activeTintColor: theme.primary,
-    inactiveTintColor: theme.disabled
-  };
-
-  const defaultNavigationOptions = ({ navigation }) => {
-    return {
-      tabBarIcon: ({ tintColor }: TabBarIconProps) => {
-        const { routeName } = navigation.state;
-        if (routeName === "NearbyScreen") {
-          return <MaterialCommunityIcons name="near-me" size={25} color={tintColor} />;
-        }
-
-        if (routeName === "SettingsScreen") {
-          return <Entypo name="cog" size={25} color={tintColor} />;
-        }
-
-        return null;
-      }
-    };
-  };
-
-  return {
-    initialRouteName: "NearbyScreen",
-    tabBarOptions,
-    defaultNavigationOptions,
+function Navigator() {
+  const theme: Theme = useContext(ThemeContext);
+  const baseStackConfig = {
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: theme.backgroundLight,
+        bottomBorderWidth: 0,
+        borderBottomWidth: 0
+      },
+      headerTitleStyle: {
+        color: theme.text
+      },
+      headerBackTitle: null,
+      headerBackImage: <BackIcon />
+    },
     mode: "modal",
     headerMode: "none"
   };
-}
-
-const BackIcon = styled(Entypo)`
-  margin: 0 ${space.large};
-`;
-
-function TabNavigationBar() {
-  const theme: Theme = useContext(ThemeContext);
-  const defaultNavigationOptions = {
-    headerStyle: {
-      backgroundColor: theme.backgroundLight,
-      bottomBorderWidth: 0,
-      borderBottomWidth: 0
-    },
-    headerTitleStyle: {
-      color: theme.text
-    },
-    headerBackTitle: null,
-    headerBackImage: <BackIcon name="chevron-thin-left" size={25} color={theme.light} />
-  };
 
   const routeConfigs = {
-    NearbyScreen,
-    DetailScreen,
-    SettingsScreen: SettingsNavigator(defaultNavigationOptions)
+    NearbyScreen: {
+      screen: NearbyScreen
+    },
+    Detail: DetailNavigator(baseStackConfig, theme),
+    SettingsScreen: SettingsNavigator(baseStackConfig, theme)
   };
-  const TabNavigator = createBottomTabNavigator(
-    routeConfigs,
-    configureBottomNavigatorConfigs(theme)
-  );
-  const AppContainer = createAppContainer(TabNavigator);
+
+  const stackConfig = {
+    ...baseStackConfig,
+    initialRouteName: "NearbyScreen"
+  };
+
+  const AppNavigator = createStackNavigator(routeConfigs, stackConfig);
+  const AppContainer = createAppContainer(AppNavigator);
 
   return <AppContainer />;
 }
 
-export default TabNavigationBar;
+export default Navigator;

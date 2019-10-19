@@ -7,6 +7,7 @@ import Constants from "expo-constants";
 import { Feather, FontAwesome5, AntDesign } from "@expo/vector-icons";
 import capitalize from "lodash/capitalize";
 
+import { NavigationActions } from "react-navigation";
 import { LinkItem } from "../../components/organisms/Settings";
 import {
   Section,
@@ -20,7 +21,7 @@ import { selectAgency } from "../../store/features/nextbus";
 import { Title } from "../../components/atoms";
 import { enumKeyFromValue } from "../../utils";
 import { NavigationProps } from "../../../types";
-import { CloseButton } from "../DetailScreen";
+import { CloseButton } from "../Detail/DetailScreen";
 import { space } from "../../styles";
 
 const MyCloseButton = styled(CloseButton)`
@@ -32,16 +33,16 @@ function SettingsScreen({ navigation }: NavigationProps) {
   const theme = useContext(ThemeContext);
   const settings = useSelector(selectSettings);
   const agency = useSelector(selectAgency);
-  // const backToDetailScreen = () => {
-  //   navigation.goBack("detailsScreenKey");
-  // };
+  const goBack = () => {
+    navigation.dispatch(NavigationActions.back());
+  };
 
   return (
     <SafeArea>
       <ScrollView>
         <Section>
           <Title>Settings</Title>
-          {/* <MyCloseButton onPress={backToDetailScreen} /> */}
+          <MyCloseButton onPress={goBack} />
         </Section>
         <Section>
           <GroupTitle>Preferences</GroupTitle>

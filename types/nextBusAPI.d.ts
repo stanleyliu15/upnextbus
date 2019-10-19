@@ -122,13 +122,6 @@ declare namespace NextBusAPI {
     secsSinceReport: string;
   }
 
-  interface VehiclesConfig {
-    vehicle: Vehicle | Vehicle[];
-    lastTime: {
-      time: string;
-    };
-  }
-
   interface Error {
     content: string;
     shouldRetry: string;

@@ -17,8 +17,16 @@ const StyledFloatingButton = styled(CircularIconButton).attrs(props => ({
 }))`
   position: absolute;
 
-  left: ${space.xxxLarge};
+  left: ${({ position }) => {
+    if (position === "bottom-left") return space.xxxLarge;
+    return "auto";
+  }};
+
   bottom: ${space.xxxLarge};
+  right: ${({ position }) => {
+    if (position === "bottom-right") return space.xxxLarge;
+    return "auto";
+  }};
 
   background-color: ${({ theme }) => theme.backgroundLight};
 

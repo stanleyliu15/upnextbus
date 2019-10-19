@@ -89,7 +89,6 @@ declare namespace NextBus {
 
   interface StopLabel {
     routeId: string;
-    directionId: string;
     stopId: string;
   }
 
@@ -136,11 +135,6 @@ declare namespace NextBus {
   interface PredictionsListQueryOptions {
     agencyId: string;
     stopLabels: StopLabel[];
-  }
-
-  interface VehiclesConfig {
-    vehicles: Vehicle[];
-    lastTime: string;
   }
 
   interface VehiclesQueryOptions {

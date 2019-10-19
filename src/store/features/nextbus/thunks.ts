@@ -30,8 +30,8 @@ export function getRoutes(): ThunkResult<Promise<void>> {
     } = getState();
     dispatch(getRoutesAsync.request());
     try {
-      const agencies = await NextBusAPI.getRoutes({ agencyId: selectedAgencyId });
-      dispatch(getRoutesAsync.success(agencies));
+      const routes = await NextBusAPI.getRoutes({ agencyId: selectedAgencyId });
+      dispatch(getRoutesAsync.success(routes));
     } catch (error) {
       dispatch(getRoutesAsync.failure(error));
     }
@@ -41,17 +41,20 @@ export function getRoutes(): ThunkResult<Promise<void>> {
 export function getNearbyPredictionsList(): ThunkResult<Promise<void>> {
   return async function(dispatch: ThunkDispatch, getState) {
     const {
-      nextBus: {
-        routes: { data },
-        selectedAgencyId
-      },
+      nextBus: { routes, selectedAgencyId, favorites, routeIdFilters },
       settings: { maxStopDistance, predictionListLimit }
     } = getState();
 
     dispatch(getNearbyPredictionListAsync.request());
     try {
       const predictionsList = await NextBusService.getNearbyPredictionsList(
-        { agencyId: selectedAgencyId, routes: data, maxStopDistance },
+        {
+          agencyId: selectedAgencyId,
+          routes: routes.data,
+          maxStopDistance,
+          favorites,
+          routeIdFilters
+        },
         { listLimit: predictionListLimit }
       );
       dispatch(getNearbyPredictionListAsync.success(predictionsList));
@@ -67,9 +70,8 @@ export function getNearestAgencyIdByLocation(): ThunkResult<Promise<void>> {
 
     try {
       const location = await getLocationAsync();
-      const agencyId = await NextBusMobileAPI.getNearestAgencyIdByLocation(location);
-      dispatch(selectAgencyId(agencyId));
-      dispatch(getNearestAgencyIdByLocationAsync.success(agencyId));
+      const nearestAgencyId = await NextBusMobileAPI.getNearestAgencyIdByLocation(location);
+      dispatch(getNearestAgencyIdByLocationAsync.success(nearestAgencyId));
     } catch (error) {
       dispatch(getNearestAgencyIdByLocationAsync.failure(error));
     }
@@ -79,6 +81,10 @@ export function getNearestAgencyIdByLocation(): ThunkResult<Promise<void>> {
 export function getNearestAgencyIdByLocationAndRoutes(): ThunkResult<Promise<void>> {
   return (dispatch: ThunkDispatch, getState) => {
     return dispatch(getNearestAgencyIdByLocation()).then(() => {
+      const {
+        nextBus: { nearestAgencyIdByLocation }
+      } = getState();
+      dispatch(selectAgencyId(nearestAgencyIdByLocation.data));
       return dispatch(getRoutes());
     });
   };

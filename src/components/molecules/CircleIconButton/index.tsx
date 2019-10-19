@@ -11,7 +11,6 @@ const Wrapper = styled.View`
 `;
 
 export const CircularIconButton = styled(Button).attrs(props => ({
-  underlayColor: props.theme.background,
   children: <Wrapper>{props.children}</Wrapper>,
   ...props
 }))`

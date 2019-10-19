@@ -1,8 +1,6 @@
 import React from "react";
 import styled from "styled-components/native";
 import { Entypo } from "@expo/vector-icons";
-import { Dimensions } from "react-native";
-import { getInset, getStatusBarHeight } from "react-native-safe-area-view";
 
 import { Text, Strong } from "../../atoms";
 import { space, border, fontFamily, fontSize } from "../../../styles";
@@ -35,8 +33,8 @@ export const VerticalSeperator = styled.View`
   margin-top: ${space.xxLarge};
   margin-bottom: ${space.xxLarge};
 
-  padding-left: ${space.small};
-  padding-right: ${space.small};
+  margin-left: ${space.small};
+  margin-right: ${space.small};
 `;
 
 export const RouteName = styled(Text)`
@@ -50,8 +48,15 @@ export const DirectionName = styled(Text)`
   margin-top: ${space.xLarge};
 `;
 
-export const StopName = styled(Text)`
+export const Row = styled.View`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
   margin-top: ${space.large};
+`;
+
+export const StopName = styled(Text)`
   font-size: ${fontSize.primary};
   color: ${({ theme }) => theme.textLighter};
 `;
@@ -79,7 +84,7 @@ export const PredictionMinute = styled(Text)`
   font-size: ${fontSize.large};
 `;
 
-export const PredictionUnit = styled(Text)`
+export const Unit = styled(Text)`
   font-size: ${fontSize.nano};
   margin-left: ${space.nano};
 `;
@@ -89,17 +94,6 @@ export const PanelContainer = styled(Wrapper)`
   border-radius: ${border.round};
 
   padding: ${space.medium};
-
-  /*
-   TODO: may need to adjust if supporting landscape mode
-   TODO: test on other devices */
-  max-height: ${({ limitSpace }) =>
-    limitSpace
-      ? Dimensions.get("screen").height -
-        getStatusBarHeight() -
-        getInset("top") -
-        getInset("bottom")
-      : "auto"};
 `;
 
 export const BackButton = styled.TouchableHighlight.attrs(props => ({

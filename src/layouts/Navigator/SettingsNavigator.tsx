@@ -8,56 +8,57 @@ import PredictionsLimitScreen from "../../screens/Settings/Preferences/Predictio
 import RouteNameOptionScreen from "../../screens/Settings/Preferences/RouteNameOptionScreen";
 import ThemeScreen from "../../screens/Settings/Theme/ThemeScreen";
 
-const routeConfigs = {
-  SettingsScreen: {
-    screen: SettingsScreen,
-    navigationOptions: {
-      header: null
+export default (parentStackConfig, theme) => {
+  const routeConfigs = {
+    SettingsScreen: {
+      screen: SettingsScreen,
+      navigationOptions: {
+        header: null
+      }
+    },
+    ChangeAgencyScreen: {
+      screen: ChangeAgencyScreen,
+      navigationOptions: {
+        headerTitle: "Change Agency"
+      }
+    },
+    FilterRoutesScreen: {
+      screen: FilterRoutesScreen,
+      navigationOptions: {
+        headerTitle: "Configure Routes"
+      }
+    },
+    DistanceLimitScreen: {
+      screen: DistanceLimitScreen,
+      navigationOptions: {
+        headerTitle: "Distance Limit"
+      }
+    },
+    PredictionsLimitScreen: {
+      screen: PredictionsLimitScreen,
+      navigationOptions: {
+        headerTitle: "Predictions Limit"
+      }
+    },
+    RouteNameOptionScreen: {
+      screen: RouteNameOptionScreen,
+      navigationOptions: {
+        headerTitle: "Route Name Option"
+      }
+    },
+    ThemeScreen: {
+      screen: ThemeScreen,
+      navigationOptions: {
+        headerTitle: "Theme"
+      }
     }
-  },
-  ChangeAgencyScreen: {
-    screen: ChangeAgencyScreen,
-    navigationOptions: {
-      headerTitle: "Change Agency"
-    }
-  },
-  FilterRoutesScreen: {
-    screen: FilterRoutesScreen,
-    navigationOptions: {
-      headerTitle: "Configure Routes"
-    }
-  },
-  DistanceLimitScreen: {
-    screen: DistanceLimitScreen,
-    navigationOptions: {
-      headerTitle: "Distance Limit"
-    }
-  },
-  PredictionsLimitScreen: {
-    screen: PredictionsLimitScreen,
-    navigationOptions: {
-      headerTitle: "Predictions Limit"
-    }
-  },
-  RouteNameOptionScreen: {
-    screen: RouteNameOptionScreen,
-    navigationOptions: {
-      headerTitle: "Route Name Option"
-    }
-  },
-  ThemeScreen: {
-    screen: ThemeScreen,
-    navigationOptions: {
-      headerTitle: "Theme"
-    }
-  }
-};
+  };
 
-const configureNavigationOptions = defaultNavigationOptions => ({
-  initialRouteName: "SettingsScreen",
-  defaultNavigationOptions
-});
+  const stackConfig = {
+    ...parentStackConfig,
+    initialRouteName: "SettingsScreen",
+    headerMode: "screen"
+  };
 
-export default defaultNavigationOptions => {
-  return createStackNavigator(routeConfigs, configureNavigationOptions(defaultNavigationOptions));
+  return createStackNavigator(routeConfigs, stackConfig);
 };

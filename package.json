@@ -4,6 +4,8 @@
     "start": "react-native start",
     "android": "react-native run-android && react-native log-android",
     "ios": "react-native run-ios && react-native log-ios",
+    "ios-5s": "react-native run-ios --simulator \"iPhone 5s\" && react-native log-ios",
+    "ios-6s": "react-native run-ios --simulator \"iPhone 6s\" && react-native log-ios",
     "eslint:fix": "eslint . --fix --ext .js,.ts,.tsx",
     "prettier": "prettier --write '**/*.{js,ts,tsx,json,md}'",
     "jest": "jest"

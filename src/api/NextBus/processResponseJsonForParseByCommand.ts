@@ -32,13 +32,10 @@ const uniformalizeResponseData = (command: NextBusAPI.Command, responseData: any
   }
 
   if (command === COMMANDS.vehicleLocations) {
-    return {
-      // eslint-disable-next-line no-prototype-builtins
-      vehicles: responseData.hasOwnProperty(COMMAND_PATH_MAP[command])
-        ? arrayify(responseData[COMMAND_PATH_MAP[command]])
-        : [],
-      lastTime: responseData.lastTime
-    };
+    // eslint-disable-next-line no-prototype-builtins
+    return responseData.hasOwnProperty(COMMAND_PATH_MAP[command])
+      ? arrayify(responseData[COMMAND_PATH_MAP[command]])
+      : [];
   }
 
   return arrayify(responseData);

@@ -1,19 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { GestureResponderEvent, View } from "react-native";
-import styled from "styled-components/native";
+import styled, { ThemeContext } from "styled-components/native";
 import { useSelector, useDispatch } from "react-redux";
-import { FontAwesome, Feather } from "@expo/vector-icons";
+import { FontAwesome, MaterialIcons, AntDesign } from "@expo/vector-icons";
 
 import { normalizeRouteName } from "../../../utils";
 import { selectRouteNameOption } from "../../../store/features/settings";
-import {
-  RouteName,
-  PredictionTime,
-  PredictionMinute,
-  PredictionUnit,
-  DashDash
-} from "./itemStyles";
-import { space, border, fontFamily } from "../../../styles";
+import { RouteName, PredictionTime, PredictionMinute, Unit, DashDash } from "./itemStyles";
+import { space, fontFamily } from "../../../styles";
 import { LinkItem } from "../Settings";
 import { CircularIconButton } from "../../molecules";
 import { selectFavorites, favorite, unfavorite } from "../../../store/features/nextbus";
@@ -23,6 +17,7 @@ type Props = {
   onDirectionPress?: (event: GestureResponderEvent) => void;
   onStopPress?: (event: GestureResponderEvent) => void;
   onRefreshPress: (event: GestureResponderEvent) => void;
+  onServiceAlertsPress?: (event: GestureResponderEvent) => void;
   canRefresh: boolean;
 };
 
@@ -31,8 +26,10 @@ export function DetailItem({
   canRefresh,
   onDirectionPress = undefined,
   onStopPress = undefined,
-  onRefreshPress
+  onRefreshPress,
+  onServiceAlertsPress = undefined
 }: Props) {
+  const theme = useContext(ThemeContext);
   const { directionName, stopName, predictionList, stopId, routeId } = predictions;
   const dispatch = useDispatch();
   const predictionMinutes = predictionList.map(prediction => prediction.minutes).join(", ");
@@ -60,20 +57,31 @@ export function DetailItem({
         title={directionName}
         onPress={onDirectionPress}
         prioritizePropertySpace
+        externalLink
       />
       <MyLinkItem
         as={onStopPress ? undefined : View}
         title={stopName}
         onPress={onStopPress}
         prioritizePropertySpace
+        externalLink
       />
+      {onServiceAlertsPress && (
+        <MyLinkItem
+          icon={<AntDesign name="warning" size={22.5} color={theme.warning} />}
+          title="Service Alerts"
+          onPress={onServiceAlertsPress}
+          prioritizePropertySpace
+          externalLink
+        />
+      )}
       <RefreshAndTimes>
         <Refresh onPress={canRefresh && onRefreshPress} />
         <PredictionTime>
           {predictionList.length > 0 ? (
             <>
               <PredictionMinute>{predictionMinutes}</PredictionMinute>
-              <PredictionUnit>min</PredictionUnit>
+              <Unit>min</Unit>
             </>
           ) : (
             <DashDash>--</DashDash>
@@ -85,6 +93,7 @@ export function DetailItem({
 }
 
 const MyRouteName = styled(RouteName)`
+  flex-shrink: 1;
   padding: ${space.small} ${space.medium} ${space.small} ${space.xLarge};
 `;
 
@@ -109,26 +118,12 @@ const RefreshAndTimes = styled(Between)`
   margin-top: ${space.large};
 `;
 
-export const Row = styled.View`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  padding: ${space.medium};
-  background: ${({ theme }) => theme.backgroundDark};
-  border-radius: ${border.round};
-`;
-
 const Refresh = styled(CircularIconButton).attrs(props => ({
-  underlayColor: props.theme.backgroundDark,
-  iconSize: 20,
-  children: <Feather name="refresh-cw" size={20} color={props.theme.primary} />
-}))`
-  padding: ${space.large};
-  border: 2px solid ${({ theme }) => theme.primary};
-`;
+  iconSize: 25,
+  children: <MaterialIcons name="refresh" size={33} color={props.theme.primary} />
+}))``;
 
-const FavoriteButton = styled(CircularIconButton).attrs(props => ({
+export const FavoriteButton = styled(CircularIconButton).attrs(props => ({
   underlayColor: props.theme.backgroundDark,
   iconSize: 25,
   children: (
@@ -138,4 +133,6 @@ const FavoriteButton = styled(CircularIconButton).attrs(props => ({
       color={props.favorited ? props.theme.primary : props.theme.primary}
     />
   )
-}))``;
+}))`
+  align-self: flex-start;
+`;

@@ -6,6 +6,6 @@ export interface NextBusState {
   nearbyPredictionsList: AsyncResult<NextBus.Predictions[]>;
   nearestAgencyIdByLocation: AsyncResult<string>;
   selectedAgencyId: string | null;
-  favorites: { routeId: string; stopId: string }[];
+  favorites: NextBus.StopLabel[];
   routeIdFilters: string[];
 }
