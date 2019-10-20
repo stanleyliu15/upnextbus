@@ -61,12 +61,6 @@ export const StopName = styled(Text)`
   color: ${({ theme }) => theme.textLighter};
 `;
 
-export const DashDash = styled(Text)`
-  font-family: ${fontFamily.light};
-  font-size: ${fontSize.large};
-  text-align: center;
-`;
-
 export const PredictionTimeSection = styled.View`
   flex: 1.4;
   padding: ${space.xxLarge} ${space.xLarge} ${space.xLarge} ${space.medium};

@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Linking, ScrollView } from "react-native";
 import styled, { ThemeContext } from "styled-components/native";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import * as StoreReview from "expo-store-review";
 import Constants from "expo-constants";
 import { Feather, FontAwesome5, AntDesign } from "@expo/vector-icons";
@@ -17,12 +17,12 @@ import {
 } from "../../components/organisms/Settings/settingsStyles";
 import SafeArea from "../../layouts/SafeArea";
 import { selectSettings, RouteNameOption } from "../../store/features/settings";
-import { selectAgency } from "../../store/features/nextbus";
+import { selectAgency, getAgencies, selectAgencies } from "../../store/features/nextbus";
 import { Title } from "../../components/atoms";
 import { enumKeyFromValue } from "../../utils";
 import { NavigationProps } from "../../../types";
 import { CloseButton } from "../Detail/DetailScreen";
-import { space } from "../../styles";
+import { space, ThemeColor } from "../../styles";
 
 const MyCloseButton = styled(CloseButton)`
   top: ${space.large};
@@ -30,12 +30,20 @@ const MyCloseButton = styled(CloseButton)`
 
 function SettingsScreen({ navigation }: NavigationProps) {
   const { navigate } = navigation;
+  const dispatch = useDispatch();
   const theme = useContext(ThemeContext);
   const settings = useSelector(selectSettings);
+  const agencies = useSelector(selectAgencies);
   const agency = useSelector(selectAgency);
   const goBack = () => {
     navigation.dispatch(NavigationActions.back());
   };
+
+  useEffect(() => {
+    if (agencies.data.length === 0) {
+      dispatch(getAgencies());
+    }
+  }, [agencies.data.length, dispatch]);
 
   return (
     <SafeArea>
@@ -49,30 +57,40 @@ function SettingsScreen({ navigation }: NavigationProps) {
           <SectionContent>
             <LinkItem
               title="Agency"
-              value={agency.name}
+              loading={agencies.loading}
+              value={agencies.loading || agencies.error || !agency ? null : agency.name}
               onPress={() => navigate("ChangeAgencyScreen")}
             />
             <LinkItem
               title="Routes"
               description="choose which routes you want to see"
-              onPress={() => navigate("FilterRoutesScreen")}
+              onPress={() => navigate("ChangeFilterRoutesScreen")}
+              prioritizePropertySpace
             />
             <LinkItem
               title="Distance Limit"
               value={`${settings.maxStopDistance} miles`}
-              onPress={() => navigate("DistanceLimitScreen")}
+              onPress={() => navigate("ChangeDistanceLimitScreen")}
             />
             <LinkItem
               title="Predictions Limit"
               description="the number of predictions per bus"
               value={settings.predictionListLimit}
-              onPress={() => navigate("PredictionsLimitScreen")}
+              onPress={() => navigate("ChangePredictionsLimitScreen")}
+              prioritizePropertySpace
             />
             <LinkItem
-              title="Route Name Option"
-              description="change how you see the route name in the predictions"
+              title="Bus Naming"
+              description="choose how you see bus names"
               value={enumKeyFromValue(RouteNameOption, settings.routeNameOption)}
-              onPress={() => navigate("RouteNameOptionScreen")}
+              onPress={() => navigate("ChangeRouteNameOptionScreen")}
+              prioritizePropertySpace
+            />
+            <LinkItem
+              title="Show Inactive Buses"
+              value={settings.showInactivePredictions ? "Yes" : "No"}
+              onPress={() => navigate("ChangeShowInactivePredictionsScreen")}
+              prioritizePropertySpace
             />
           </SectionContent>
         </Section>
@@ -82,8 +100,14 @@ function SettingsScreen({ navigation }: NavigationProps) {
             <LinkItem
               title="Theme"
               value={capitalize(settings.themeColor)}
-              icon={<FontAwesome5 name="adjust" size={22.5} color={theme.text} />}
-              onPress={() => navigate("ThemeScreen")}
+              icon={
+                <FontAwesome5
+                  name="adjust"
+                  size={20}
+                  color={settings.themeColor === ThemeColor.LIGHT ? "#ff9506" : "#9852f9"}
+                />
+              }
+              onPress={() => navigate("ChangeThemeScreen")}
             />
           </SectionContent>
         </Section>
@@ -92,10 +116,11 @@ function SettingsScreen({ navigation }: NavigationProps) {
           <SectionContent>
             <LinkItem
               title="Rate Us"
-              icon={<AntDesign name="star" size={25} color={theme.primary} />}
+              icon={<AntDesign name="star" size={20} color={theme.primary} />}
               description="help us on the store!"
               onPress={() => StoreReview.requestReview()}
               externalLink
+              prioritizePropertySpace
             />
           </SectionContent>
           <Version center>{`Version: ${Constants.nativeAppVersion}`}</Version>
@@ -106,9 +131,10 @@ function SettingsScreen({ navigation }: NavigationProps) {
             <LinkItem
               title="Contact Us"
               description="tell us what you think!"
-              icon={<Feather name="mail" size={22.5} color={theme.text} />}
+              icon={<Feather name="mail" size={20} color={theme.text} />}
               onPress={() => Linking.openURL("mailto://upnextbus@gmail.com")}
               externalLink
+              prioritizePropertySpace
             />
           </SectionContent>
         </Section>

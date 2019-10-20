@@ -22,7 +22,6 @@ export const Section = styled.View`
 
 export const GroupTitle = styled(Text)`
   margin-bottom: ${space.medium};
-  /* font-size: ${fontSize.small}; */
   font-family: ${fontFamily.bold};
 `;
 
@@ -62,7 +61,7 @@ export const Description = styled(Text)`
 `;
 
 export const ValueColumn = styled.View`
-  flex: ${({ prioritizePropertySpace }) => (prioritizePropertySpace ? "0 0 auto" : 1)}
+  flex: ${({ prioritizePropertySpace }) => (prioritizePropertySpace ? "0 0 auto" : 1)};
 
   flex-direction: row;
   justify-content: flex-end;
@@ -77,5 +76,6 @@ export const Value = styled(Text)`
 
 export const Version = styled(Text)`
   margin-top: ${space.small};
+  font-size: ${fontSize.small};
   color: ${({ theme }) => theme.light};
 `;

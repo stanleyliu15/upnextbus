@@ -1,15 +1,15 @@
 import {
-  selectAgencyId,
   getAgenciesAsync,
   getRoutesAsync,
   getNearbyPredictionListAsync,
-  getNearestAgencyIdByLocationAsync
+  selectAgencyId
 } from "./actions";
 import { ThunkDispatch, ThunkResult } from "../../types";
-import { getLocationAsync } from "../../../services/location-service";
 import * as NextBusService from "../../../services/nextbus-service";
 import NextBusAPI from "../../../api/NextBus/api";
+import { getLocationAsync } from "../../../services/location-service";
 import NextBusMobileAPI from "../../../api/NextBusMobile/api";
+import { NextBusNoNearbyAgencyError } from "../../../errors";
 
 export function getAgencies(): ThunkResult<Promise<void>> {
   return async function(dispatch: ThunkDispatch, getState) {
@@ -40,20 +40,32 @@ export function getRoutes(): ThunkResult<Promise<void>> {
 
 export function getNearbyPredictionsList(): ThunkResult<Promise<void>> {
   return async function(dispatch: ThunkDispatch, getState) {
-    const {
-      nextBus: { routes, selectedAgencyId, favorites, routeIdFilters },
-      settings: { maxStopDistance, predictionListLimit }
-    } = getState();
-
     dispatch(getNearbyPredictionListAsync.request());
+    const location = await getLocationAsync();
+
     try {
+      if (getState().nextBus.selectedAgencyId === null) {
+        const nearestAgencyId = await NextBusMobileAPI.getNearestAgencyIdByLocation(location);
+        if (!nearestAgencyId) {
+          throw new NextBusNoNearbyAgencyError();
+        }
+
+        dispatch(selectAgencyId(nearestAgencyId));
+        await dispatch(getRoutes());
+      }
+
+      const { routes, selectedAgencyId, favorites, routeIdFilters } = getState().nextBus;
+      const { maxStopDistance, predictionListLimit, showInactivePredictions } = getState().settings;
+
       const predictionsList = await NextBusService.getNearbyPredictionsList(
         {
           agencyId: selectedAgencyId,
           routes: routes.data,
           maxStopDistance,
+          location,
           favorites,
-          routeIdFilters
+          routeIdFilters,
+          filterInactivePredictions: showInactivePredictions
         },
         { listLimit: predictionListLimit }
       );
@@ -61,31 +73,5 @@ export function getNearbyPredictionsList(): ThunkResult<Promise<void>> {
     } catch (error) {
       dispatch(getNearbyPredictionListAsync.failure(error));
     }
-  };
-}
-
-export function getNearestAgencyIdByLocation(): ThunkResult<Promise<void>> {
-  return async function(dispatch: ThunkDispatch, getState) {
-    dispatch(getNearestAgencyIdByLocationAsync.request());
-
-    try {
-      const location = await getLocationAsync();
-      const nearestAgencyId = await NextBusMobileAPI.getNearestAgencyIdByLocation(location);
-      dispatch(getNearestAgencyIdByLocationAsync.success(nearestAgencyId));
-    } catch (error) {
-      dispatch(getNearestAgencyIdByLocationAsync.failure(error));
-    }
-  };
-}
-
-export function getNearestAgencyIdByLocationAndRoutes(): ThunkResult<Promise<void>> {
-  return (dispatch: ThunkDispatch, getState) => {
-    return dispatch(getNearestAgencyIdByLocation()).then(() => {
-      const {
-        nextBus: { nearestAgencyIdByLocation }
-      } = getState();
-      dispatch(selectAgencyId(nearestAgencyIdByLocation.data));
-      return dispatch(getRoutes());
-    });
   };
 }

@@ -8,7 +8,8 @@ const initialState: SettingsState = {
   themeColor: ThemeColor.LIGHT,
   maxStopDistance: 1,
   predictionListLimit: 3,
-  routeNameOption: RouteNameOption.Name
+  routeNameOption: RouteNameOption.Name,
+  showInactivePredictions: true
 };
 
 const reducer = createReducer<SettingsState>(initialState)
@@ -27,6 +28,10 @@ const reducer = createReducer<SettingsState>(initialState)
   .handleAction(actions.setRouteNameOption, (state, action) => ({
     ...state,
     routeNameOption: action.payload
+  }))
+  .handleAction(actions.setShowInactivePredictions, (state, action) => ({
+    ...state,
+    showInactivePredictions: action.payload
   }));
 
 export { reducer as settingsReducer };

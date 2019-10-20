@@ -18,3 +18,9 @@ export class LocationPermissionDeniedError extends Error {
     super("Permissions to use location was denied");
   }
 }
+
+export class NextBusNoNearbyAgencyError extends Error {
+  constructor() {
+    super("Unable to find any agencies near you.");
+  }
+}

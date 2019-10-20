@@ -2,8 +2,6 @@ import { lighten } from "polished";
 
 import { BaseColors, StatusColors, AppColors } from "./types";
 
-// TODO: inverse colors for baseColors for dark mode
-
 export const baseColors: BaseColors = {
   white: "#fff",
   black: "#000",
@@ -13,11 +11,18 @@ export const baseColors: BaseColors = {
   darker: "#222"
 };
 
-export const statusColors: StatusColors = {
+export const lightStatusColors: StatusColors = {
   success: "#99cc33",
   warning: "#ffcc00",
   disabled: "#d3d3d3",
   error: "#ff0000"
+};
+
+export const darkStatusColors: StatusColors = {
+  success: "#99cc33",
+  warning: "#ffcc00",
+  disabled: "#d3d3d3",
+  error: lighten(0.08, lightStatusColors.error)
 };
 
 export const lightColors: AppColors = {
@@ -40,7 +45,7 @@ export const lightColors: AppColors = {
 };
 
 export const darkColors: AppColors = {
-  primary: lighten(0.2, lightColors.primary),
+  primary: lighten(0.25, lightColors.primary),
   primaryLight: lighten(0.025, lightColors.primaryLight),
   primaryDark: lighten(0.2, lightColors.primaryDark),
   secondary: lightColors.secondary,

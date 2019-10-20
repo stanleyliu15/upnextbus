@@ -381,7 +381,9 @@ const MyLoader = styled(Loader)`
   top: 20;
   left: 20;
 
-  background-color: transparent;
+  padding: ${space.medium};
+  border-radius: ${border.round};
+  background-color: ${({ theme }) => theme.background};
 `;
 
 const Container = styled.View`

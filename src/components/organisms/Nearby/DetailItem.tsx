@@ -2,15 +2,16 @@ import React, { useContext } from "react";
 import { GestureResponderEvent, View } from "react-native";
 import styled, { ThemeContext } from "styled-components/native";
 import { useSelector, useDispatch } from "react-redux";
-import { FontAwesome, MaterialIcons, AntDesign } from "@expo/vector-icons";
+import { FontAwesome, MaterialIcons, Ionicons } from "@expo/vector-icons";
 
 import { normalizeRouteName } from "../../../utils";
 import { selectRouteNameOption } from "../../../store/features/settings";
-import { RouteName, PredictionTime, PredictionMinute, Unit, DashDash } from "./itemStyles";
+import { RouteName, PredictionTime, PredictionMinute, Unit } from "./itemStyles";
 import { space, fontFamily } from "../../../styles";
 import { LinkItem } from "../Settings";
 import { CircularIconButton } from "../../molecules";
 import { selectFavorites, favorite, unfavorite } from "../../../store/features/nextbus";
+import { Strong } from "../../atoms";
 
 type Props = {
   predictions: NextBus.Predictions;
@@ -68,7 +69,7 @@ export function DetailItem({
       />
       {onServiceAlertsPress && (
         <MyLinkItem
-          icon={<AntDesign name="warning" size={22.5} color={theme.warning} />}
+          icon={<Ionicons name="ios-warning" size={25} color={theme.warning} />}
           title="Service Alerts"
           onPress={onServiceAlertsPress}
           prioritizePropertySpace
@@ -84,7 +85,7 @@ export function DetailItem({
               <Unit>min</Unit>
             </>
           ) : (
-            <DashDash>--</DashDash>
+            <Strong center>--</Strong>
           )}
         </PredictionTime>
       </RefreshAndTimes>

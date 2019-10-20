@@ -11,7 +11,7 @@ import configureStore from "./src/store";
 import RootScreen from "./src/screens/RootScreen";
 import fonts from "./src/config/fonts";
 import images from "./src/config/images";
-import { getAgencies, getNearestAgencyIdByLocationAndRoutes } from "./src/store/features/nextbus";
+import { lightColors } from "./src/styles/palette";
 
 // TODO: fix warnings later
 console.disableYellowBox = true;
@@ -19,7 +19,15 @@ console.disableYellowBox = true;
 useScreens();
 
 // TODO: customize
-const AppLoader = styled.ActivityIndicator``;
+export const AppLoader = styled.ActivityIndicator.attrs(props => ({
+  color: "#fff",
+  ...props
+}))`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  background-color: ${lightColors.primary};
+`;
 
 function cacheFonts(fonts) {
   return fonts.map(font => Font.loadAsync(font));
@@ -45,24 +53,19 @@ export default function() {
       const imageAssets = cacheImages(images);
       const fontAssets = cacheFonts(fonts);
 
-      await Promise.all([
-        ...fontAssets,
-        ...imageAssets,
-        // TODO: fetch only if empty
-        store.dispatch(getAgencies()),
-        store.dispatch(getNearestAgencyIdByLocationAndRoutes())
-      ]);
+      await Promise.all([...fontAssets, ...imageAssets]);
 
       handleFinish();
     }
 
     prepareApp();
-  }, [store]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (ready) {
     return (
       <Provider store={store}>
-        <PersistGate persistor={persistor}>
+        <PersistGate loading={<AppLoader />} persistor={persistor}>
           <RootScreen />
         </PersistGate>
       </Provider>

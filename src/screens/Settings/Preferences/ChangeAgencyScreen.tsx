@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FlatList } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -6,7 +6,8 @@ import {
   selectAgencies,
   selectAgencyId,
   selectSelectedAgencyId,
-  getRoutes
+  getRoutes,
+  getAgencies
 } from "../../../store/features/nextbus";
 import { Loader } from "../../../components/atoms";
 import { ErrorInfo } from "../../../components/molecules";
@@ -24,6 +25,10 @@ function ChangeAgencyScreen({ navigation }: NavigationProps) {
     dispatch(getRoutes());
     navigation.goBack();
   };
+
+  useEffect(() => {
+    dispatch(getAgencies());
+  }, [dispatch]);
 
   if (agencies.loading) {
     return <Loader />;

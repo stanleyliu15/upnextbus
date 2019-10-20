@@ -65,30 +65,6 @@ const reducer = combineReducers<NextBusState>({
         return null;
       })
   }),
-  nearestAgencyIdByLocation: combineReducers({
-    loading: createReducer(false as boolean)
-      .handleAction(actions.getNearestAgencyIdByLocationAsync.request, (state, action) => true)
-      .handleAction(
-        [
-          actions.getNearestAgencyIdByLocationAsync.success,
-          actions.getNearestAgencyIdByLocationAsync.failure
-        ],
-        (state, action) => false
-      ),
-    data: createReducer(null).handleAction(
-      actions.getNearestAgencyIdByLocationAsync.success,
-      (state, action) => {
-        return action.payload;
-      }
-    ),
-    error: createReducer(null)
-      .handleAction(actions.getNearestAgencyIdByLocationAsync.failure, (state, action) => {
-        return action.payload;
-      })
-      .handleAction(actions.getNearestAgencyIdByLocationAsync.request, (state, action) => {
-        return null;
-      })
-  }),
   selectedAgencyId: createReducer(null).handleAction(actions.selectAgencyId, (state, action) => {
     return action.payload;
   }),

@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
+import React, { useEffect, useState, useContext, useRef, Fragment } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { FlatList, RefreshControl, GestureResponderEvent } from "react-native";
+import { FlatList, RefreshControl, GestureResponderEvent, Linking } from "react-native";
 import { ThemeContext } from "styled-components/native";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 
@@ -14,6 +14,11 @@ import {
 } from "../store/features/nextbus";
 import { PredictionsItem } from "../components/organisms/Nearby";
 import SafeArea from "../layouts/SafeArea";
+import {
+  LocationPermissionDeniedError,
+  NextBusNoNearbyError,
+  NextBusNoNearbyAgencyError
+} from "../errors";
 
 function NearbyScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -25,78 +30,118 @@ function NearbyScreen({ navigation }) {
   const favorites = useSelector(selectFavorites);
 
   useEffect(() => {
-    if (firstUpdate.current) {
-      dispatch(getNearbyPredictionsList());
-      firstUpdate.current = false;
-    }
-    if (refreshing) {
-      dispatch(getNearbyPredictionsList()).then(() => {
+    async function fetchData() {
+      if (firstUpdate.current) {
+        await dispatch(getNearbyPredictionsList());
+        firstUpdate.current = false;
+      }
+      if (refreshing) {
+        await dispatch(getNearbyPredictionsList());
         setRefreshing(false);
-      });
+      }
     }
+
+    fetchData();
   }, [dispatch, refreshing]);
 
   const handleRefresh = () => setRefreshing(true);
 
   const openSettings = () => navigation.navigate("SettingsScreen");
 
-  if (nearby.loading && firstUpdate.current) {
-    return <Loader />;
-  }
+  function getMainView() {
+    if (nearby.error) {
+      if (nearby.error instanceof LocationPermissionDeniedError) {
+        return (
+          <ErrorInfo
+            title="Location permissions"
+            message={nearby.error.message}
+            onRetry={() => Linking.openURL("app-settings:")}
+            onRetryTitle="Go to settings"
+            externalLink
+          />
+        );
+      }
 
-  if (nearby.error) {
+      if (nearby.error instanceof NextBusNoNearbyError) {
+        return (
+          <ErrorInfo
+            message={nearby.error.message}
+            onRetry={() => dispatch(getNearbyPredictionsList())}
+          />
+        );
+      }
+
+      if (nearby.error instanceof NextBusNoNearbyAgencyError) {
+        return (
+          <ErrorInfo
+            message={nearby.error.message}
+            onRetry={() => {
+              navigation.navigate("ChangeAgencyScreen");
+            }}
+            onRetryTitle="Set Agency"
+            externalLink
+          />
+        );
+      }
+
+      return <ErrorInfo message={nearby.error.message} />;
+    }
+
+    if (nearby.loading && firstUpdate.current) {
+      return <Loader />;
+    }
+
     return (
-      <ErrorInfo
-        message={nearby.error.message}
-        onRetry={() => dispatch(getNearbyPredictionsList())}
-      />
+      <Fragment>
+        <FloatingButton onPress={handleRefresh} iconSize={28} position="bottom-left">
+          <MaterialIcons name="refresh" size={35} color={theme.primary} />
+        </FloatingButton>
+        <FlatList
+          data={nearby.data}
+          keyExtractor={(item: NextBus.Predictions) => `${item.routeId}-${item.stopId}`}
+          renderItem={({ item }) => (
+            <PredictionsItem
+              favorited={favorites.some(
+                favorite => favorite.routeId === item.routeId && favorite.stopId === item.stopId
+              )}
+              predictions={item}
+              onPredictionsPress={(event: GestureResponderEvent): void => {
+                const route = routes.find(route => route.id === item.routeId);
+                const { directions } = route;
+                const direction = directions.find(dir => {
+                  return dir.stops.some(stop => stop.id === item.stopId);
+                });
+                const stop = direction.stops.find(stop => {
+                  return stop.id === item.stopId;
+                });
+                navigation.navigate("DetailScreen", {
+                  predictions: item,
+                  route,
+                  directions,
+                  direction,
+                  stop
+                });
+              }}
+            />
+          )}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+              tintColor={theme.primary}
+            />
+          }
+        />
+      </Fragment>
     );
   }
 
   return (
     <SafeArea>
-      <FloatingButton onPress={handleRefresh} iconSize={28} position="bottom-left">
-        <MaterialIcons name="refresh" size={35} color={theme.primary} />
-      </FloatingButton>
       <FloatingButton onPress={openSettings} iconSize={28} position="bottom-right">
         <Feather name="settings" size={28} color={theme.primary} />
       </FloatingButton>
-      <FlatList
-        data={nearby.data}
-        keyExtractor={(item: NextBus.Predictions) => `${item.routeId}-${item.stopId}`}
-        renderItem={({ item }) => (
-          <PredictionsItem
-            favorited={favorites.some(
-              favorite => favorite.routeId === item.routeId && favorite.stopId === item.stopId
-            )}
-            predictions={item}
-            onPredictionsPress={(event: GestureResponderEvent): void => {
-              const route = routes.find(route => route.id === item.routeId);
-              const { directions } = route;
-              const direction = directions.find(dir => {
-                return dir.stops.some(stop => stop.id === item.stopId);
-              });
-              const stop = direction.stops.find(stop => {
-                return stop.id === item.stopId;
-              });
-              navigation.navigate("DetailScreen", {
-                predictions: item,
-                route,
-                directions,
-                direction,
-                stop
-              });
-            }}
-          />
-        )}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={handleRefresh}
-            tintColor={theme.primary}
-          />
-        }
-      />
+      {getMainView()}
     </SafeArea>
   );
 }

@@ -21,3 +21,8 @@ export const setRouteNameOption = createAction(
   "@settings/SET_ROUTE_NAME_OPTION",
   action => (routeNameOption: RouteNameOption) => action(routeNameOption)
 );
+
+export const setShowInactivePredictions = createAction(
+  "@settings/SET_SHOW_INACTIVE_PREDICTIONS",
+  action => (showInactivePredictions: boolean) => action(showInactivePredictions)
+);

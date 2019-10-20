@@ -9,7 +9,7 @@ const nextBusPersistConfig = {
   key: "nextBus",
   storage: AsyncStorage,
   // TODO: update blacklist
-  blacklist: ["agencies", "predictions", "nearestPredictionsList", "nearestAgencyIdByLocation"]
+  blacklist: ["agencies", "predictions", "nearestPredictionsList"]
 };
 
 const rootPersistConfig = {

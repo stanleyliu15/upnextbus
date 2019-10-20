@@ -14,9 +14,7 @@ function Navigator() {
   const baseStackConfig = {
     defaultNavigationOptions: {
       headerStyle: {
-        backgroundColor: theme.backgroundLight,
-        bottomBorderWidth: 0,
-        borderBottomWidth: 0
+        backgroundColor: theme.background
       },
       headerTitleStyle: {
         color: theme.text

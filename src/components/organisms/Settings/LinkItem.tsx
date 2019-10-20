@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Entypo, AntDesign } from "@expo/vector-icons";
-import { ThemeContext } from "styled-components/native";
+import styled, { ThemeContext } from "styled-components/native";
 import noop from "lodash/noop";
 
 import { TextStyle, StyleProp } from "react-native";
@@ -14,7 +14,7 @@ import {
   Value
 } from "./settingsStyles";
 import { OnPressHandler } from "../../../../types";
-import { Strong } from "../../atoms";
+import { Strong, Loader } from "../../atoms";
 
 type Props = {
   title: string;
@@ -26,6 +26,7 @@ type Props = {
   externalLink?: boolean;
   prioritizePropertySpace?: boolean;
   fixedHeight?: boolean;
+  loading?: boolean;
 };
 
 export function LinkItem({
@@ -34,14 +35,33 @@ export function LinkItem({
   description = null,
   icon = null,
   value = null,
+  loading = false,
   externalLink = false,
   onPress = noop,
   prioritizePropertySpace = false
 }: Props) {
   const theme = useContext(ThemeContext);
 
+  const MyLoader = styled(Loader)`
+    background-color: transparent;
+    flex-direction: row;
+    justify-content: flex-end;
+  `;
+
+  function getValueComponent() {
+    if (loading) {
+      return <MyLoader />;
+    }
+
+    if (externalLink) {
+      return <AntDesign name="arrowright" size={20} color={theme.light} />;
+    }
+
+    return <Entypo name="chevron-thin-right" size={20} color={theme.light} />;
+  }
+
   return (
-    <LinkButton onPress={onPress} underlayColor={theme.backgroundDark}>
+    <LinkButton onPress={loading ? noop : onPress} underlayColor={theme.backgroundDark}>
       <ItemContainer>
         <PropertyColumn>
           {icon}
@@ -52,11 +72,7 @@ export function LinkItem({
         </PropertyColumn>
         <ValueColumn prioritizePropertySpace={prioritizePropertySpace}>
           {value && <Value numberOfLines={1}>{value}</Value>}
-          {externalLink ? (
-            <AntDesign name="arrowright" size={20} color={theme.light} />
-          ) : (
-            <Entypo name="chevron-thin-right" size={20} color={theme.light} />
-          )}
+          {getValueComponent()}
         </ValueColumn>
       </ItemContainer>
     </LinkButton>

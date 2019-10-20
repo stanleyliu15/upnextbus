@@ -2,7 +2,9 @@ import React from "react";
 import { Svg, Path } from "react-native-svg";
 
 export const EndPointSvg = props => (
-  <Svg width={32} height={32} fill="none" {...props}>
+  /* eslint-disable react-native/no-color-literals */
+  /* eslint-disable react-native/no-inline-styles */
+  <Svg width={32} height={32} style={{ backgroundColor: "#000" }} {...props}>
     <Path
       d="M13.289 22.158h8.8v1.99h-8.8v-1.99zm-.178-14.305h8.978v1.99h-8.978v-1.99z"
       fill="#fff"

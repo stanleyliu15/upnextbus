@@ -19,10 +19,10 @@ import {
   PredictionTimeSection,
   PredictionTime,
   PredictionMinute,
-  Unit,
-  DashDash
+  Unit
 } from "./itemStyles";
 import { fontSize } from "../../../styles";
+import { Strong } from "../../atoms";
 
 type Props = {
   predictions: NextBus.Predictions;
@@ -59,7 +59,7 @@ export function PredictionsItem({ predictions, onPredictionsPress = null, favori
                 </PredictionTime>
               ))
             ) : (
-              <DashDash>--</DashDash>
+              <Strong center>--</Strong>
             )}
           </PredictionTimeSection>
         </Main>

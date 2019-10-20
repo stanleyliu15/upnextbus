@@ -1,4 +1,3 @@
-import { getLocationAsync } from "./location-service";
 import NextBusAPI from "../api/NextBus/api";
 import { NextBusNoNearbyError } from "../errors";
 import { GeoLocation } from "../../types";
@@ -56,22 +55,25 @@ export interface NearbyPredictionListConfig {
   agencyId: string;
   routes?: NextBus.Route[];
   maxStopDistance?: number;
+  location: GeoLocation;
   favorites: NextBus.StopLabel[];
   routeIdFilters: string[];
+  filterInactivePredictions: boolean;
 }
 
 export const getNearbyPredictionsList = async (
   {
     agencyId,
-    routes = [],
-    maxStopDistance = 1,
-    favorites = [],
-    routeIdFilters = []
+    routes,
+    location,
+    maxStopDistance,
+    favorites,
+    routeIdFilters,
+    filterInactivePredictions
   }: NearbyPredictionListConfig,
   parseOptions: NextBus.PredictionsListParseOptions
 ): Promise<NextBus.Predictions[]> => {
   try {
-    const location = await getLocationAsync();
     const routesFiltered =
       routeIdFilters.length > 0
         ? routes.filter(route => routeIdFilters.includes(route.id))
@@ -81,7 +83,6 @@ export const getNearbyPredictionsList = async (
       createStopLabel(favorite.routeId, favorite.stopId)
     );
 
-    console.log("TEST", agencyId, routesFiltered, location, maxStopDistance);
     const nearbyStopLabels = getNearestStopLabels(routesFiltered, location, maxStopDistance);
 
     const allStopLabels = favoriteStopLabels.concat(nearbyStopLabels);
@@ -101,7 +102,11 @@ export const getNearbyPredictionsList = async (
       if (isFavorite) {
         return [item, ...list];
       } else {
-        return [...list, item];
+        if (filterInactivePredictions && item.predictionList.length === 0) {
+          return list;
+        } else {
+          return [...list, item];
+        }
       }
     }, []);
   } catch (error) {

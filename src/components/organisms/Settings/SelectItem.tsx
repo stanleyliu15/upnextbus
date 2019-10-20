@@ -64,11 +64,11 @@ const HighlightButton = styled.TouchableHighlight.attrs(props => ({
 const HighlightContent = styled.View`
   display: flex;
   flex-direction: row;
-
   align-items: center;
 `;
 
 const Item = styled.View`
+  flex: 1;
   display: flex;
   justify-content: center;
 `;

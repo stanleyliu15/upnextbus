@@ -8,6 +8,7 @@ import { fromThemeColor } from "../styles";
 
 function RootScreen() {
   const themeColor = useSelector(selectThemeColor);
+
   return (
     <ThemeProvider theme={fromThemeColor(themeColor)}>
       <Navigator />

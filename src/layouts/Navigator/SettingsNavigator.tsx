@@ -1,12 +1,13 @@
 import { createStackNavigator } from "react-navigation-stack";
 
 import SettingsScreen from "../../screens/Settings/SettingsScreen";
-import FilterRoutesScreen from "../../screens/Settings/Preferences/FilterRoutesScreen";
+import FilterRoutesScreen from "../../screens/Settings/Preferences/ChangeFilterRoutesScreen";
 import ChangeAgencyScreen from "../../screens/Settings/Preferences/ChangeAgencyScreen";
-import DistanceLimitScreen from "../../screens/Settings/Preferences/DistanceLimitScreen";
-import PredictionsLimitScreen from "../../screens/Settings/Preferences/PredictionsLimitScreen";
-import RouteNameOptionScreen from "../../screens/Settings/Preferences/RouteNameOptionScreen";
-import ThemeScreen from "../../screens/Settings/Theme/ThemeScreen";
+import DistanceLimitScreen from "../../screens/Settings/Preferences/ChangeDistanceLimitScreen";
+import PredictionsLimitScreen from "../../screens/Settings/Preferences/ChangePredictionsLimitScreen";
+import RouteNameOptionScreen from "../../screens/Settings/Preferences/ChangeRouteNameOptionScreen";
+import ThemeScreen from "../../screens/Settings/Preferences/ChangeThemeScreen";
+import ChangeShowInactivePredictionsScreen from "../../screens/Settings/Preferences/ChangeShowInactivePredictionsScreen";
 
 export default (parentStackConfig, theme) => {
   const routeConfigs = {
@@ -22,34 +23,40 @@ export default (parentStackConfig, theme) => {
         headerTitle: "Change Agency"
       }
     },
-    FilterRoutesScreen: {
+    ChangeFilterRoutesScreen: {
       screen: FilterRoutesScreen,
       navigationOptions: {
         headerTitle: "Configure Routes"
       }
     },
-    DistanceLimitScreen: {
+    ChangeDistanceLimitScreen: {
       screen: DistanceLimitScreen,
       navigationOptions: {
         headerTitle: "Distance Limit"
       }
     },
-    PredictionsLimitScreen: {
+    ChangePredictionsLimitScreen: {
       screen: PredictionsLimitScreen,
       navigationOptions: {
         headerTitle: "Predictions Limit"
       }
     },
-    RouteNameOptionScreen: {
+    ChangeRouteNameOptionScreen: {
       screen: RouteNameOptionScreen,
       navigationOptions: {
-        headerTitle: "Route Name Option"
+        headerTitle: "Bus Naming"
       }
     },
-    ThemeScreen: {
+    ChangeThemeScreen: {
       screen: ThemeScreen,
       navigationOptions: {
         headerTitle: "Theme"
+      }
+    },
+    ChangeShowInactivePredictionsScreen: {
+      screen: ChangeShowInactivePredictionsScreen,
+      navigationOptions: {
+        headerTitle: "Show Inactive Buses"
       }
     }
   };

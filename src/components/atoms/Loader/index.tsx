@@ -8,7 +8,7 @@ export type Props = Omit<ActivityIndicatorProps, "size"> & {
 
 export const Loader = styled.ActivityIndicator.attrs(props => ({
   color: props.color || props.theme.primary,
-  size: props.size || "large"
+  size: props.size || "small"
 }))`
   flex: 1;
   justify-content: center;

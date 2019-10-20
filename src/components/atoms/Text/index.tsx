@@ -4,6 +4,7 @@ import { fontFamily, fontSize, space } from "../../../styles";
 
 type TextProps = {
   iconSpace?: boolean;
+  hasIconRight?: boolean;
   right?: boolean;
   center?: boolean;
 };
@@ -12,7 +13,15 @@ export const Text = styled.Text<TextProps>`
   color: ${({ theme }) => theme.text};
   font-family: ${fontFamily.normal};
   font-size: ${fontSize.primary};
-  margin-left: ${({ iconSpace }) => (iconSpace ? space.large : 0)};
+  ${({ iconSpace, hasIconRight }) => {
+    if (iconSpace) {
+      if (hasIconRight) {
+        return `margin-right: ${space.large}`;
+      } else {
+        return `margin-left: ${space.large}`;
+      }
+    }
+  }};
   text-align: ${props => {
     if (props.right) return "right";
     if (props.center) return "center";

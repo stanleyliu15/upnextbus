@@ -5,7 +5,7 @@ import { space } from "../../styles";
 
 export const BackIcon = styled(Entypo).attrs(props => ({
   name: "chevron-thin-left",
-  size: 25,
+  size: 20,
   color: props.theme.text,
   ...props
 }))`

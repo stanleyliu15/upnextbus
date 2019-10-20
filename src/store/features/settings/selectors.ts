@@ -1,5 +1,4 @@
 import { RootState } from "../../types";
-import { ThemeColor } from "../../../styles";
 
 export const selectSettings = (state: RootState) => state.settings;
 
@@ -10,3 +9,6 @@ export const selectDistanceLimit = (state: RootState) => state.settings.maxStopD
 export const selectPredictionListLimit = (state: RootState) => state.settings.predictionListLimit;
 
 export const selectRouteNameOption = (state: RootState) => state.settings.routeNameOption;
+
+export const selectShowInactivePredictions = (state: RootState) =>
+  state.settings.showInactivePredictions;

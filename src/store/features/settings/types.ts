@@ -10,4 +10,5 @@ export interface SettingsState {
   maxStopDistance: number;
   predictionListLimit: number;
   routeNameOption: RouteNameOption;
+  showInactivePredictions: boolean;
 }

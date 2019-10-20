@@ -53,7 +53,8 @@ module.exports = {
     /* Other */
     "func-names": "off",
     "no-shadow": "off",
-    "global-require": "off"
+    "global-require": "off",
+    "no-console": "off"
   },
   root: true
 };
