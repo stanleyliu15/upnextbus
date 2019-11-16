@@ -5,8 +5,6 @@ import { Entypo } from "@expo/vector-icons";
 import { Text, Strong } from "../../atoms";
 import { space, border, fontFamily, fontSize } from "../../../styles";
 
-export const Wrapper = styled.View``;
-
 export const Container = styled.TouchableHighlight.attrs(props => ({
   ...props,
   underlayColor: props.theme.backgroundDark
@@ -83,8 +81,8 @@ export const Unit = styled(Text)`
   margin-left: ${space.nano};
 `;
 
-export const PanelContainer = styled(Wrapper)`
-  background-color: ${({ theme }) => theme.background};
+export const PanelContainer = styled.View`
+  background-color: ${({ theme }) => theme.backgroundLight};
   border-radius: ${border.round};
 
   padding: ${space.medium};

@@ -10,7 +10,7 @@ type SaveButtonProps = {
 
 export const SaveButton = ({ onSave }: SaveButtonProps) => {
   return (
-    <Save onPress={() => onSave()}>
+    <Save onPress={onSave}>
       <SaveText center>Save Changes</SaveText>
     </Save>
   );
