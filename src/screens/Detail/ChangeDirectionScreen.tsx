@@ -1,8 +1,9 @@
 import React from "react";
 import SafeArea from "../../layouts/SafeArea";
 import { SelectItem } from "../../components/organisms/Settings";
+import { NavigationProps } from "../../../types";
 
-const ChangeDirectionScreen = ({ navigation }) => {
+const ChangeDirectionScreen = ({ navigation }: NavigationProps) => {
   const direction = navigation.getParam("direction");
   const directions = navigation.getParam("directions");
   const directionIds = navigation.getParam("directionIds");
@@ -14,7 +15,6 @@ const ChangeDirectionScreen = ({ navigation }) => {
       {directions.map((directionToSelect, index) => {
         let directionName;
         if (directionIds.includes(directionToSelect.id)) {
-          // eslint-disable-next-line prefer-destructuring
           directionName = predictionsDirectionName;
         } else {
           directionName = directionToSelect.name;

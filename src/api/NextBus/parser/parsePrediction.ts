@@ -1,4 +1,5 @@
 import { parseBoolean } from "../../../utils";
+import { NextBus, NextBusAPI } from "../../../../types";
 
 const parsePrediction = (predictionParam: NextBusAPI.Prediction): NextBus.Prediction => ({
   directionId: predictionParam.dirTag,

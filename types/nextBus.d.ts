@@ -1,9 +1,9 @@
-import { GeoLocation } from ".";
+import { GeoLocation } from "./utils";
 
 /**
  * Typings for my version of the Nextbus API
  */
-declare namespace NextBus {
+export declare namespace NextBus {
   type ServiceAlertPriority = "LOW" | "NORMAL" | "HIGH" | "CRITICAL";
 
   interface Agency {

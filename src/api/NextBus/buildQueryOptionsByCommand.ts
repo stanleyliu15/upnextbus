@@ -1,4 +1,5 @@
 import b from "./queryOptionBuilders";
+import { NextBus, NextBusAPI } from "../../../types";
 
 const commandQueryOptionsBuilder = {
   agencyList: b.buildQueryOptionsForAgencies,

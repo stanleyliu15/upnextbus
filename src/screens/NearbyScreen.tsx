@@ -4,6 +4,7 @@ import { FlatList, RefreshControl, GestureResponderEvent, Linking } from "react-
 import { ThemeContext } from "styled-components/native";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 
+import { NextBus, NavigationProps } from "../../types";
 import { Loader } from "../components/atoms";
 import { ErrorInfo, FloatingButton } from "../components/molecules";
 import {
@@ -20,7 +21,7 @@ import {
   NextBusNoNearbyAgencyError
 } from "../errors";
 
-function NearbyScreen({ navigation }) {
+function NearbyScreen({ navigation }: NavigationProps) {
   const dispatch = useDispatch();
   const nearby = useSelector(selectNearbyPredictionList);
   const theme = useContext(ThemeContext);
@@ -105,7 +106,7 @@ function NearbyScreen({ navigation }) {
                 favorite => favorite.routeId === item.routeId && favorite.stopId === item.stopId
               )}
               predictions={item}
-              onPredictionsPress={(event: GestureResponderEvent): void => {
+              onPredictionsPress={(_event: GestureResponderEvent): void => {
                 const route = routes.find(route => route.id === item.routeId);
                 const { directions } = route;
                 const direction = directions.find(dir => {

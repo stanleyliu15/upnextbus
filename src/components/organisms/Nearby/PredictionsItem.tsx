@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 
 import { FontAwesome } from "@expo/vector-icons";
 import { ThemeContext } from "styled-components";
+import { NextBus } from "../../../../types";
 import { normalizeRouteName } from "../../../utils";
 import { selectRouteNameOption } from "../../../store/features/settings";
 import {
@@ -27,6 +28,7 @@ import { Strong } from "../../atoms";
 type Props = {
   predictions: NextBus.Predictions;
   onPredictionsPress?: (event: GestureResponderEvent) => void;
+  favorited: boolean;
 };
 
 export function PredictionsItem({ predictions, onPredictionsPress = null, favorited }: Props) {

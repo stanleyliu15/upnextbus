@@ -47,10 +47,15 @@ export const SelectItem = function({
 
 const SELECT_ITEM_HEIGHT = "60px";
 
+type HighlightButtonProps = {
+  fixedHeight?: boolean;
+  lastItem?: boolean;
+};
+
 const HighlightButton = styled.TouchableHighlight.attrs(props => ({
   ...props,
   underlayColor: props.theme.backgroundDark
-}))`
+}))<HighlightButtonProps>`
   padding: ${space.xxxLarge};
   height: ${({ fixedHeight }) => (fixedHeight ? SELECT_ITEM_HEIGHT : "auto")};
 

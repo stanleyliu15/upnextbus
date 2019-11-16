@@ -16,9 +16,8 @@ import { Loader } from "../../../components/atoms";
 import { ErrorInfo } from "../../../components/molecules";
 import { normalizeRouteName, useToggle } from "../../../utils";
 import { space } from "../../../styles";
-import { NavigationProps } from "../../../../types";
+import { NavigationProps, NextBus } from "../../../../types";
 
-// eslint-disable-next-line no-underscore-dangle
 let _setRouteIds;
 
 function FilterRoutesScreen({ navigation }: NavigationProps) {

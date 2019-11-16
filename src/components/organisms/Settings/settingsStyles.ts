@@ -49,7 +49,7 @@ export const PropertyColumn = styled.View`
   margin-right: ${space.small};
 `;
 
-export const PropertyAndDescription = styled.View`
+export const PropertyAndDescription = styled.View<{ iconSpace?: boolean }>`
   flex: 1;
   margin-left: ${({ iconSpace }) => (iconSpace ? space.large : 0)};
 `;
@@ -60,7 +60,7 @@ export const Description = styled(Text)`
   font-size: ${fontSize.small};
 `;
 
-export const ValueColumn = styled.View`
+export const ValueColumn = styled.View<{ prioritizePropertySpace?: boolean }>`
   flex: ${({ prioritizePropertySpace }) => (prioritizePropertySpace ? "0 0 auto" : 1)};
 
   flex-direction: row;

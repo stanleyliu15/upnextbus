@@ -4,6 +4,7 @@ import styled, { ThemeContext } from "styled-components/native";
 import { useSelector, useDispatch } from "react-redux";
 import { FontAwesome, MaterialIcons, Ionicons } from "@expo/vector-icons";
 
+import { NextBus } from "../../../../types";
 import { normalizeRouteName } from "../../../utils";
 import { selectRouteNameOption } from "../../../store/features/settings";
 import { RouteName, PredictionTime, PredictionMinute, Unit } from "./itemStyles";

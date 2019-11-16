@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FlatList } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import {
   selectAgencies,
@@ -13,7 +13,8 @@ import { Loader } from "../../../components/atoms";
 import { ErrorInfo } from "../../../components/molecules";
 import { SelectItem, SaveButton } from "../../../components/organisms/Settings";
 import SafeArea from "../../../layouts/SafeArea";
-import { NavigationProps } from "../../../../types";
+import { NavigationProps, NextBus } from "../../../../types";
+import { useSelector } from "../../../store/types";
 
 function ChangeAgencyScreen({ navigation }: NavigationProps) {
   const dispatch = useDispatch();

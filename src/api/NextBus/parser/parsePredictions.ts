@@ -1,6 +1,7 @@
 import parseServiceAlert from "./parseServiceAlert";
 import parsePrediction from "./parsePrediction";
 import { titleCase, arrayify } from "../../../utils";
+import { NextBus, NextBusAPI } from "../../../../types";
 
 const parsePredictions = (
   predictions: NextBusAPI.Predictions,
