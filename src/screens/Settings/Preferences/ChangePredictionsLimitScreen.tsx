@@ -16,7 +16,7 @@ export default function({ navigation }: NavigationProps) {
   const dispatch = useDispatch();
   const predictionListLimit = useSelector(selectPredictionListLimit);
   const [selectedListLimit, setSelectedListLimit] = useState(predictionListLimit);
-  const handleSave = () => {
+  const handleSave = _event => {
     dispatch(setPredictionListLimit(selectedListLimit));
     navigation.goBack();
   };

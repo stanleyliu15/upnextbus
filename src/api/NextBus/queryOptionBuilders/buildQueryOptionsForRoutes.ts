@@ -1,3 +1,5 @@
+import { NextBus, NextBusAPI } from "../../../../types";
+
 const buildQueryOptionsForRoutes: NextBus.QueryOptionsBuilder = (
   command: NextBusAPI.Command,
   queryOptionsParam: NextBus.RoutesQueryOptions

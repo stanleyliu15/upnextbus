@@ -4,6 +4,7 @@ import { AGENCY_ID_FILTERS, COMMAND_PATH_MAP, COMMANDS } from "./config";
 import { arrayify } from "../../utils";
 import { NextBusAPIError } from "../../errors";
 import parseError from "./parser/parseError";
+import { NextBusAPI } from "../../../types";
 
 const checkResponseJsonForError = (responseJson: NextBusAPI.ResponseJson) => {
   if (responseJson.Error) {

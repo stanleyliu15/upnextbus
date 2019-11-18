@@ -12,7 +12,7 @@ export default function() {
   const dispatch = useDispatch();
   const themeColor = useSelector(selectThemeColor);
   const [selectedThemeColor, setSelectedThemeColor] = useState(themeColor);
-  const handleSave = () => dispatch(setThemeColor(selectedThemeColor));
+  const handleSave = _event => dispatch(setThemeColor(selectedThemeColor));
   const themeColors = Object.values(ThemeColor);
   return (
     <SafeArea>

@@ -42,7 +42,7 @@ function cacheImages(images) {
   });
 }
 
-export default function() {
+export default function App() {
   // TODO: test app works on fresh store
   const { store, persistor } = configureStore();
   const [ready, setReady] = useState(false);

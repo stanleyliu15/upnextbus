@@ -1,4 +1,5 @@
 import request from "./request";
+import { NextBus } from "../../../types";
 
 const NextBusAPI = {
   getAgencies: (): Promise<NextBus.Agency[]> => request("agencyList"),

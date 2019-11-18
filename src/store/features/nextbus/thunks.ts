@@ -12,7 +12,7 @@ import NextBusMobileAPI from "../../../api/NextBusMobile/api";
 import { NextBusNoNearbyAgencyError } from "../../../errors";
 
 export function getAgencies(): ThunkResult<Promise<void>> {
-  return async function(dispatch: ThunkDispatch, getState) {
+  return async function(dispatch: ThunkDispatch, _getState) {
     dispatch(getAgenciesAsync.request());
     try {
       const agencies = await NextBusAPI.getAgencies();

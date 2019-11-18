@@ -1,6 +1,6 @@
 import NextBusAPI from "../api/NextBus/api";
 import { NextBusNoNearbyError } from "../errors";
-import { GeoLocation } from "../../types";
+import { GeoLocation, NextBus } from "../../types";
 import * as Geolocation from "../utils/geolocation";
 
 const createStopLabel = (routeId, stopId) => ({ routeId, stopId });

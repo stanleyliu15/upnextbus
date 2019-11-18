@@ -44,6 +44,8 @@ target 'upnextbus' do
   pod 'GoogleMaps'
   pod 'Google-Maps-iOS-Utils'
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   # target 'upnextbusTests' do
   #   inherit! :search_paths
   #   # Pods for testing

@@ -1,4 +1,5 @@
 import { titleCase } from "../../../utils";
+import { NextBus, NextBusAPI } from "../../../../types";
 
 import parseLocation from "./parseLocation";
 

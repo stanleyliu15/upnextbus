@@ -3,10 +3,12 @@ import MapView, { PROVIDER_GOOGLE, Marker, Polyline, Callout } from "react-nativ
 import styled, { ThemeContext } from "styled-components/native";
 import { useSelector } from "react-redux";
 import * as Location from "expo-location";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { getStatusBarHeight, getInset } from "react-native-safe-area-view";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
+import { getStatusBarHeight, getInset } from "react-native-safe-area-view";
 import { withNavigationFocus, NavigationActions } from "react-navigation";
+
+import { NextBus } from "../../../types";
 import { selectSelectedAgencyId } from "../../store/features/nextbus";
 import {
   selectThemeColor,
@@ -75,11 +77,11 @@ const DetailScreen = function({ navigation, isFocused }) {
     navigation.dispatch(NavigationActions.back());
   };
 
-  const handleServiceAlertsPress = event => {
+  const handleServiceAlertsPress = _event => {
     navigation.navigate("ServiceAlertsScreen", { serviceAlerts: predictions.serviceAlerts });
   };
 
-  const handleDirectionPress = directionToPress => event => {
+  const handleDirectionPress = directionToPress => _event => {
     if (direction.id !== directionToPress.id) {
       const nearestStop = getNearestStop(directionToPress.stops, location, distanceLimit);
       if (stop.id !== nearestStop.id) {
@@ -92,7 +94,7 @@ const DetailScreen = function({ navigation, isFocused }) {
     }
   };
 
-  const handleStopPress = stopToPress => event => {
+  const handleStopPress = stopToPress => _event => {
     if (stop.id !== stopToPress.id) {
       setDistance(getDistanceBetween(location, stopToPress.location));
       setWalkMiddlePoint(getMiddleLocation(location, stopToPress.location));
@@ -141,7 +143,7 @@ const DetailScreen = function({ navigation, isFocused }) {
       const _vehicles = await NextBusAPI.getVehicles({
         agencyId,
         routeId: routeParam.id,
-        lastTime: -1
+        lastTime: "-1"
       });
 
       if (isFocused) {
@@ -163,7 +165,7 @@ const DetailScreen = function({ navigation, isFocused }) {
     }
   };
 
-  const handleRefreshPress = event => {
+  const handleRefreshPress = _event => {
     fetchData();
   };
 

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { GestureResponderEvent } from "react-native";
 import styled, { ThemeContext } from "styled-components/native";
-import { Feather } from "@expo/vector-icons";
+import Feather from "react-native-vector-icons/Feather";
 
 import { Text } from "../../atoms";
 import { space } from "../../../styles";
@@ -47,10 +47,15 @@ export const SelectItem = function({
 
 const SELECT_ITEM_HEIGHT = "60px";
 
+type HighlightButtonProps = {
+  fixedHeight?: boolean;
+  lastItem?: boolean;
+};
+
 const HighlightButton = styled.TouchableHighlight.attrs(props => ({
   ...props,
   underlayColor: props.theme.backgroundDark
-}))`
+}))<HighlightButtonProps>`
   padding: ${space.xxxLarge};
   height: ${({ fixedHeight }) => (fixedHeight ? SELECT_ITEM_HEIGHT : "auto")};
 

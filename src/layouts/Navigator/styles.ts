@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Entypo } from "@expo/vector-icons";
+import Entypo from "react-native-vector-icons/Entypo";
 
 import { space } from "../../styles";
 

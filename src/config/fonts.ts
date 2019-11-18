@@ -1,13 +1,4 @@
-import {
-  FontAwesome5,
-  Entypo,
-  AntDesign,
-  Feather,
-  Ionicons,
-  MaterialIcons,
-  MaterialCommunityIcons,
-  SimpleLineIcons
-} from "@expo/vector-icons";
+/* eslint-disable @typescript-eslint/camelcase */
 
 // Icon Library
 // https://oblador.github.io/react-native-vector-icons/
@@ -15,15 +6,17 @@ import {
 // TODO: optimize fonts/icons
 
 export default [
-  FontAwesome5.font,
-  Entypo.font,
-  AntDesign.font,
-  Feather.font,
-  MaterialIcons.font,
-  MaterialCommunityIcons.font,
-  Ionicons.font,
-  SimpleLineIcons.font,
   {
+    FontAwesome5_Brands: require("../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"),
+    FontAwesome5_Regular: require("../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"),
+    FontAwesome5_Solid: require("../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"),
+    AntDesign: require("../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"),
+    Entypo: require("../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"),
+    Feather: require("../../node_modules/react-native-vector-icons/Fonts/Feather.ttf"),
+    MaterialIcons: require("../../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"),
+    MaterialCommunityIcons: require("../../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"),
+    Ionicons: require("../../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"),
+    SimpleLineIcons: require("../../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"),
     "open-sans-light": require("../../assets/fonts/OpenSans-Light.ttf"),
     "open-sans-regular": require("../../assets/fonts/OpenSans-Regular.ttf"),
     "open-sans-semi-bold": require("../../assets/fonts/OpenSans-SemiBold.ttf"),

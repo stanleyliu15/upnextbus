@@ -1,5 +1,6 @@
 import { StateType, ActionType } from "typesafe-actions";
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
+import { TypedUseSelectorHook, useSelector as useSelectorGeneric } from "react-redux";
 
 export type RootState = StateType<ReturnType<typeof import("./root-reducer").default>>;
 
@@ -14,3 +15,5 @@ export interface AsyncResult<T> {
   data: T | null;
   error: Error | null;
 }
+
+export const useSelector: TypedUseSelectorHook<RootState> = useSelectorGeneric;

@@ -1,8 +1,7 @@
 import React, { useState, useContext } from "react";
 import { FlatList } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import styled, { ThemeContext } from "styled-components/native";
 import SafeArea from "../../../layouts/SafeArea";
 import {
@@ -16,21 +15,20 @@ import { Loader } from "../../../components/atoms";
 import { ErrorInfo } from "../../../components/molecules";
 import { normalizeRouteName, useToggle } from "../../../utils";
 import { space } from "../../../styles";
-import { NavigationProps } from "../../../../types";
+import { NavigationProps, NextBus } from "../../../../types";
 
-// eslint-disable-next-line no-underscore-dangle
 let _setRouteIds;
 
 function FilterRoutesScreen({ navigation }: NavigationProps) {
   const dispatch = useDispatch();
   const routes = useSelector(selectRoutes);
-  const handleRetry = () => dispatch(getRoutes());
+  const handleRetry = _event => dispatch(getRoutes());
 
   const filterRouteIds = useSelector(selectFilterRouteIds);
   const [routeIds, setRouteIds] = useState(filterRouteIds);
   _setRouteIds = setRouteIds;
 
-  const handleSave = () => {
+  const handleSave = _event => {
     dispatch(setFilterRouteIds(routeIds));
     navigation.goBack();
   };

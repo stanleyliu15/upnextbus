@@ -1,17 +1,14 @@
 import React from "react";
 import styled from "styled-components/native";
-import { AntDesign } from "@expo/vector-icons";
+import AntDesign from "react-native-vector-icons/AntDesign";
 
 import SafeArea from "../../layouts/SafeArea";
 import { Text } from "../../components/atoms";
 import { VerticalSeperator } from "../../components/organisms/Nearby/itemStyles";
 import { space, border } from "../../styles";
+import { NavigationProps } from "../../../types";
 
-type Props = {
-  serviceAlerts: NextBus.ServiceAlert[];
-};
-
-function ServiceAlertsScreen({ navigation }: Props) {
+function ServiceAlertsScreen({ navigation }: NavigationProps) {
   const serviceAlerts = navigation.getParam("serviceAlerts");
 
   return (
@@ -72,9 +69,9 @@ const Alert = styled.View`
   display: flex;
   flex-direction: row;
 
-  border-radius: ${border.round}
+  border-radius: ${border.round};
   margin: ${space.zero} ${space.large} ${space.large};
-  padding:  ${space.large};
+  padding: ${space.large};
 
   border-color: ${({ theme }) => theme.warning};
   border-width: 0.66px;

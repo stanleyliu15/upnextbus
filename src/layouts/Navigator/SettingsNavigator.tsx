@@ -9,7 +9,7 @@ import RouteNameOptionScreen from "../../screens/Settings/Preferences/ChangeRout
 import ThemeScreen from "../../screens/Settings/Preferences/ChangeThemeScreen";
 import ChangeShowInactivePredictionsScreen from "../../screens/Settings/Preferences/ChangeShowInactivePredictionsScreen";
 
-export default (parentStackConfig, theme) => {
+export default (parentStackConfig, _theme) => {
   const routeConfigs = {
     SettingsScreen: {
       screen: SettingsScreen,

@@ -1,4 +1,5 @@
 import { createAction, createAsyncAction } from "typesafe-actions";
+import { NextBus } from "../../../../types";
 
 export const selectAgencyId = createAction(
   "@nextBus/SELECT_AGENCY_ID",

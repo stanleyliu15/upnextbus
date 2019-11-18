@@ -8,26 +8,17 @@ PODS:
   - EXFileSystem (6.0.2):
     - UMCore
     - UMFileSystemInterface
-  - EXFont (6.0.1):
+  - EXFont (7.0.0):
     - UMCore
     - UMFontInterface
-  - EXKeepAwake (6.0.0):
-    - UMCore
-  - EXLinearGradient (6.0.0):
-    - UMCore
-  - EXLocation (6.0.0):
+  - EXLocation (7.0.0):
     - UMCore
     - UMPermissionsInterface
     - UMTaskManagerInterface
-  - EXPermissions (6.0.0):
+  - EXPermissions (7.0.0):
     - UMCore
     - UMPermissionsInterface
-  - EXSQLite (6.0.0):
-    - UMCore
-    - UMFileSystemInterface
   - EXStoreReview (1.0.0):
-    - UMCore
-  - EXWebBrowser (6.0.0):
     - UMCore
   - FBLazyVector (0.61.2)
   - FBReactNativeSpec (0.61.2):
@@ -280,6 +271,8 @@ PODS:
     - React
   - RNSVG (9.11.1):
     - React
+  - RNVectorIcons (6.6.0):
+    - React
   - UMBarCodeScannerInterface (3.0.0)
   - UMCameraInterface (3.0.0)
   - UMConstantsInterface (3.0.0)
@@ -303,13 +296,9 @@ DEPENDENCIES:
   - EXConstants (from `../node_modules/expo-constants/ios`)
   - EXFileSystem (from `../node_modules/expo-file-system/ios`)
   - EXFont (from `../node_modules/expo-font/ios`)
-  - EXKeepAwake (from `../node_modules/expo-keep-awake/ios`)
-  - EXLinearGradient (from `../node_modules/expo-linear-gradient/ios`)
   - EXLocation (from `../node_modules/expo-location/ios`)
   - EXPermissions (from `../node_modules/expo-permissions/ios`)
-  - EXSQLite (from `../node_modules/expo-sqlite/ios`)
   - EXStoreReview (from `../node_modules/expo-store-review/ios`)
-  - EXWebBrowser (from `../node_modules/expo-web-browser/ios`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
@@ -344,6 +333,7 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
+  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - UMBarCodeScannerInterface (from `../node_modules/unimodules-barcode-scanner-interface/ios`)
   - UMCameraInterface (from `../node_modules/unimodules-camera-interface/ios`)
   - UMConstantsInterface (from `../node_modules/unimodules-constants-interface/ios`)
@@ -379,27 +369,15 @@ EXTERNAL SOURCES:
   EXFont:
     :path: !ruby/object:Pathname
     path: "../node_modules/expo-font/ios"
-  EXKeepAwake:
-    :path: !ruby/object:Pathname
-    path: "../node_modules/expo-keep-awake/ios"
-  EXLinearGradient:
-    :path: !ruby/object:Pathname
-    path: "../node_modules/expo-linear-gradient/ios"
   EXLocation:
     :path: !ruby/object:Pathname
     path: "../node_modules/expo-location/ios"
   EXPermissions:
     :path: !ruby/object:Pathname
     path: "../node_modules/expo-permissions/ios"
-  EXSQLite:
-    :path: !ruby/object:Pathname
-    path: "../node_modules/expo-sqlite/ios"
   EXStoreReview:
     :path: !ruby/object:Pathname
     path: "../node_modules/expo-store-review/ios"
-  EXWebBrowser:
-    :path: !ruby/object:Pathname
-    path: "../node_modules/expo-web-browser/ios"
   FBLazyVector:
     :path: "../node_modules/react-native/Libraries/FBLazyVector"
   FBReactNativeSpec:
@@ -458,6 +436,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNSVG:
     :path: "../node_modules/react-native-svg"
+  RNVectorIcons:
+    :path: "../node_modules/react-native-vector-icons"
   UMBarCodeScannerInterface:
     :path: !ruby/object:Pathname
     path: "../node_modules/unimodules-barcode-scanner-interface/ios"
@@ -503,14 +483,10 @@ SPEC CHECKSUMS:
   EXAppLoaderProvider: 7a8185228d8ba9e689a0e2d6d957fe9bdd49c8a0
   EXConstants: 5d81e84ca71b9a552529889cc798b4a04e9e22b3
   EXFileSystem: 091907902fcec9f9182b656fdead41a82f30986a
-  EXFont: c862449210fc86aa11d24a202cb22c71a0d39609
-  EXKeepAwake: e7cb6516675052b12a7d23291e33078b4239653a
-  EXLinearGradient: 40781b77e58f844c8dc4ad310dc9755b4d3792a7
-  EXLocation: 4eb76115832f08b1e78003b335c210e18fa60424
-  EXPermissions: 99e52dc3e5f8e55153f1958004f6df2a30a1f2f5
-  EXSQLite: 8dab6a5ab1b78be7925073d6071eb22095d4dda6
+  EXFont: 71d07dc5d2153db7d1a23f1e0cc1b6341d55c432
+  EXLocation: 452a1d9edceb1b93deb86fd785236606d33742dd
+  EXPermissions: df10ad83df2f6b647aec304619354f8ab48d5f63
   EXStoreReview: 240aa065fa7674a68a73036029f20d6629ca31ad
-  EXWebBrowser: def838b95aa9d396f9ce71ace4e614ee16e7ee30
   FBLazyVector: 68b6a76960fbd8ecd9fb7ce0aadd3329c3340a99
   FBReactNativeSpec: 5a764c60abdc3336a213e5310c40b74741f32839
   Folly: 183c8dae43723c50ebd669140abc6258bbb6e95a
@@ -542,6 +518,7 @@ SPEC CHECKSUMS:
   RNReanimated: 7a52c90473b5e81c13408d40d797b98387eaddde
   RNScreens: 720a9e6968beb73e8196239801e887d8401f86ed
   RNSVG: be27aa7c58819f97399388ae53d7fa0572f32c7f
+  RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   UMBarCodeScannerInterface: 84ea2d6b58ff0dc27ef9b68bab71286be18ee020
   UMCameraInterface: 26b26005d1756a0d5f4f04f1e168e39ea9154535
   UMConstantsInterface: 038bacb19de12b6fd328c589122c8dc977cccf61
@@ -556,6 +533,6 @@ SPEC CHECKSUMS:
   UMTaskManagerInterface: 8664abd37a00715727e60df9ecd65e42ba47b548
   Yoga: 14927e37bd25376d216b150ab2a561773d57911f
 
-PODFILE CHECKSUM: 9dadfa47ff79244cd4131a94cbb87da75a49ee11
+PODFILE CHECKSUM: 29fa35b31b41bf68deebe5a49e741d9eab9d4182
 
 COCOAPODS: 1.8.3

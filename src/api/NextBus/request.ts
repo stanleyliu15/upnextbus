@@ -3,6 +3,7 @@ import buildQueryOptionsByCommand from "./buildQueryOptionsByCommand";
 import processResponseJsonForParseByCommand from "./processResponseJsonForParseByCommand";
 import parseResponseDataByCommand from "./parseResponseDataByCommand";
 import { objectToQueryParameters } from "../../utils";
+import { NextBus, NextBusAPI } from "../../../types";
 
 const request = async (
   command: NextBusAPI.Command,
@@ -22,7 +23,6 @@ const request = async (
 
     return responseDataParsed;
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.error(error);
 
     throw error;

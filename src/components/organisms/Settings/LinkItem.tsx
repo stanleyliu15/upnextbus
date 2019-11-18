@@ -1,5 +1,7 @@
 import React, { useContext } from "react";
-import { Entypo, AntDesign } from "@expo/vector-icons";
+import Entypo from "react-native-vector-icons/Entypo";
+import AntDesign from "react-native-vector-icons/AntDesign";
+
 import styled, { ThemeContext } from "styled-components/native";
 import noop from "lodash/noop";
 

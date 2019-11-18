@@ -28,7 +28,7 @@ const StyledFloatingButton = styled(CircularIconButton).attrs(props => ({
     return "auto";
   }};
 
-  background-color: ${({ theme }) => theme.backgroundLight};
+  background-color: ${({ theme }) => theme.background};
 
   padding: 0;
 

@@ -2,8 +2,10 @@ import React, { useEffect, useState, useContext, useRef, Fragment } from "react"
 import { useSelector, useDispatch } from "react-redux";
 import { FlatList, RefreshControl, GestureResponderEvent, Linking } from "react-native";
 import { ThemeContext } from "styled-components/native";
-import { Feather, MaterialIcons } from "@expo/vector-icons";
+import Feather from "react-native-vector-icons/Feather";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
+import { NextBus, NavigationProps } from "../../types";
 import { Loader } from "../components/atoms";
 import { ErrorInfo, FloatingButton } from "../components/molecules";
 import {
@@ -20,7 +22,7 @@ import {
   NextBusNoNearbyAgencyError
 } from "../errors";
 
-function NearbyScreen({ navigation }) {
+function NearbyScreen({ navigation }: NavigationProps) {
   const dispatch = useDispatch();
   const nearby = useSelector(selectNearbyPredictionList);
   const theme = useContext(ThemeContext);
@@ -55,7 +57,7 @@ function NearbyScreen({ navigation }) {
           <ErrorInfo
             title="Location permissions"
             message={nearby.error.message}
-            onRetry={() => Linking.openURL("app-settings:")}
+            onRetry={_event => Linking.openURL("app-settings:")}
             onRetryTitle="Go to settings"
             externalLink
           />
@@ -66,7 +68,7 @@ function NearbyScreen({ navigation }) {
         return (
           <ErrorInfo
             message={nearby.error.message}
-            onRetry={() => dispatch(getNearbyPredictionsList())}
+            onRetry={_event => dispatch(getNearbyPredictionsList())}
           />
         );
       }
@@ -75,7 +77,7 @@ function NearbyScreen({ navigation }) {
         return (
           <ErrorInfo
             message={nearby.error.message}
-            onRetry={() => {
+            onRetry={_event => {
               navigation.navigate("ChangeAgencyScreen");
             }}
             onRetryTitle="Set Agency"
@@ -97,6 +99,9 @@ function NearbyScreen({ navigation }) {
           <MaterialIcons name="refresh" size={35} color={theme.primary} />
         </FloatingButton>
         <FlatList
+          style={{
+            backgroundColor: theme.backgroundLight
+          }}
           data={nearby.data}
           keyExtractor={(item: NextBus.Predictions) => `${item.routeId}-${item.stopId}`}
           renderItem={({ item }) => (
@@ -105,7 +110,7 @@ function NearbyScreen({ navigation }) {
                 favorite => favorite.routeId === item.routeId && favorite.stopId === item.stopId
               )}
               predictions={item}
-              onPredictionsPress={(event: GestureResponderEvent): void => {
+              onPredictionsPress={(_event: GestureResponderEvent): void => {
                 const route = routes.find(route => route.id === item.routeId);
                 const { directions } = route;
                 const direction = directions.find(dir => {

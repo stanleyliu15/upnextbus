@@ -1,12 +1,12 @@
+import { GeoLocation } from "./utils";
 /**
  * Typings based on the NextBus API
  *
  * Documentation:
  * https://www.nextbus.com/xmlFeedDocs/NextBusXMLFeed.pdf
  */
-import { GeoLocation } from ".";
 
-declare namespace NextBusAPI {
+export declare namespace NextBusAPI {
   type Command =
     | "agencyList"
     | "routeConfig"
@@ -139,7 +139,6 @@ declare namespace NextBusAPI {
     command: NextBusAPI.Command;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface AgenciesQueryOptions extends BaseQueryOptions {}
 
   interface RoutesQueryOptions extends BaseQueryOptions {

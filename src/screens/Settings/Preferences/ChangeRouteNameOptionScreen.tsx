@@ -14,7 +14,7 @@ export default function({ navigation }: NavigationProps) {
   const dispatch = useDispatch();
   const routeNameOption = useSelector(selectRouteNameOption);
   const [selectedRouteNameOption, setSelectedRouteNameOption] = useState(routeNameOption);
-  const handleSave = () => {
+  const handleSave = _event => {
     dispatch(setRouteNameOption(selectedRouteNameOption));
     navigation.goBack();
   };

@@ -2,6 +2,7 @@ import { arrayify } from "../../../utils";
 import parseStop from "./parseStop";
 import parseDirection from "./parseDirection";
 import parsePath from "./parsePath";
+import { NextBus, NextBusAPI } from "../../../../types";
 
 const parseRoute = (routeParam: NextBusAPI.Route): NextBus.Route => {
   const route = {} as NextBus.Route;

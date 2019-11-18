@@ -1,4 +1,5 @@
 import p from "./parser";
+import { NextBus, NextBusAPI } from "../../../types";
 
 const commandParser = {
   agencyList: (agencies: NextBusAPI.Agency[]): NextBus.Agency[] =>
