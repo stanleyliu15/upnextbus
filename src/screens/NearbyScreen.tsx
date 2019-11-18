@@ -2,7 +2,8 @@ import React, { useEffect, useState, useContext, useRef, Fragment } from "react"
 import { useSelector, useDispatch } from "react-redux";
 import { FlatList, RefreshControl, GestureResponderEvent, Linking } from "react-native";
 import { ThemeContext } from "styled-components/native";
-import { Feather, MaterialIcons } from "@expo/vector-icons";
+import Feather from "react-native-vector-icons/Feather";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 import { NextBus, NavigationProps } from "../../types";
 import { Loader } from "../components/atoms";
@@ -56,7 +57,7 @@ function NearbyScreen({ navigation }: NavigationProps) {
           <ErrorInfo
             title="Location permissions"
             message={nearby.error.message}
-            onRetry={() => Linking.openURL("app-settings:")}
+            onRetry={_event => Linking.openURL("app-settings:")}
             onRetryTitle="Go to settings"
             externalLink
           />
@@ -67,7 +68,7 @@ function NearbyScreen({ navigation }: NavigationProps) {
         return (
           <ErrorInfo
             message={nearby.error.message}
-            onRetry={() => dispatch(getNearbyPredictionsList())}
+            onRetry={_event => dispatch(getNearbyPredictionsList())}
           />
         );
       }
@@ -76,7 +77,7 @@ function NearbyScreen({ navigation }: NavigationProps) {
         return (
           <ErrorInfo
             message={nearby.error.message}
-            onRetry={() => {
+            onRetry={_event => {
               navigation.navigate("ChangeAgencyScreen");
             }}
             onRetryTitle="Set Agency"
@@ -98,6 +99,9 @@ function NearbyScreen({ navigation }: NavigationProps) {
           <MaterialIcons name="refresh" size={35} color={theme.primary} />
         </FloatingButton>
         <FlatList
+          style={{
+            backgroundColor: theme.backgroundLight
+          }}
           data={nearby.data}
           keyExtractor={(item: NextBus.Predictions) => `${item.routeId}-${item.stopId}`}
           renderItem={({ item }) => (

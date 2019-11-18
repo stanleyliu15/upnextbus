@@ -2,7 +2,9 @@ import React, { useContext } from "react";
 import { GestureResponderEvent, View } from "react-native";
 import styled, { ThemeContext } from "styled-components/native";
 import { useSelector, useDispatch } from "react-redux";
-import { FontAwesome, MaterialIcons, Ionicons } from "@expo/vector-icons";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 import { NextBus } from "../../../../types";
 import { normalizeRouteName } from "../../../utils";

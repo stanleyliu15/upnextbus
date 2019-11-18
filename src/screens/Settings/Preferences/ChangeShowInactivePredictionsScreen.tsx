@@ -16,7 +16,7 @@ export default function({ navigation }) {
   const showInactivePredictions = useSelector(selectShowInactivePredictions);
 
   const [selectedOption, setSelectedOption] = useState(showInactivePredictions ? "Yes" : "No");
-  const handleSave = () => {
+  const handleSave = _event => {
     dispatch(setShowInactivePredictions(selectedOption === "Yes"));
     navigation.goBack();
   };

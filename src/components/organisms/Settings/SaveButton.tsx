@@ -3,9 +3,10 @@ import styled from "styled-components/native";
 
 import { Button, Text } from "../../atoms";
 import { space } from "../../../styles";
+import { OnPressHandler } from "../../../../types";
 
 type SaveButtonProps = {
-  onSave: VoidFunction;
+  onSave: OnPressHandler;
 };
 
 export const SaveButton = ({ onSave }: SaveButtonProps) => {

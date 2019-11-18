@@ -3,7 +3,8 @@ import MapView, { PROVIDER_GOOGLE, Marker, Polyline, Callout } from "react-nativ
 import styled, { ThemeContext } from "styled-components/native";
 import { useSelector } from "react-redux";
 import * as Location from "expo-location";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+
 import { getStatusBarHeight, getInset } from "react-native-safe-area-view";
 import { withNavigationFocus, NavigationActions } from "react-navigation";
 

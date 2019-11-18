@@ -1,8 +1,18 @@
 module.exports = {
-  preset: "jest-expo",
-  transformIgnorePatterns: [
-    "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|sentry-expo|native-base)"
-  ],
+  preset: "react-native",
+  moduleFileExtensions: ["ts", "tsx", "js"],
+  transform: {
+    "^.+\\.(js)$": "<rootDir>/node_modules/babel-jest",
+    "\\.(ts|tsx)$": "ts-jest"
+  },
+  testRegex: "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+  testPathIgnorePatterns: ["\\.snap$", "<rootDir>/node_modules/"],
+  cacheDirectory: ".jest/cache",
   automock: false,
-  setupFiles: ["./setupJest.ts"]
+  setupFiles: ["./setupJest.ts"],
+  globals: {
+    "ts-jest": {
+      babelConfig: true
+    }
+  }
 };

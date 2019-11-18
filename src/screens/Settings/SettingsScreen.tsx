@@ -4,7 +4,9 @@ import styled, { ThemeContext } from "styled-components/native";
 import { useSelector, useDispatch } from "react-redux";
 import * as StoreReview from "expo-store-review";
 import Constants from "expo-constants";
-import { Feather, FontAwesome5, AntDesign } from "@expo/vector-icons";
+import Feather from "react-native-vector-icons/Feather";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import capitalize from "lodash/capitalize";
 
 import { NavigationActions } from "react-navigation";
@@ -27,6 +29,8 @@ import { space, ThemeColor } from "../../styles";
 const MyCloseButton = styled(CloseButton)`
   top: ${space.large};
 `;
+
+// TODO: reverse background colors
 
 function SettingsScreen({ navigation }: NavigationProps) {
   const { navigate } = navigation;
@@ -59,37 +63,37 @@ function SettingsScreen({ navigation }: NavigationProps) {
               title="Agency"
               loading={agencies.loading}
               value={agencies.loading || agencies.error || !agency ? null : agency.name}
-              onPress={() => navigate("ChangeAgencyScreen")}
+              onPress={_event => navigate("ChangeAgencyScreen")}
             />
             <LinkItem
               title="Routes"
               description="choose which routes you want to see"
-              onPress={() => navigate("ChangeFilterRoutesScreen")}
+              onPress={_event => navigate("ChangeFilterRoutesScreen")}
               prioritizePropertySpace
             />
             <LinkItem
               title="Distance Limit"
               value={`${settings.maxStopDistance} miles`}
-              onPress={() => navigate("ChangeDistanceLimitScreen")}
+              onPress={_event => navigate("ChangeDistanceLimitScreen")}
             />
             <LinkItem
               title="Predictions Limit"
               description="the number of predictions per bus"
               value={settings.predictionListLimit}
-              onPress={() => navigate("ChangePredictionsLimitScreen")}
+              onPress={_event => navigate("ChangePredictionsLimitScreen")}
               prioritizePropertySpace
             />
             <LinkItem
               title="Bus Naming"
               description="choose how you see bus names"
               value={enumKeyFromValue(RouteNameOption, settings.routeNameOption)}
-              onPress={() => navigate("ChangeRouteNameOptionScreen")}
+              onPress={_event => navigate("ChangeRouteNameOptionScreen")}
               prioritizePropertySpace
             />
             <LinkItem
               title="Show Inactive Buses"
               value={settings.showInactivePredictions ? "Yes" : "No"}
-              onPress={() => navigate("ChangeShowInactivePredictionsScreen")}
+              onPress={_event => navigate("ChangeShowInactivePredictionsScreen")}
               prioritizePropertySpace
             />
           </SectionContent>
@@ -107,7 +111,7 @@ function SettingsScreen({ navigation }: NavigationProps) {
                   color={settings.themeColor === ThemeColor.LIGHT ? "#ff9506" : "#9852f9"}
                 />
               }
-              onPress={() => navigate("ChangeThemeScreen")}
+              onPress={_event => navigate("ChangeThemeScreen")}
             />
           </SectionContent>
         </Section>
@@ -118,7 +122,7 @@ function SettingsScreen({ navigation }: NavigationProps) {
               title="Rate Us"
               icon={<AntDesign name="star" size={20} color={theme.primary} />}
               description="help us on the store!"
-              onPress={() => StoreReview.requestReview()}
+              onPress={_event => StoreReview.requestReview()}
               externalLink
               prioritizePropertySpace
             />
@@ -132,7 +136,7 @@ function SettingsScreen({ navigation }: NavigationProps) {
               title="Contact Us"
               description="tell us what you think!"
               icon={<Feather name="mail" size={20} color={theme.text} />}
-              onPress={() => Linking.openURL("mailto://upnextbus@gmail.com")}
+              onPress={_event => Linking.openURL("mailto://upnextbus@gmail.com")}
               externalLink
               prioritizePropertySpace
             />

@@ -13,7 +13,7 @@ export default function({ navigation }: NavigationProps) {
   const dispatch = useDispatch();
   const distanceLimit = useSelector(selectDistanceLimit);
   const [selectedDistanceLimit, setSelectedDistanceLimit] = useState(distanceLimit);
-  const handleSave = () => {
+  const handleSave = _event => {
     dispatch(setMaxStopDistance(selectedDistanceLimit));
     navigation.goBack();
   };

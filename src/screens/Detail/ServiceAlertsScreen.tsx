@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components/native";
-import { AntDesign } from "@expo/vector-icons";
+import AntDesign from "react-native-vector-icons/AntDesign";
 
 import SafeArea from "../../layouts/SafeArea";
 import { Text } from "../../components/atoms";

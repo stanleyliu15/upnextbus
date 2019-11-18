@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components/native";
-import { Entypo } from "@expo/vector-icons";
+import Entypo from "react-native-vector-icons/Entypo";
 
 import { Text, Strong } from "../../atoms";
 import { space, border, fontFamily, fontSize } from "../../../styles";

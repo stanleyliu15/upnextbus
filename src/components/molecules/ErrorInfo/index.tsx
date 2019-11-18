@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import styled, { ThemeContext } from "styled-components/native";
 import noop from "lodash/noop";
 
-import { AntDesign } from "@expo/vector-icons";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import { Text, Button, Strong } from "../../atoms";
 import { fontFamily, fontSize, space } from "../../../styles";
 import { OnPressHandler } from "../../../../types";

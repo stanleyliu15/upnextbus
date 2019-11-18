@@ -21,7 +21,7 @@ function ChangeAgencyScreen({ navigation }: NavigationProps) {
   const agencies = useSelector(selectAgencies);
   const selectedAgencyId = useSelector(selectSelectedAgencyId);
   const [agencyId, setAgencyId] = useState(selectedAgencyId);
-  const handleSave = () => {
+  const handleSave = _event => {
     dispatch(selectAgencyId(agencyId));
     dispatch(getRoutes());
     navigation.goBack();

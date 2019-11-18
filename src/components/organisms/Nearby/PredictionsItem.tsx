@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { GestureResponderEvent } from "react-native";
 import { useSelector } from "react-redux";
 
-import { FontAwesome } from "@expo/vector-icons";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { ThemeContext } from "styled-components";
 import { NextBus } from "../../../../types";
 import { normalizeRouteName } from "../../../utils";

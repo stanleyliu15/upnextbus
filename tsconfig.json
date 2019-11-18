@@ -3,10 +3,12 @@
     "noEmit": true,
     "lib": ["dom", "esnext"],
     "jsx": "react-native",
+    "module": "commonjs",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
+    "esModuleInterop": true
   }
 }
