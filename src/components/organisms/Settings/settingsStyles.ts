@@ -26,7 +26,7 @@ export const GroupTitle = styled(Text)`
 `;
 
 export const SectionContent = styled.View`
-  background-color: ${({ theme }) => theme.background};
+  background-color: ${({ theme }) => theme.backgroundLight};
   border-radius: ${border.round};
   padding: ${space.small};
 `;
