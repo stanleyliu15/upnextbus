@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, Fragment, useRef } from "react";
-import MapView, { PROVIDER_GOOGLE, Marker, Polyline, Callout } from "react-native-maps";
+import MapView, { Marker, Polyline, Callout } from "react-native-maps";
 import styled, { ThemeContext } from "styled-components/native";
 import { useSelector } from "react-redux";
 import * as Location from "expo-location";
@@ -346,7 +346,6 @@ const DetailScreen = function({ navigation, isFocused }) {
     <Container>
       <Map
         ref={mapRef}
-        provider={PROVIDER_GOOGLE}
         initialRegion={{
           latitude: stopParam.location.lat,
           longitude: stopParam.location.lon,
