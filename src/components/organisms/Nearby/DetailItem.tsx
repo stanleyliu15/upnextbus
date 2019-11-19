@@ -80,7 +80,7 @@ export function DetailItem({
         />
       )}
       <RefreshAndTimes>
-        <Refresh onPress={canRefresh && onRefreshPress} />
+        <Refresh onPress={canRefresh ? onRefreshPress : undefined} />
         <PredictionTime>
           {predictionList.length > 0 ? (
             <>

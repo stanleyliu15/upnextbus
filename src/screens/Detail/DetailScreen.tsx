@@ -38,11 +38,11 @@ const LON_DELTA = 0.05;
 const AUTO_REFRESH_DATA_TIME = 10000;
 
 const DetailScreen = function({ navigation, isFocused }) {
-  const predictionsParam = navigation.getParam("predictions");
-  const routeParam = navigation.getParam("route");
-  const directionsParam = navigation.getParam("directions");
-  const directionParam = navigation.getParam("direction");
-  const stopParam = navigation.getParam("stop");
+  const predictionsParam: NextBus.Predictions = navigation.getParam("predictions");
+  const routeParam: NextBus.Route = navigation.getParam("route");
+  const directionsParam: NextBus.Direction[] = navigation.getParam("directions");
+  const directionParam: NextBus.Direction = navigation.getParam("direction");
+  const stopParam: NextBus.Stop = navigation.getParam("stop");
 
   const mapRef = useRef<MapView>(null);
 
@@ -121,9 +121,11 @@ const DetailScreen = function({ navigation, isFocused }) {
   };
 
   const handleLocationButtonPress = () => {
-    mapRef.current.animateToCoordinate({
-      latitude: location.lat,
-      longitude: location.lon
+    mapRef.current.animateCamera({
+      center: {
+        latitude: location.lat,
+        longitude: location.lon
+      }
     });
   };
 
@@ -183,9 +185,11 @@ const DetailScreen = function({ navigation, isFocused }) {
     if (!isFocused) {
       setAutoRefresh(false);
     } else {
-      mapRef.current.animateToCoordinate({
-        latitude: stop.location.lat,
-        longitude: stop.location.lon
+      mapRef.current.animateCamera({
+        center: {
+          latitude: stop.location.lat,
+          longitude: stop.location.lon
+        }
       });
     }
   }, [isFocused, stop.location.lat, stop.location.lon]);
@@ -217,10 +221,10 @@ const DetailScreen = function({ navigation, isFocused }) {
   }, []);
 
   function renderStopMarkers() {
-    return direction.stops.map((s, index) => {
+    return direction.stops.map((stop, index) => {
       const coordinate = {
-        latitude: s.location.lat,
-        longitude: s.location.lon
+        latitude: stop.location.lat,
+        longitude: stop.location.lon
       };
 
       function getMarkerComponent() {
@@ -230,11 +234,11 @@ const DetailScreen = function({ navigation, isFocused }) {
       }
 
       return (
-        <Marker coordinate={coordinate} onPress={handleStopPress(s)}>
+        <Marker key={stop.id} coordinate={coordinate} onPress={handleStopPress(stop)}>
           {getMarkerComponent()}
           <Callout tooltip>
             <CalloutView>
-              <Strong>{s.name}</Strong>
+              <Strong>{stop.name}</Strong>
             </CalloutView>
           </Callout>
         </Marker>
@@ -261,7 +265,7 @@ const DetailScreen = function({ navigation, isFocused }) {
       };
 
       return (
-        <Marker coordinate={coordinate}>
+        <Marker key={vehicle.id} coordinate={coordinate}>
           <BusSvg
             fill={isDarkThemeColor ? theme.white : theme.black}
             label={`${vehicle.secondsSinceRecord + seconds}s`}
@@ -350,7 +354,7 @@ const DetailScreen = function({ navigation, isFocused }) {
           longitudeDelta: LON_DELTA
         }}
         showsUserLocation={true}
-        customMapStyle={isDarkThemeColor && DARK_MAP_STYLE}
+        customMapStyle={isDarkThemeColor ? DARK_MAP_STYLE : undefined}
       >
         <Fragment>
           {renderWalkPolyline()}

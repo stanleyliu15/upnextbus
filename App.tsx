@@ -13,9 +13,6 @@ import fonts from "./src/config/fonts";
 import images from "./src/config/images";
 import { lightColors } from "./src/styles/palette";
 
-// TODO: fix warnings later
-console.disableYellowBox = true;
-
 useScreens();
 
 // TODO: customize
