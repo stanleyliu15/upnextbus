@@ -3,10 +3,10 @@ import buildQueryOptionsByCommand from "./buildQueryOptionsByCommand";
 import processResponseJsonForParseByCommand from "./processResponseJsonForParseByCommand";
 import parseResponseDataByCommand from "./parseResponseDataByCommand";
 import { objectToQueryParameters } from "../../utils";
-import { NextBus, NextBusAPI } from "../../../types";
+import { NextBus, NextBusSource } from "../../../types";
 
 const request = async (
-  command: NextBusAPI.Command,
+  command: NextBusSource.Command,
   queryOptions: NextBus.QueryOptions = {},
   parseOptions: NextBus.ParseOptions = {}
 ): Promise<any> => {
@@ -16,7 +16,7 @@ const request = async (
 
   try {
     const response = await fetch(url);
-    const responseJson: NextBusAPI.ResponseJson = await response.json();
+    const responseJson: NextBusSource.ResponseJson = await response.json();
 
     const responseData = processResponseJsonForParseByCommand(command, responseJson);
     const responseDataParsed = parseResponseDataByCommand(command, responseData, parseOptions);

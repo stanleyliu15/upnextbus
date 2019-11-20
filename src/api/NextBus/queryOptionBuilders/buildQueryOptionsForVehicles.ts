@@ -1,9 +1,9 @@
-import { NextBus, NextBusAPI } from "../../../../types";
+import { NextBus, NextBusSource } from "../../../../types";
 
 const buildQueryOptionsForVehicles: NextBus.QueryOptionsBuilder = (
-  command: NextBusAPI.Command,
+  command: NextBusSource.Command,
   queryOptionsParam: NextBus.VehiclesQueryOptions
-): NextBusAPI.VehiclesQueryOptions => ({
+): NextBusSource.VehiclesQueryOptions => ({
   command,
   a: queryOptionsParam.agencyId,
   r: queryOptionsParam.routeId,

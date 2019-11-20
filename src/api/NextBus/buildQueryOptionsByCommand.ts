@@ -1,5 +1,5 @@
 import b from "./queryOptionBuilders";
-import { NextBus, NextBusAPI } from "../../../types";
+import { NextBus, NextBusSource } from "../../../types";
 
 const commandQueryOptionsBuilder = {
   agencyList: b.buildQueryOptionsForAgencies,
@@ -14,8 +14,8 @@ const commandQueryOptionsBuilder = {
  * Builds the query options used by this api to Nextbus API based on the command
  */
 export default (
-  command: NextBusAPI.Command,
+  command: NextBusSource.Command,
   queryOptionsParam: NextBus.QueryOptions
-): NextBusAPI.QueryOptions => {
+): NextBusSource.QueryOptions => {
   return commandQueryOptionsBuilder[command](command, queryOptionsParam);
 };

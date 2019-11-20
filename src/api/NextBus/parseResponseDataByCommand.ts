@@ -1,23 +1,23 @@
 import p from "./parser";
-import { NextBus, NextBusAPI } from "../../../types";
+import { NextBus, NextBusSource } from "../../../types";
 
 const commandParser = {
-  agencyList: (agencies: NextBusAPI.Agency[]): NextBus.Agency[] =>
+  agencyList: (agencies: NextBusSource.Agency[]): NextBus.Agency[] =>
     agencies.map(agency => p.parseAgency(agency)),
-  routeConfig: (routes: NextBusAPI.Route[]): NextBus.Route[] =>
+  routeConfig: (routes: NextBusSource.Route[]): NextBus.Route[] =>
     routes.map(route => p.parseRoute(route)),
-  routeList: (routeInfos: NextBusAPI.RouteInfo[]): NextBus.RouteInfo[] =>
+  routeList: (routeInfos: NextBusSource.RouteInfo[]): NextBus.RouteInfo[] =>
     routeInfos.map(routeInfo => p.parseRouteInfo(routeInfo)),
   predictions: (
-    predictions: NextBusAPI.Predictions,
+    predictions: NextBusSource.Predictions,
     parseOptions: NextBus.PredictionsParseOptions
   ): NextBus.Predictions => p.parsePredictions(predictions, parseOptions),
   predictionsForMultiStops: (
-    predictionsList: NextBusAPI.Predictions[],
+    predictionsList: NextBusSource.Predictions[],
     parseOptions: NextBus.PredictionsListParseOptions
   ): NextBus.Predictions[] =>
     predictionsList.map(predictions => p.parsePredictions(predictions, parseOptions)),
-  vehicleLocations: (vehicles: NextBusAPI.Vehicle[]): NextBus.Vehicle[] =>
+  vehicleLocations: (vehicles: NextBusSource.Vehicle[]): NextBus.Vehicle[] =>
     vehicles.map(vehicle => p.parseVehicle(vehicle))
 };
 
@@ -25,7 +25,7 @@ const commandParser = {
  * Parsers the data of the response based on the command
  */
 export default (
-  command: NextBusAPI.Command,
+  command: NextBusSource.Command,
   responseData: any,
   parseOptions: NextBus.ParseOptions
 ): any => {

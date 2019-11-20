@@ -1,6 +1,6 @@
-import { NextBus, NextBusAPI } from "../../../../types";
+import { NextBus, NextBusSource } from "../../../../types";
 
-const parseAgency = (agency: NextBusAPI.Agency): NextBus.Agency => ({
+const parseAgency = (agency: NextBusSource.Agency): NextBus.Agency => ({
   id: agency.tag,
   name: agency.title,
   region: agency.regionTitle,

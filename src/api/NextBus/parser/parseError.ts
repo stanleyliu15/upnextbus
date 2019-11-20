@@ -1,7 +1,7 @@
 import { parseBoolean } from "../../../utils";
-import { NextBus, NextBusAPI } from "../../../../types";
+import { NextBus, NextBusSource } from "../../../../types";
 
-const parseError = (errorParam: NextBusAPI.Error | NextBusAPI.Error[]): NextBus.Error => {
+const parseError = (errorParam: NextBusSource.Error | NextBusSource.Error[]): NextBus.Error => {
   // api returns duplicate errors as array on certain inputs
   if (Array.isArray(errorParam)) {
     return {

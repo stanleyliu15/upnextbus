@@ -2,9 +2,9 @@ import { arrayify } from "../../../utils";
 import parseStop from "./parseStop";
 import parseDirection from "./parseDirection";
 import parsePath from "./parsePath";
-import { NextBus, NextBusAPI } from "../../../../types";
+import { NextBus, NextBusSource } from "../../../../types";
 
-const parseRoute = (routeParam: NextBusAPI.Route): NextBus.Route => {
+const parseRoute = (routeParam: NextBusSource.Route): NextBus.Route => {
   const route = {} as NextBus.Route;
 
   route.id = routeParam.tag;

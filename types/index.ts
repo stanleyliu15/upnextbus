@@ -3,7 +3,7 @@ import { NavigationScreenProp, NavigationState, NavigationParams } from "react-n
 import { Theme } from "../src/styles";
 
 export * from "./nextBus";
-export * from "./nextBusAPI";
+export * from "./nextBusSource";
 
 export * from "./utils";
 

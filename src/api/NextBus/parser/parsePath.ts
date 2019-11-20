@@ -1,8 +1,8 @@
 import { arrayify } from "../../../utils";
 import parseLocation from "./parseLocation";
-import { NextBus, NextBusAPI } from "../../../../types";
+import { NextBus, NextBusSource } from "../../../../types";
 
-const parsePath = (path: NextBusAPI.Path): NextBus.Path => ({
+const parsePath = (path: NextBusSource.Path): NextBus.Path => ({
   locations: arrayify(path.point).map(point => parseLocation(point.lat, point.lon))
 });
 

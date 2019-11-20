@@ -1,10 +1,10 @@
 import parseServiceAlert from "./parseServiceAlert";
 import parsePrediction from "./parsePrediction";
 import { titleCase, arrayify } from "../../../utils";
-import { NextBus, NextBusAPI } from "../../../../types";
+import { NextBus, NextBusSource } from "../../../../types";
 
 const parsePredictions = (
-  predictions: NextBusAPI.Predictions,
+  predictions: NextBusSource.Predictions,
   parseOptions: NextBus.PredictionsParseOptions
 ): NextBus.Predictions => {
   const directions = arrayify(predictions.direction);

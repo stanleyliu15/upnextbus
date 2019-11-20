@@ -37,7 +37,6 @@ export interface AppColors {
   backgroundDark: string;
   backgroundDarker: string;
   backgroundLight: string;
-  backgroundLighter: string;
 }
 
 export interface Palette extends BaseColors, StatusColors, AppColors {}
