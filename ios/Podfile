@@ -40,9 +40,9 @@ target 'upnextbus' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
   pod 'react-native-maps', path: rn_maps_path
-  pod 'react-native-google-maps', path: rn_maps_path
-  pod 'GoogleMaps'
-  pod 'Google-Maps-iOS-Utils'
+  # pod 'react-native-google-maps', path: rn_maps_path # uncomment if want google-maps support on ios
+  # pod 'GoogleMaps' # uncomment if want google-maps support on ios
+  # pod 'Google-Maps-iOS-Utils' # uncomment if want google-maps support on ios
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 

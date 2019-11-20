@@ -16,7 +16,7 @@ export const CircularIconButton = styled(Button).attrs(props => ({
 }))`
   padding: 0;
   border-radius: 0;
-  background-color: ${({ theme }) => theme.background};
+  background-color: ${({ theme, inverse }) => (inverse ? theme.backgroundLight : theme.background)};
 
   justify-content: center;
   align-items: center;

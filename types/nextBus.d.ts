@@ -112,9 +112,9 @@ export declare namespace NextBus {
     | VehiclesQueryOptions;
 
   type QueryOptionsBuilder = (
-    command: NextBusAPI.Command,
+    command: NextBusSource.Command,
     queryOptions: NextBus.QueryOptions
-  ) => NextBusAPI.QueryOptions;
+  ) => NextBusSource.QueryOptions;
 
   interface AgenciesQueryOptions {}
 

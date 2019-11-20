@@ -1,8 +1,8 @@
 import parseLocation from "./parseLocation";
-import { NextBus, NextBusAPI } from "../../../../types";
+import { NextBus, NextBusSource } from "../../../../types";
 import { parseBoolean } from "../../../utils";
 
-const parseVehicle = (vehicle: NextBusAPI.Vehicle): NextBus.Vehicle => ({
+const parseVehicle = (vehicle: NextBusSource.Vehicle): NextBus.Vehicle => ({
   id: vehicle.id,
   routeId: vehicle.routeTag,
   directionId: vehicle.dirTag,

@@ -1,7 +1,7 @@
 import { removeExtraWhitespace } from "../../../utils";
-import { NextBus, NextBusAPI } from "../../../../types";
+import { NextBus, NextBusSource } from "../../../../types";
 
-const parseServiceAlert = (serviceAlert: NextBusAPI.ServiceAlert): NextBus.ServiceAlert => {
+const parseServiceAlert = (serviceAlert: NextBusSource.ServiceAlert): NextBus.ServiceAlert => {
   const priority = serviceAlert.priority.toUpperCase() as NextBus.ServiceAlertPriority;
   return { message: removeExtraWhitespace(serviceAlert.text).trim(), priority };
 };

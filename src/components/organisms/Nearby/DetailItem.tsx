@@ -80,7 +80,7 @@ export function DetailItem({
         />
       )}
       <RefreshAndTimes>
-        <Refresh onPress={canRefresh && onRefreshPress} />
+        <Refresh onPress={canRefresh ? onRefreshPress : undefined} />
         <PredictionTime>
           {predictionList.length > 0 ? (
             <>
@@ -128,13 +128,13 @@ const Refresh = styled(CircularIconButton).attrs(props => ({
 }))``;
 
 export const FavoriteButton = styled(CircularIconButton).attrs(props => ({
-  underlayColor: props.theme.backgroundDark,
   iconSize: 25,
+  inverse: true,
   children: (
     <FontAwesome
       name={`heart${props.favorited ? "" : "-o"}`}
       size={25}
-      color={props.favorited ? props.theme.primary : props.theme.primary}
+      color={props.theme.primary}
     />
   )
 }))`

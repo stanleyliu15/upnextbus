@@ -9,6 +9,7 @@ import {
 } from "../../../store/features/settings";
 import { SelectItem, SaveButton } from "../../../components/organisms/Settings";
 import SafeArea from "../../../layouts/SafeArea";
+import { NavigationProps } from "../../../../types";
 
 export default function({ navigation }: NavigationProps) {
   const dispatch = useDispatch();

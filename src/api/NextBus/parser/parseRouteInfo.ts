@@ -1,6 +1,6 @@
-import { NextBus, NextBusAPI } from "../../../../types";
+import { NextBus, NextBusSource } from "../../../../types";
 
-const parseRouteInfo = (routeInfo: NextBusAPI.RouteInfo): NextBus.RouteInfo => ({
+const parseRouteInfo = (routeInfo: NextBusSource.RouteInfo): NextBus.RouteInfo => ({
   id: routeInfo.tag,
   name: routeInfo.title,
   shortName: routeInfo.shortTitle

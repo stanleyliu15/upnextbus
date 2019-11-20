@@ -50,7 +50,7 @@ function SettingsScreen({ navigation }: NavigationProps) {
   }, [agencies.data.length, dispatch]);
 
   return (
-    <SafeArea>
+    <SafeArea inverse>
       <ScrollView>
         <Section>
           <Title>Settings</Title>

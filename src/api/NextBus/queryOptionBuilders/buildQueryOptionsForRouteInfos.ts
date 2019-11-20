@@ -1,9 +1,9 @@
-import { NextBus, NextBusAPI } from "../../../../types";
+import { NextBus, NextBusSource } from "../../../../types";
 
 const buildQueryOptionsForRouteInfos: NextBus.QueryOptionsBuilder = (
-  command: NextBusAPI.Command,
+  command: NextBusSource.Command,
   queryOptionsParam: NextBus.RouteInfosQueryOptions
-): NextBusAPI.RouteInfosQueryOptions => ({
+): NextBusSource.RouteInfosQueryOptions => ({
   command,
   a: queryOptionsParam.agencyId
 });

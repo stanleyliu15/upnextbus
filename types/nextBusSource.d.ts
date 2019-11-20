@@ -6,7 +6,7 @@ import { GeoLocation } from "./utils";
  * https://www.nextbus.com/xmlFeedDocs/NextBusXMLFeed.pdf
  */
 
-export declare namespace NextBusAPI {
+export declare namespace NextBusSource {
   type Command =
     | "agencyList"
     | "routeConfig"
@@ -136,7 +136,7 @@ export declare namespace NextBusAPI {
     | VehiclesQueryOptions;
 
   interface BaseQueryOptions {
-    command: NextBusAPI.Command;
+    command: NextBusSource.Command;
   }
 
   interface AgenciesQueryOptions extends BaseQueryOptions {}

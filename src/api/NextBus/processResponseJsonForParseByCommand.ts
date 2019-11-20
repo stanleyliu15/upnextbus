@@ -4,9 +4,9 @@ import { AGENCY_ID_FILTERS, COMMAND_PATH_MAP, COMMANDS } from "./config";
 import { arrayify } from "../../utils";
 import { NextBusAPIError } from "../../errors";
 import parseError from "./parser/parseError";
-import { NextBusAPI } from "../../../types";
+import { NextBusSource } from "../../../types";
 
-const checkResponseJsonForError = (responseJson: NextBusAPI.ResponseJson) => {
+const checkResponseJsonForError = (responseJson: NextBusSource.ResponseJson) => {
   if (responseJson.Error) {
     const error = parseError(responseJson.Error);
     throw new NextBusAPIError(error.message, error.retriable);
@@ -16,8 +16,8 @@ const checkResponseJsonForError = (responseJson: NextBusAPI.ResponseJson) => {
 };
 
 const extractResponseData = (
-  command: NextBusAPI.Command,
-  responseJson: NextBusAPI.ResponseJson
+  command: NextBusSource.Command,
+  responseJson: NextBusSource.ResponseJson
 ): any => {
   if (command === COMMANDS.vehicleLocations) {
     return responseJson;
@@ -27,7 +27,7 @@ const extractResponseData = (
   return responseJson[path];
 };
 
-const uniformalizeResponseData = (command: NextBusAPI.Command, responseData: any): any => {
+const uniformalizeResponseData = (command: NextBusSource.Command, responseData: any): any => {
   if (command === COMMANDS.predictions) {
     return responseData;
   }
@@ -42,16 +42,18 @@ const uniformalizeResponseData = (command: NextBusAPI.Command, responseData: any
   return arrayify(responseData);
 };
 
-const cleanseResponseData = (command: NextBusAPI.Command, responseData: any): any => {
+const cleanseResponseData = (command: NextBusSource.Command, responseData: any): any => {
   if (command === COMMANDS.agencyList) {
-    const agencies = responseData as NextBusAPI.Agency[];
-    return agencies.filter((agency: NextBusAPI.Agency) => !AGENCY_ID_FILTERS.includes(agency.tag));
+    const agencies = responseData as NextBusSource.Agency[];
+    return agencies.filter(
+      (agency: NextBusSource.Agency) => !AGENCY_ID_FILTERS.includes(agency.tag)
+    );
   }
 
   return responseData;
 };
 
-export default (command: NextBusAPI.Command, responseJson: NextBusAPI.ResponseJson) => {
+export default (command: NextBusSource.Command, responseJson: NextBusSource.ResponseJson) => {
   return flow(
     checkResponseJsonForError,
     extractResponseData.bind(this, command),

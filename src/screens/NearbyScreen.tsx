@@ -5,6 +5,8 @@ import { ThemeContext } from "styled-components/native";
 import Feather from "react-native-vector-icons/Feather";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
+import SafeArea from "../layouts/SafeArea";
+import { PredictionsItem } from "../components/organisms/Nearby";
 import { NextBus, NavigationProps } from "../../types";
 import { Loader } from "../components/atoms";
 import { ErrorInfo, FloatingButton } from "../components/molecules";
@@ -14,8 +16,6 @@ import {
   selectRoutes,
   selectFavorites
 } from "../store/features/nextbus";
-import { PredictionsItem } from "../components/organisms/Nearby";
-import SafeArea from "../layouts/SafeArea";
 import {
   LocationPermissionDeniedError,
   NextBusNoNearbyError,
@@ -47,7 +47,6 @@ function NearbyScreen({ navigation }: NavigationProps) {
   }, [dispatch, refreshing]);
 
   const handleRefresh = () => setRefreshing(true);
-
   const openSettings = () => navigation.navigate("SettingsScreen");
 
   function getMainView() {
@@ -77,9 +76,7 @@ function NearbyScreen({ navigation }: NavigationProps) {
         return (
           <ErrorInfo
             message={nearby.error.message}
-            onRetry={_event => {
-              navigation.navigate("ChangeAgencyScreen");
-            }}
+            onRetry={_event => navigation.navigate("ChangeAgencyScreen")}
             onRetryTitle="Set Agency"
             externalLink
           />
