@@ -1,23 +1,5 @@
 export const API_URL = "http://webservices.nextbus.com/service/publicJSONFeed";
 
-/**
- * List of agency tag's or id's currently known to either:
- *  - contain no route information
- *  - contain too much route information
- *    NextBus API has a hard limit of 100 routes, if an agency exceeds that amount, it returns an Error
- *  - never seems to finish initialization
- *  - expose development data
- *
- * These agencies should not be sent to the caller
- *
- * The List:
- *  bruinbus - contains no information
- *  lametro, ttc - contains too much information
- *  dta, configdev - expose development data
- *
- */
-export const AGENCY_ID_FILTERS = ["bruinbus", "lametro", "ttc", "dta", "configdev"];
-
 export const COMMANDS = {
   agencyList: "agencyList",
   routeConfig: "routeConfig",

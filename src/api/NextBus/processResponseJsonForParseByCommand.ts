@@ -1,14 +1,22 @@
 import flow from "lodash/flow";
 
-import { AGENCY_ID_FILTERS, COMMAND_PATH_MAP, COMMANDS } from "./config";
+import { COMMAND_PATH_MAP, COMMANDS } from "./config";
 import { arrayify } from "../../utils";
-import { NextBusAPIError } from "../../errors";
+import { NextBusAPIError, NextBusSourceMaximumRouteError } from "../../errors";
 import parseError from "./parser/parseError";
 import { NextBusSource } from "../../../types";
+
+const MAXIMUM_ROUTES_ERROR_MESSAGE =
+  'Command would return more routes than the maximum: 100.\n Try specifying batches of routes from "routeList".';
 
 const checkResponseJsonForError = (responseJson: NextBusSource.ResponseJson) => {
   if (responseJson.Error) {
     const error = parseError(responseJson.Error);
+
+    if (error.message === MAXIMUM_ROUTES_ERROR_MESSAGE) {
+      throw new NextBusSourceMaximumRouteError(error.message);
+    }
+
     throw new NextBusAPIError(error.message, error.retriable);
   }
 
@@ -42,22 +50,10 @@ const uniformalizeResponseData = (command: NextBusSource.Command, responseData: 
   return arrayify(responseData);
 };
 
-const cleanseResponseData = (command: NextBusSource.Command, responseData: any): any => {
-  if (command === COMMANDS.agencyList) {
-    const agencies = responseData as NextBusSource.Agency[];
-    return agencies.filter(
-      (agency: NextBusSource.Agency) => !AGENCY_ID_FILTERS.includes(agency.tag)
-    );
-  }
-
-  return responseData;
-};
-
 export default (command: NextBusSource.Command, responseJson: NextBusSource.ResponseJson) => {
   return flow(
     checkResponseJsonForError,
     extractResponseData.bind(this, command),
-    uniformalizeResponseData.bind(this, command),
-    cleanseResponseData.bind(this, command)
+    uniformalizeResponseData.bind(this, command)
   )(responseJson);
 };

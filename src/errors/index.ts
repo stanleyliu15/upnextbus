@@ -13,6 +13,8 @@ export class NextBusNoNearbyError extends Error {
   }
 }
 
+export class NextBusSourceMaximumRouteError extends Error {}
+
 export class LocationPermissionDeniedError extends Error {
   constructor() {
     super("Permissions to use location was denied");

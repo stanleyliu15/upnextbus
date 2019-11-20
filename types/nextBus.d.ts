@@ -120,6 +120,7 @@ export declare namespace NextBus {
 
   interface RoutesQueryOptions {
     agencyId: string;
+    routeId?: string;
   }
 
   interface RouteInfosQueryOptions {

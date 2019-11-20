@@ -11,6 +11,7 @@ export declare namespace NextBusSource {
     | "agencyList"
     | "routeConfig"
     | "routeList"
+    | "routeList"
     | "predictions"
     | "predictionsForMultiStops"
     | "vehicleLocations";
@@ -44,7 +45,6 @@ export declare namespace NextBusSource {
   interface RouteInfo {
     tag: string;
     title: string;
-    shortTitle?: string;
   }
 
   interface Point {
@@ -143,6 +143,7 @@ export declare namespace NextBusSource {
 
   interface RoutesQueryOptions extends BaseQueryOptions {
     a: string;
+    r?: string;
     terse?: string;
     verbose?: string;
   }
