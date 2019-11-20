@@ -1,10 +1,9 @@
 import styled from "styled-components/native";
+import { ActivityIndicatorProps } from "react-native";
 
 export type Props = Omit<ActivityIndicatorProps, "size"> & {
   large?: boolean;
 };
-
-// TODO: custom loader
 
 export const Loader = styled.ActivityIndicator.attrs(props => ({
   color: props.color || props.theme.primary,

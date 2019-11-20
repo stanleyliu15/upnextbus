@@ -15,7 +15,6 @@ import { lightColors } from "./src/styles/palette";
 
 useScreens();
 
-// TODO: customize
 export const AppLoader = styled.ActivityIndicator.attrs(props => ({
   color: "#fff",
   ...props
@@ -40,7 +39,6 @@ function cacheImages(images) {
 }
 
 export default function App() {
-  // TODO: test app works on fresh store
   const { store, persistor } = configureStore();
   const [ready, setReady] = useState(false);
   const handleFinish = () => setReady(true);

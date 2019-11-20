@@ -30,8 +30,6 @@ const MyCloseButton = styled(CloseButton)`
   top: ${space.large};
 `;
 
-// TODO: reverse background colors
-
 function SettingsScreen({ navigation }: NavigationProps) {
   const { navigate } = navigation;
   const dispatch = useDispatch();

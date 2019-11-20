@@ -8,7 +8,6 @@ import { settingsReducer } from "./features/settings/reducer";
 const nextBusPersistConfig = {
   key: "nextBus",
   storage: AsyncStorage,
-  // TODO: update blacklist
   blacklist: ["agencies", "predictions", "nearestPredictionsList"]
 };
 
