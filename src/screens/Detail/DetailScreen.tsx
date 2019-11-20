@@ -37,6 +37,8 @@ const LON_DELTA = 0.05;
 
 const AUTO_REFRESH_DATA_TIME = 10000;
 
+const MAP_PROVIDER = null;
+
 const DetailScreen = function({ navigation, isFocused }) {
   const predictionsParam: NextBus.Predictions = navigation.getParam("predictions");
   const routeParam: NextBus.Route = navigation.getParam("route");
@@ -267,7 +269,7 @@ const DetailScreen = function({ navigation, isFocused }) {
       return (
         <Marker key={vehicle.id} coordinate={coordinate}>
           <BusSvg
-            fill={isDarkThemeColor ? theme.white : theme.black}
+            fill={isDarkThemeColor && MAP_PROVIDER === "google" ? theme.white : theme.black}
             label={`${vehicle.secondsSinceRecord + seconds}s`}
           />
         </Marker>
@@ -346,6 +348,7 @@ const DetailScreen = function({ navigation, isFocused }) {
     <Container>
       <Map
         ref={mapRef}
+        provider={MAP_PROVIDER}
         initialRegion={{
           latitude: stopParam.location.lat,
           longitude: stopParam.location.lon,
