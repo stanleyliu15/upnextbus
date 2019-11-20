@@ -11,20 +11,6 @@ export const baseColors: BaseColors = {
   darker: "#222"
 };
 
-export const lightStatusColors: StatusColors = {
-  success: "#99cc33",
-  warning: "#ffcc00",
-  disabled: "#d3d3d3",
-  error: "#ff0000"
-};
-
-export const darkStatusColors: StatusColors = {
-  success: "#99cc33",
-  warning: "#ffcc00",
-  disabled: "#d3d3d3",
-  error: lighten(0.08, lightStatusColors.error)
-};
-
 export const lightColors: AppColors = {
   primary: "#0d47a1",
   primaryLight: "#5472d3",
@@ -60,4 +46,18 @@ export const darkColors: AppColors = {
   backgroundDark: "#333",
   backgroundDarker: "#222",
   backgroundLight: "#555"
+};
+
+export const lightStatusColors: StatusColors = {
+  success: "#99cc33",
+  warning: "#ffcc00",
+  disabled: "#d3d3d3",
+  error: lightColors.primary
+};
+
+export const darkStatusColors: StatusColors = {
+  success: "#99cc33",
+  warning: "#ffcc00",
+  disabled: "#d3d3d3",
+  error: darkColors.primary
 };
