@@ -1,6 +1,5 @@
 import React from "react";
 import { Svg, Path } from "react-native-svg";
-import { View } from "react-native";
 
 export const PointSvg = props => {
   return (

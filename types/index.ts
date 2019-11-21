@@ -11,14 +11,6 @@ declare module "styled-components/native" {
   export interface DefaultTheme extends Theme {}
 }
 
-declare module "react-navigation-tabs/lib/typescript/src/types" {
-  export interface TabBarIconProps {
-    focused: boolean;
-    tintColor?: string;
-    horizontal?: boolean;
-  }
-}
-
 export interface NavigationProps {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }

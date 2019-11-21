@@ -69,7 +69,7 @@ export const ValueColumn = styled.View<{ prioritizePropertySpace?: boolean }>`
 `;
 
 export const Value = styled(Text)`
-  color: ${({ theme }) => theme.light};
+  color: ${({ theme }) => theme.textLighter};
   margin-right: ${space.nano};
   flex-shrink: 1;
 `;

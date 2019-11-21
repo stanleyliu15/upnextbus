@@ -12,25 +12,26 @@ export const FloatingButton = props => {
   );
 };
 
+type StyledFloatingButtonProps = {
+  position: "bottom-left" | "bottom-right";
+};
+
 const StyledFloatingButton = styled(CircularIconButton).attrs(props => ({
   ...props
-}))`
+}))<StyledFloatingButtonProps>`
   position: absolute;
 
+  bottom: ${space.xxxLarge};
   left: ${({ position }) => {
     if (position === "bottom-left") return space.xxxLarge;
     return "auto";
   }};
-
-  bottom: ${space.xxxLarge};
   right: ${({ position }) => {
     if (position === "bottom-right") return space.xxxLarge;
     return "auto";
   }};
+  z-index: 1px;
 
   background-color: ${({ theme }) => theme.background};
-
   padding: 0;
-
-  z-index: 1px;
 `;

@@ -12,9 +12,9 @@ import { selectRouteNameOption } from "../../../store/features/settings";
 import { RouteName, PredictionTime, PredictionMinute, Unit } from "./itemStyles";
 import { space, fontFamily } from "../../../styles";
 import { LinkItem } from "../Settings";
-import { CircularIconButton } from "../../molecules";
+import { CircularIconButton, CircularIconButtonProps } from "../../molecules";
 import { selectFavorites, favorite, unfavorite } from "../../../store/features/nextbus";
-import { Strong } from "../../atoms";
+import { Strong, ButtonProps } from "../../atoms";
 
 type Props = {
   predictions: NextBus.Predictions;
@@ -127,7 +127,9 @@ const Refresh = styled(CircularIconButton).attrs(props => ({
   children: <MaterialIcons name="refresh" size={33} color={props.theme.primary} />
 }))``;
 
-export const FavoriteButton = styled(CircularIconButton).attrs(props => ({
+type FavoriteButtonProps = ButtonProps & CircularIconButtonProps & { favorited?: boolean };
+
+export const FavoriteButton = styled(CircularIconButton).attrs<FavoriteButtonProps>(props => ({
   iconSize: 25,
   inverse: true,
   children: (
@@ -137,6 +139,6 @@ export const FavoriteButton = styled(CircularIconButton).attrs(props => ({
       color={props.theme.primary}
     />
   )
-}))`
+}))<FavoriteButtonProps>`
   align-self: flex-start;
 `;

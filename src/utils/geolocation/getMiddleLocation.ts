@@ -1,6 +1,7 @@
 import { degreesToRadians, radiansToDegrees } from "./converter";
+import { GeoLocation } from "../../../types";
 
-export function getMiddleLocation(location1, location2) {
+export function getMiddleLocation(location1: GeoLocation, location2: GeoLocation) {
   const dLng = degreesToRadians(location2.lon - location1.lon);
 
   const lat1 = degreesToRadians(location1.lat);
