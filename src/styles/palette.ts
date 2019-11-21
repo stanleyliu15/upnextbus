@@ -42,10 +42,10 @@ export const darkColors: AppColors = {
   textLighter: "#e0e0e0",
   textLightest: "#ededed",
 
-  background: "#444",
+  background: "#4d4d4d",
   backgroundDark: "#333",
   backgroundDarker: "#222",
-  backgroundLight: "#555"
+  backgroundLight: "#404040"
 };
 
 export const lightStatusColors: StatusColors = {
