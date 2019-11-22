@@ -6,38 +6,21 @@ import SafeArea from "../../layouts/SafeArea";
 import { Text } from "../../components/atoms";
 import { VerticalSeperator } from "../../components/organisms/Nearby/itemStyles";
 import { space, border } from "../../styles";
-import { NavigationProps } from "../../../types";
+import { NavigationProps, NextBus } from "../../../types";
 
 function ServiceAlertsScreen({ navigation }: NavigationProps) {
-  const serviceAlerts = navigation.getParam("serviceAlerts");
+  const serviceAlerts: NextBus.ServiceAlert[] = navigation.getParam("serviceAlerts");
 
   return (
     <SafeArea>
       {serviceAlerts.map(serviceAlert => (
-        <>
-          <Container>
-            <Alert>
-              <AlertIcon />
-              <MyVerticalSeperator />
-              <AlertMessage>{`${serviceAlert.message}LScrollView will load items (data in it for scrolling) immediately after component loading. So all data will mount into RAM and you can't use hundred or thousand items in it (because of low performance).`}</AlertMessage>
-            </Alert>
-            <Alert>
-              <AlertIcon />
-              <MyVerticalSeperator />
-              <AlertMessage>{`${serviceAlert.message}L`}</AlertMessage>
-            </Alert>
-            <Alert>
-              <AlertIcon />
-              <MyVerticalSeperator />
-              <AlertMessage>{`${serviceAlert.message}LScrollView wiof low performance).`}</AlertMessage>
-            </Alert>
-            <Alert>
-              <AlertIcon />
-              <MyVerticalSeperator />
-              <AlertMessage>{`${serviceAlert.message}L`}</AlertMessage>
-            </Alert>
-          </Container>
-        </>
+        <Container key={serviceAlert.message}>
+          <Alert>
+            <AlertIcon />
+            <MyVerticalSeperator />
+            <AlertMessage>{`${serviceAlert.message}`}</AlertMessage>
+          </Alert>
+        </Container>
       ))}
     </SafeArea>
   );
