@@ -125,7 +125,9 @@ const RefreshAndTimes = styled(Between)`
 const Refresh = styled(CircularIconButton).attrs(props => ({
   iconSize: 25,
   children: <MaterialIcons name="refresh" size={33} color={props.theme.primary} />
-}))``;
+}))`
+  background-color: transparent;
+`;
 
 type FavoriteButtonProps = ButtonProps & CircularIconButtonProps & { favorited?: boolean };
 

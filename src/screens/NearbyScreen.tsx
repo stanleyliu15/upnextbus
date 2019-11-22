@@ -8,7 +8,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import SafeArea from "../layouts/SafeArea";
 import { PredictionsItem } from "../components/organisms/Nearby";
 import { NextBus, NavigationProps } from "../../types";
-import { Loader } from "../components/atoms";
+import { AppLoader } from "../components/atoms";
 import { ErrorInfo, FloatingButton } from "../components/molecules";
 import {
   getNearbyPredictionsList,
@@ -34,8 +34,8 @@ function NearbyScreen({ navigation }: NavigationProps) {
   useEffect(() => {
     async function fetchData() {
       if (firstUpdate.current) {
-        await dispatch(getNearbyPredictionsList());
         firstUpdate.current = false;
+        await dispatch(getNearbyPredictionsList());
       }
       if (refreshing) {
         await dispatch(getNearbyPredictionsList());
@@ -48,94 +48,44 @@ function NearbyScreen({ navigation }: NavigationProps) {
 
   const handleRefresh = () => setRefreshing(true);
   const openSettings = () => navigation.navigate("SettingsScreen");
-
-  function getMainView() {
-    if (nearby.error) {
-      if (nearby.error instanceof LocationPermissionDeniedError) {
-        return (
-          <ErrorInfo
-            title="Location permissions"
-            message={nearby.error.message}
-            onRetry={_event => Linking.openURL("app-settings:")}
-            onRetryTitle="Go to settings"
-            externalLink
-          />
-        );
-      }
-
-      if (nearby.error instanceof NextBusNoNearbyError) {
-        return (
-          <ErrorInfo
-            message={nearby.error.message}
-            onRetry={_event => dispatch(getNearbyPredictionsList())}
-          />
-        );
-      }
-
-      if (nearby.error instanceof NextBusNoNearbyAgencyError) {
-        return (
-          <ErrorInfo
-            message={nearby.error.message}
-            onRetry={_event => navigation.navigate("ChangeAgencyScreen")}
-            onRetryTitle="Set Agency"
-            externalLink
-          />
-        );
-      }
-
-      return <ErrorInfo message={nearby.error.message} />;
-    }
-
-    if (nearby.loading && firstUpdate.current) {
-      return <Loader />;
-    }
-
-    return (
-      <Fragment>
-        <FloatingButton onPress={handleRefresh} iconSize={28} position="bottom-left">
-          <MaterialIcons name="refresh" size={35} color={theme.primary} />
-        </FloatingButton>
-        <FlatList
-          style={{
-            backgroundColor: theme.backgroundLight
-          }}
-          data={nearby.data}
-          keyExtractor={(item: NextBus.Predictions) => `${item.routeId}-${item.stopId}`}
-          renderItem={({ item }) => (
-            <PredictionsItem
-              favorited={favorites.some(
-                favorite => favorite.routeId === item.routeId && favorite.stopId === item.stopId
-              )}
-              predictions={item}
-              onPredictionsPress={(_event: GestureResponderEvent): void => {
-                const route = routes.find(route => route.id === item.routeId);
-                const { directions } = route;
-                const direction = directions.find(dir => {
-                  return dir.stops.some(stop => stop.id === item.stopId);
-                });
-                const stop = direction.stops.find(stop => {
-                  return stop.id === item.stopId;
-                });
-                navigation.navigate("DetailScreen", {
-                  predictions: item,
-                  route,
-                  directions,
-                  direction,
-                  stop
-                });
-              }}
-            />
-          )}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={handleRefresh}
-              tintColor={theme.primary}
-            />
-          }
+  const getErrorView = error => {
+    if (error instanceof LocationPermissionDeniedError) {
+      return (
+        <ErrorInfo
+          title="Location permissions"
+          message={nearby.error.message}
+          onRetry={_event => Linking.openURL("app-settings:")}
+          onRetryTitle="Go to settings"
+          externalLink
         />
-      </Fragment>
-    );
+      );
+    }
+
+    if (error instanceof NextBusNoNearbyError) {
+      return (
+        <ErrorInfo
+          message={nearby.error.message}
+          onRetry={_event => dispatch(getNearbyPredictionsList())}
+        />
+      );
+    }
+
+    if (error instanceof NextBusNoNearbyAgencyError) {
+      return (
+        <ErrorInfo
+          message={nearby.error.message}
+          onRetry={_event => navigation.navigate("ChangeAgencyScreen")}
+          onRetryTitle="Set Agency"
+          externalLink
+        />
+      );
+    }
+
+    return <ErrorInfo message={nearby.error.message} />;
+  };
+
+  if (nearby.loading && firstUpdate.current) {
+    return <AppLoader />;
   }
 
   return (
@@ -143,7 +93,54 @@ function NearbyScreen({ navigation }: NavigationProps) {
       <FloatingButton onPress={openSettings} iconSize={28} position="bottom-right">
         <Feather name="settings" size={28} color={theme.primary} />
       </FloatingButton>
-      {getMainView()}
+      {nearby.error ? (
+        getErrorView(nearby.error)
+      ) : (
+        <Fragment>
+          <FloatingButton onPress={handleRefresh} iconSize={28} position="bottom-left">
+            <MaterialIcons name="refresh" size={35} color={theme.primary} />
+          </FloatingButton>
+          <FlatList
+            style={{
+              backgroundColor: theme.backgroundLight
+            }}
+            data={nearby.data}
+            keyExtractor={(item: NextBus.Predictions) => `${item.routeId}-${item.stopId}`}
+            renderItem={({ item }) => (
+              <PredictionsItem
+                favorited={favorites.some(
+                  favorite => favorite.routeId === item.routeId && favorite.stopId === item.stopId
+                )}
+                predictions={item}
+                onPredictionsPress={(_event: GestureResponderEvent): void => {
+                  const route = routes.find(route => route.id === item.routeId);
+                  const { directions } = route;
+                  const direction = directions.find(dir => {
+                    return dir.stops.some(stop => stop.id === item.stopId);
+                  });
+                  const stop = direction.stops.find(stop => {
+                    return stop.id === item.stopId;
+                  });
+                  navigation.navigate("DetailScreen", {
+                    predictions: item,
+                    route,
+                    directions,
+                    direction,
+                    stop
+                  });
+                }}
+              />
+            )}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={handleRefresh}
+                tintColor={theme.secondaryLight}
+              />
+            }
+          />
+        </Fragment>
+      )}
     </SafeArea>
   );
 }

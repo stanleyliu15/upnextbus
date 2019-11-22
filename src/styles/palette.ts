@@ -11,11 +11,16 @@ export const baseColors: BaseColors = {
   darker: "#222"
 };
 
-export const lightColors: AppColors = {
+export const baseAppColors = {
   primary: "#0d47a1",
+  secondary: "#2979ff"
+};
+
+export const lightColors: AppColors = {
+  primary: baseAppColors.primary,
   primaryLight: "#5472d3",
   primaryDark: "#002171",
-  secondary: "#2979ff",
+  secondary: baseAppColors.secondary,
   secondaryLight: "#75a7ff",
   secondaryDark: "#004ecb",
 
@@ -24,9 +29,9 @@ export const lightColors: AppColors = {
   textLighter: "#777",
   textLightest: "#999",
   background: "#f4f4f4",
+  backgroundLight: "#fff",
   backgroundDark: "#e0e0e0",
-  backgroundDarker: "#c0c0c0",
-  backgroundLight: "#fff"
+  backgroundDarker: "#c0c0c0"
 };
 
 export const darkColors: AppColors = {

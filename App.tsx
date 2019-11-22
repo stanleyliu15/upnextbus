@@ -6,24 +6,13 @@ import { useScreens } from "react-native-screens";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 
-import styled from "styled-components/native";
 import configureStore from "./src/store";
 import RootScreen from "./src/screens/RootScreen";
 import fonts from "./src/config/fonts";
 import images from "./src/config/images";
-import { lightColors } from "./src/styles/palette";
+import { AppLoader } from "./src/components/atoms";
 
 useScreens();
-
-export const AppLoader = styled.ActivityIndicator.attrs(props => ({
-  color: "#fff",
-  ...props
-}))`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  background-color: ${lightColors.primary};
-`;
 
 function cacheFonts(fonts) {
   return fonts.map(font => Font.loadAsync(font));
