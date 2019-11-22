@@ -8,7 +8,8 @@
     "ios-6s": "react-native run-ios --simulator \"iPhone 6s\" && react-native log-ios",
     "eslint:fix": "eslint . --fix --ext .js,.ts,.tsx",
     "prettier": "prettier --write '**/*.{js,ts,tsx,json,md}'",
-    "jest": "jest"
+    "jest": "jest",
+    "generate:icon": "react-native set-icon --path assets/icon.png"
   },
   "private": true,
   "dependencies": {
