@@ -31,8 +31,7 @@ export const VerticalSeperator = styled.View`
   margin-top: ${space.xxLarge};
   margin-bottom: ${space.xxLarge};
 
-  margin-left: ${space.small};
-  margin-right: ${space.small};
+  margin-horizontal: ${space.small};
 `;
 
 export const RouteName = styled(Text)`
@@ -84,7 +83,6 @@ export const Unit = styled(Text)`
 export const PanelContainer = styled.View`
   background-color: ${({ theme }) => theme.backgroundLight};
   border-radius: ${border.round};
-
   padding: ${space.medium};
 `;
 

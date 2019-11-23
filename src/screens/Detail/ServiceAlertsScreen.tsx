@@ -26,12 +26,13 @@ function ServiceAlertsScreen({ navigation }: NavigationProps) {
   );
 }
 
-const AlertIcon = styled.View.attrs(props => ({
-  ...props,
-  children: <AntDesign name="warning" size={20} color={props.theme.warning} />
+const AlertIcon = styled(AntDesign).attrs(props => ({
+  name: "warning",
+  size: 20,
+  color: props.theme.warning,
+  ...props
 }))`
-  padding-left: ${space.large};
-  padding-right: ${space.large};
+  padding-horizontal: ${space.large};
 `;
 
 const MyVerticalSeperator = styled(VerticalSeperator)`
@@ -44,8 +45,7 @@ const MyVerticalSeperator = styled(VerticalSeperator)`
 
 const AlertMessage = styled(Text)`
   flex: 1;
-  padding-left: ${space.large};
-  padding-right: ${space.large};
+  padding-horizontal: ${space.large};
 `;
 
 const Alert = styled.View`
