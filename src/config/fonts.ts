@@ -16,7 +16,6 @@ export default [
     MaterialIcons: require("../../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"),
     MaterialCommunityIcons: require("../../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"),
     Ionicons: require("../../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"),
-    SimpleLineIcons: require("../../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"),
     "open-sans-light": require("../../assets/fonts/OpenSans-Light.ttf"),
     "open-sans-regular": require("../../assets/fonts/OpenSans-Regular.ttf"),
     "open-sans-semi-bold": require("../../assets/fonts/OpenSans-SemiBold.ttf"),
