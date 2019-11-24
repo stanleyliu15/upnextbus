@@ -27,8 +27,8 @@ type Props = {
   onPress?: OnPressHandler;
   externalLink?: boolean;
   prioritizePropertySpace?: boolean;
-  fixedHeight?: boolean;
   loading?: boolean;
+  includeBottomBorder?: boolean;
 };
 
 export function LinkItem({
@@ -40,7 +40,8 @@ export function LinkItem({
   loading = false,
   externalLink = false,
   onPress = noop,
-  prioritizePropertySpace = false
+  prioritizePropertySpace = false,
+  includeBottomBorder = false
 }: Props) {
   const theme = useContext(ThemeContext);
 
@@ -63,7 +64,7 @@ export function LinkItem({
   }
 
   return (
-    <LinkButton onPress={loading ? noop : onPress} underlayColor={theme.backgroundDark}>
+    <LinkButton onPress={loading ? noop : onPress} includeBottomBorder={includeBottomBorder}>
       <ItemContainer>
         <PropertyColumn>
           {icon}

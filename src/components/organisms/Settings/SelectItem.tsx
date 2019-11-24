@@ -5,7 +5,7 @@ import Feather from "react-native-vector-icons/Feather";
 
 import { Text } from "../../atoms";
 import { space } from "../../../styles";
-import { Description } from "./settingsStyles";
+import { Description, LinkButton } from "./settingsStyles";
 
 type SelectItemProps = {
   name: string;
@@ -27,7 +27,7 @@ export const SelectItem = function({
   const theme = useContext(ThemeContext);
 
   return (
-    <HighlightButton onPress={onSelect} fixedHeight={fixedHeight} lastItem={lastItem}>
+    <LinkButton onPress={onSelect} includeBottomBorder={!lastItem}>
       <HighlightContent>
         {selected ? (
           <Feather name="check-circle" size={20} color={theme.primary} />
@@ -41,30 +41,9 @@ export const SelectItem = function({
           {description && <Description iconSpace>{description}</Description>}
         </Item>
       </HighlightContent>
-    </HighlightButton>
+    </LinkButton>
   );
 };
-
-const SELECT_ITEM_HEIGHT = "60px";
-
-type HighlightButtonProps = {
-  fixedHeight?: boolean;
-  lastItem?: boolean;
-};
-
-const HighlightButton = styled.TouchableHighlight.attrs(props => ({
-  ...props,
-  underlayColor: props.theme.backgroundDark
-}))<HighlightButtonProps>`
-  padding: ${space.xxxLarge};
-  height: ${({ fixedHeight }) => (fixedHeight ? SELECT_ITEM_HEIGHT : "auto")};
-
-  ${({ lastItem, theme }) => {
-    if (!lastItem) {
-      return `border-bottom-width: 0.25px; border-bottom-color: ${theme.lighter}`;
-    }
-  }};
-`;
 
 const HighlightContent = styled.View`
   display: flex;

@@ -9,7 +9,6 @@ export const Container = styled.TouchableHighlight.attrs(props => ({
   ...props,
   underlayColor: props.theme.backgroundDark
 }))`
-  /* TODO: Use flatlis's ItemSeparatorComponent seperator component for this */
   border-bottom-color: ${({ theme }) => theme.lighter};
   border-bottom-width: 0.33px;
 `;

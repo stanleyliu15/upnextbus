@@ -62,17 +62,20 @@ function SettingsScreen({ navigation }: NavigationProps) {
               loading={agencies.loading}
               value={agencies.loading || agencies.error || !agency ? null : agency.name}
               onPress={_event => navigate("ChangeAgencyScreen")}
+              includeBottomBorder
             />
             <LinkItem
               title="Routes"
               description="choose which routes you want to see"
               onPress={_event => navigate("ChangeFilterRoutesScreen")}
               prioritizePropertySpace
+              includeBottomBorder
             />
             <LinkItem
               title="Distance Limit"
               value={`${settings.maxStopDistance} miles`}
               onPress={_event => navigate("ChangeDistanceLimitScreen")}
+              includeBottomBorder
             />
             <LinkItem
               title="Predictions Limit"
@@ -80,6 +83,7 @@ function SettingsScreen({ navigation }: NavigationProps) {
               value={settings.predictionListLimit}
               onPress={_event => navigate("ChangePredictionsLimitScreen")}
               prioritizePropertySpace
+              includeBottomBorder
             />
             <LinkItem
               title="Bus Naming"
@@ -87,6 +91,7 @@ function SettingsScreen({ navigation }: NavigationProps) {
               value={enumKeyFromValue(RouteNameOption, settings.routeNameOption)}
               onPress={_event => navigate("ChangeRouteNameOptionScreen")}
               prioritizePropertySpace
+              includeBottomBorder
             />
             <LinkItem
               title="Show Inactive Buses"
@@ -133,7 +138,7 @@ function SettingsScreen({ navigation }: NavigationProps) {
             <LinkItem
               title="Contact Us"
               description="tell us what you think!"
-              icon={<Feather name="mail" size={20} color={theme.text} />}
+              icon={<Feather name="mail" size={20} color={theme.success} />}
               onPress={_event => Linking.openURL("mailto://upnextbus@gmail.com")}
               externalLink
               prioritizePropertySpace

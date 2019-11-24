@@ -3,17 +3,24 @@ import styled from "styled-components/native";
 import { Text } from "../../atoms";
 import { space, fontFamily, fontSize, border } from "../../../styles";
 
-export const SETTING_HEIGHT = "50px";
+export const LinkButton = styled.TouchableHighlight.attrs(props => ({
+  underlayColor: props.theme.backgroundDark,
+  ...props
+}))<{ includeBottomBorder?: boolean }>`
+  min-height: 50px;
 
-export const LinkButton = styled.TouchableHighlight`
-  height: ${SETTING_HEIGHT};
+  ${({ theme, includeBottomBorder }) => {
+    if (includeBottomBorder) {
+      return `border-bottom-width: 0.33px; border-bottom-color: ${theme.lighter}`;
+    }
+  }}
 
   display: flex;
   justify-content: center;
 
   border-radius: ${border.round};
-  padding-right: ${space.medium};
-  padding-left: ${space.xLarge};
+
+  padding: ${space.large} ${space.medium} ${space.large} ${space.xLarge};
 `;
 
 export const Section = styled.View`
