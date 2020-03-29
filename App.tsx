@@ -10,7 +10,7 @@ import configureStore from "./src/store";
 import RootScreen from "./src/screens/RootScreen";
 import fonts from "./src/config/fonts";
 import images from "./src/config/images";
-import { AppLoader } from "./src/components/atoms";
+import { AppLoader } from "./src/components";
 
 useScreens();
 
@@ -27,7 +27,7 @@ function cacheImages(images) {
   });
 }
 
-export default function App() {
+function App() {
   const { store, persistor } = configureStore();
   const [ready, setReady] = useState(false);
   const handleFinish = () => setReady(true);
@@ -43,7 +43,6 @@ export default function App() {
     }
 
     prepareApp();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (ready) {
@@ -58,3 +57,5 @@ export default function App() {
 
   return <AppLoader />;
 }
+
+export default App;

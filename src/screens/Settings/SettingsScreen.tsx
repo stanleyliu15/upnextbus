@@ -1,39 +1,30 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Linking, ScrollView } from "react-native";
-import styled, { ThemeContext } from "styled-components/native";
+import styled from "styled-components/native";
 import { useSelector, useDispatch } from "react-redux";
 import * as StoreReview from "expo-store-review";
 import Constants from "expo-constants";
-import Feather from "react-native-vector-icons/Feather";
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import AntDesign from "react-native-vector-icons/AntDesign";
-import capitalize from "lodash/capitalize";
+import { capitalize } from "lodash";
 
 import { NavigationActions } from "react-navigation";
-import { LinkItem } from "../../components/organisms/Settings";
-import {
-  Section,
-  GroupTitle,
-  SectionContent,
-  Version
-} from "../../components/organisms/Settings/settingsStyles";
-import SafeArea from "../../layouts/SafeArea";
+import { LinkItem, Title, Icon, SafeArea, CircleIconButton } from "../../components";
+import { Header, Section, GroupTitle, SectionContent, Version } from "./settingStyles";
 import { selectSettings, RouteNameOption } from "../../store/features/settings";
 import { selectAgency, getAgencies, selectAgencies } from "../../store/features/nextbus";
-import { Title } from "../../components/atoms";
 import { enumKeyFromValue } from "../../utils";
 import { NavigationProps } from "../../../types";
-import { CloseButton } from "../Detail/DetailScreen";
-import { space, ThemeColor } from "../../styles";
+import { ThemeColor } from "../../styles";
 
-const MyCloseButton = styled(CloseButton)`
-  top: ${space.large};
+const CloseButton = styled(CircleIconButton).attrs(({ theme }) => ({
+  underlayColor: theme.background,
+  iconSize: 20
+}))`
+  background-color: ${({ theme }) => theme.backgroundLight};
 `;
 
-function SettingsScreen({ navigation }: NavigationProps) {
+const SettingsScreen: React.FC<NavigationProps> = ({ navigation }) => {
   const { navigate } = navigation;
   const dispatch = useDispatch();
-  const theme = useContext(ThemeContext);
   const settings = useSelector(selectSettings);
   const agencies = useSelector(selectAgencies);
   const agency = useSelector(selectAgency);
@@ -50,10 +41,12 @@ function SettingsScreen({ navigation }: NavigationProps) {
   return (
     <SafeArea inverse>
       <ScrollView>
-        <Section>
+        <Header>
           <Title>Settings</Title>
-          <MyCloseButton onPress={goBack} />
-        </Section>
+          <CloseButton onPress={goBack}>
+            <Icon icon="MaterialCommunityIcons" name="close" size={22.5} color="text" />
+          </CloseButton>
+        </Header>
         <Section>
           <GroupTitle>Preferences</GroupTitle>
           <SectionContent>
@@ -80,7 +73,7 @@ function SettingsScreen({ navigation }: NavigationProps) {
             <LinkItem
               title="Predictions Limit"
               description="the number of predictions per bus"
-              value={settings.predictionListLimit}
+              value={settings.predictionListLimit.toString()}
               onPress={_event => navigate("ChangePredictionsLimitScreen")}
               prioritizePropertySpace
               includeBottomBorder
@@ -108,10 +101,11 @@ function SettingsScreen({ navigation }: NavigationProps) {
               title="Theme"
               value={capitalize(settings.themeColor)}
               icon={
-                <FontAwesome5
+                <Icon
+                  icon="FontAwesome5"
                   name="adjust"
                   size={20}
-                  color={settings.themeColor === ThemeColor.LIGHT ? "#ff9506" : "#9852f9"}
+                  color={settings.themeColor === ThemeColor.LIGHT ? "orange" : "purple"}
                 />
               }
               onPress={_event => navigate("ChangeThemeScreen")}
@@ -123,7 +117,7 @@ function SettingsScreen({ navigation }: NavigationProps) {
           <SectionContent>
             <LinkItem
               title="Rate Us"
-              icon={<AntDesign name="star" size={20} color={theme.primary} />}
+              icon={<Icon icon="AntDesign" name="star" size={20} color="primary" />}
               description="help us on the store!"
               onPress={_event => StoreReview.requestReview()}
               externalLink
@@ -138,7 +132,7 @@ function SettingsScreen({ navigation }: NavigationProps) {
             <LinkItem
               title="Contact Us"
               description="tell us what you think!"
-              icon={<Feather name="mail" size={20} color={theme.success} />}
+              icon={<Icon icon="Feather" name="mail" size={20} color="yellow" />}
               onPress={_event => Linking.openURL("mailto://upnextbus@gmail.com")}
               externalLink
               prioritizePropertySpace
@@ -148,6 +142,6 @@ function SettingsScreen({ navigation }: NavigationProps) {
       </ScrollView>
     </SafeArea>
   );
-}
+};
 
 export default SettingsScreen;

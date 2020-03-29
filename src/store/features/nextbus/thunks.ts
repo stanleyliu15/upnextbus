@@ -4,14 +4,13 @@ import {
   getNearbyPredictionListAsync,
   selectAgencyId
 } from "./actions";
-import { ThunkDispatch, ThunkResult } from "../../types";
+import { ThunkDispatch, ThunkAction } from "../../types";
 import * as NextBusService from "../../../services/nextbus-service";
 import NextBusAPI from "../../../api/NextBus/api";
 import { getLocationAsync } from "../../../services/location-service";
 import NextBusMobileAPI from "../../../api/NextBusMobile/api";
-import { NextBusNoNearbyAgencyError } from "../../../errors";
 
-export function getAgencies(): ThunkResult<Promise<void>> {
+export function getAgencies(): ThunkAction<Promise<void>> {
   return async function(dispatch: ThunkDispatch, _getState) {
     dispatch(getAgenciesAsync.request());
     try {
@@ -23,7 +22,7 @@ export function getAgencies(): ThunkResult<Promise<void>> {
   };
 }
 
-export function getRoutes(): ThunkResult<Promise<void>> {
+export function getRoutes(): ThunkAction<Promise<void>> {
   return async function(dispatch: ThunkDispatch, getState) {
     const {
       nextBus: { selectedAgencyId }
@@ -38,7 +37,7 @@ export function getRoutes(): ThunkResult<Promise<void>> {
   };
 }
 
-export function getNearbyPredictionsList(): ThunkResult<Promise<void>> {
+export function getNearbyPredictionsList(): ThunkAction<Promise<void>> {
   return async function(dispatch: ThunkDispatch, getState) {
     dispatch(getNearbyPredictionListAsync.request());
     const location = await getLocationAsync();
@@ -46,10 +45,6 @@ export function getNearbyPredictionsList(): ThunkResult<Promise<void>> {
     try {
       if (getState().nextBus.selectedAgencyId === null) {
         const nearestAgencyId = await NextBusMobileAPI.getNearestAgencyIdByLocation(location);
-        if (!nearestAgencyId) {
-          throw new NextBusNoNearbyAgencyError();
-        }
-
         dispatch(selectAgencyId(nearestAgencyId));
         await dispatch(getRoutes());
       }

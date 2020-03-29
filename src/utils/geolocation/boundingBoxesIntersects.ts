@@ -20,14 +20,12 @@ const rectangleIntersects = (rectangle1: Rectangle, rectangle2: Rectangle): bool
 const boundingBoxToRectangle = (boundingBox: GeoBoundingBox): Rectangle => {
   const point1 = { x: boundingBox.latMin, y: boundingBox.lonMin };
   const point2 = { x: boundingBox.latMax, y: boundingBox.lonMax };
+
   return pointsToRectangle(point1, point2);
 };
 
 /**
  * Check if two geolocational bounding boxes intersect
- *
- * @param boundingBox1
- * @param boundingBox2
  */
 export const boundingBoxesIntersects = (
   boundingBox1: GeoBoundingBox,

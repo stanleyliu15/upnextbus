@@ -1,37 +1,40 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, Dispatch, SetStateAction, useCallback } from "react";
 import { FlatList } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import styled, { ThemeContext } from "styled-components/native";
-import SafeArea from "../../../layouts/SafeArea";
+import styled from "styled-components/native";
+
 import {
   selectFilterRouteIds,
   filterRouteIds as setFilterRouteIds,
   selectRoutes,
   getRoutes
 } from "../../../store/features/nextbus";
-import { SelectItem, SaveButton } from "../../../components/organisms/Settings";
-import { Loader } from "../../../components/atoms";
-import { ErrorInfo } from "../../../components/molecules";
+import { Loader, Icon, SafeArea, SelectItem, ErrorInfo } from "../../../components";
+import { SaveButton } from "../settingStyles";
 import { normalizeRouteName, useToggle } from "../../../utils";
 import { space } from "../../../styles";
 import { NavigationProps, NextBus } from "../../../../types";
 
-let _setRouteIds;
-
-function FilterRoutesScreen({ navigation }: NavigationProps) {
+const ChangeFilterRoutesScreen: React.FC<NavigationProps> & {
+  setRouteIds: Dispatch<SetStateAction<string[]>>;
+  HeaderRight: React.FC;
+} = ({ navigation }) => {
   const dispatch = useDispatch();
   const routes = useSelector(selectRoutes);
-  const handleRetry = _event => dispatch(getRoutes());
-
   const filterRouteIds = useSelector(selectFilterRouteIds);
   const [routeIds, setRouteIds] = useState(filterRouteIds);
-  _setRouteIds = setRouteIds;
-
+  const handleRetry = _event => dispatch(getRoutes());
   const handleSave = _event => {
     dispatch(setFilterRouteIds(routeIds));
     navigation.goBack();
   };
+
+  useEffect(() => {
+    ChangeFilterRoutesScreen.setRouteIds = setRouteIds;
+    return () => {
+      ChangeFilterRoutesScreen.setRouteIds = null;
+    };
+  }, []);
 
   if (routes.loading) {
     return <Loader />;
@@ -62,59 +65,44 @@ function FilterRoutesScreen({ navigation }: NavigationProps) {
         )}
         extraData={routeIds}
       />
-      <SaveButton onSave={handleSave} />
+      <SaveButton onPress={handleSave} />
     </SafeArea>
   );
-}
-
-const HeaderRight = function() {
-  const theme = useContext(ThemeContext);
+};
+ChangeFilterRoutesScreen.setRouteIds = null;
+ChangeFilterRoutesScreen.HeaderRight = function(_props) {
   const routes = useSelector(selectRoutes);
-  const [toggled, toggle] = useToggle(true);
-
-  if (routes.loading || routes.error) return null;
-
-  const allRouteIds = routes.data.map(route => route.id);
-
-  const filterAll = () => {
-    _setRouteIds([]);
+  const routeIds = routes.data.map(route => route.id);
+  const [toggled, toggle] = useToggle(false);
+  const filterAll = useCallback(() => {
+    ChangeFilterRoutesScreen.setRouteIds([]);
     toggle();
-  };
-
-  const filterNone = () => {
-    _setRouteIds(allRouteIds);
+  }, [toggle]);
+  const filterNone = useCallback(() => {
+    ChangeFilterRoutesScreen.setRouteIds(routeIds);
     toggle();
-  };
+  }, [routeIds, toggle]);
 
-  if (toggled) {
-    return (
-      <Highlight onPress={filterAll} underlayColor={theme.background}>
-        <MaterialCommunityIcons
-          name="checkbox-multiple-blank-circle-outline"
-          color={theme.text}
-          size={25}
-        />
-      </Highlight>
-    );
+  if (routes.loading || routes.error) {
+    return null;
   }
 
   return (
-    <Highlight onPress={filterNone} underlayColor={theme.background}>
-      <MaterialCommunityIcons
-        name="checkbox-multiple-marked-circle-outline"
-        color={theme.text}
+    <HighlightButton onPress={toggled ? filterNone : filterAll}>
+      <Icon
+        icon="MaterialCommunityIcons"
+        name={`checkbox-multiple-${toggled ? "marked" : "blank"}-circle-outline`}
+        color="text"
         size={25}
       />
-    </Highlight>
+    </HighlightButton>
   );
-};
+} as React.FC;
 
-const Highlight = styled.TouchableHighlight`
-  margin-right: ${space.large};
+const HighlightButton = styled.TouchableHighlight.attrs(({ theme }) => ({
+  underlayColor: theme.background
+}))`
+  margin-right: ${space.md};
 `;
 
-FilterRoutesScreen.navigationOptions = {
-  headerRight: <HeaderRight />
-};
-
-export default FilterRoutesScreen;
+export default ChangeFilterRoutesScreen;

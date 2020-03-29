@@ -1,5 +1,4 @@
-import isNil from "lodash/isNil";
-import startCase from "lodash/startCase";
+import { isNil, startCase } from "lodash";
 import { useState, useCallback, useEffect, useRef } from "react";
 
 /**
@@ -48,7 +47,7 @@ export const enumKeyFromValue = (enumParam, enumValue) => {
 };
 
 export function useInterval(callback, delay) {
-  const savedCallback = useRef();
+  const savedCallback = useRef<Function>();
 
   useEffect(() => {
     savedCallback.current = callback;
@@ -69,18 +68,18 @@ export const useTimer = () => {
   const [seconds, setSeconds] = useState(0);
   const [active, setActive] = useState(false);
 
-  function start() {
+  const start = useCallback(() => {
     setActive(true);
-  }
+  }, []);
 
-  function stop() {
+  const stop = useCallback(() => {
     setActive(false);
-  }
+  }, []);
 
-  function restart() {
+  const restart = useCallback(() => {
     setSeconds(0);
     setActive(true);
-  }
+  }, []);
 
   useEffect(() => {
     let interval = null;

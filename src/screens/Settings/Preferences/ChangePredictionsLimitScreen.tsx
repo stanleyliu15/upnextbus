@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ScrollView } from "react-native";
+import { range } from "lodash";
 
 import {
   selectPredictionListLimit,
   setPredictionListLimit
 } from "../../../store/features/settings";
-import { SelectItem, SaveButton } from "../../../components/organisms/Settings";
-import SafeArea from "../../../layouts/SafeArea";
+import { SafeArea, SelectItem } from "../../../components";
+import { SaveButton } from "../settingStyles";
 import { NavigationProps } from "../../../../types";
 
-const PREDICTION_LIST_LIMITS = [1, 2, 3, 4, 5];
+const PREDICTION_LIST_LIMIT_RANGE = range(1, 6);
 
-export default function({ navigation }: NavigationProps) {
+const ChangePredictionsLimitScreen: React.FC<NavigationProps> = ({ navigation }) => {
   const dispatch = useDispatch();
   const predictionListLimit = useSelector(selectPredictionListLimit);
   const [selectedListLimit, setSelectedListLimit] = useState(predictionListLimit);
@@ -24,17 +25,19 @@ export default function({ navigation }: NavigationProps) {
   return (
     <SafeArea>
       <ScrollView>
-        {PREDICTION_LIST_LIMITS.map((limit, index) => (
+        {PREDICTION_LIST_LIMIT_RANGE.map((limit, index) => (
           <SelectItem
             key={limit}
-            name={limit}
+            name={limit.toString()}
             selected={limit === selectedListLimit}
             onSelect={() => setSelectedListLimit(limit)}
-            lastItem={index === PREDICTION_LIST_LIMITS.length - 1}
+            lastItem={index === PREDICTION_LIST_LIMIT_RANGE.length - 1}
           />
         ))}
       </ScrollView>
-      <SaveButton onSave={handleSave} />
+      <SaveButton onPress={handleSave} />
     </SafeArea>
   );
-}
+};
+
+export default ChangePredictionsLimitScreen;

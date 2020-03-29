@@ -1,17 +1,29 @@
-import flow from "lodash/flow";
+import { flow } from "lodash";
 
 import { COMMAND_PATH_MAP, COMMANDS } from "./config";
 import { arrayify } from "../../utils";
-import { NextBusAPIError, NextBusSourceMaximumRouteError } from "../../errors";
+import {
+  NextBusAPIError,
+  NextBusSourceMaximumRouteError,
+  NextBusUnavaliableRouteError
+} from "../../errors";
 import parseError from "./parser/parseError";
 import { NextBusSource } from "../../../types";
 
 const MAXIMUM_ROUTES_ERROR_MESSAGE =
   'Command would return more routes than the maximum: 100.\n Try specifying batches of routes from "routeList".';
 
+const UNAVALIABLE_ROUTE_REGEX = /For agency=((?!\s*$).+) route r=((?!\s*$).+) is not currently available. It might be initializing still./;
+
 const checkResponseJsonForError = (responseJson: NextBusSource.ResponseJson) => {
   if (responseJson.Error) {
     const error = parseError(responseJson.Error);
+
+    const unavaliableRouteMatches = UNAVALIABLE_ROUTE_REGEX.exec(error.message);
+    if (unavaliableRouteMatches) {
+      const [, , routeId] = unavaliableRouteMatches;
+      throw new NextBusUnavaliableRouteError(error.message, routeId);
+    }
 
     if (error.message === MAXIMUM_ROUTES_ERROR_MESSAGE) {
       throw new NextBusSourceMaximumRouteError(error.message);
@@ -50,10 +62,15 @@ const uniformalizeResponseData = (command: NextBusSource.Command, responseData: 
   return arrayify(responseData);
 };
 
-export default (command: NextBusSource.Command, responseJson: NextBusSource.ResponseJson) => {
+const processResponseJsonForParseByCommand = (
+  command: NextBusSource.Command,
+  responseJson: NextBusSource.ResponseJson
+) => {
   return flow(
     checkResponseJsonForError,
     extractResponseData.bind(this, command),
     uniformalizeResponseData.bind(this, command)
   )(responseJson);
 };
+
+export default processResponseJsonForParseByCommand;

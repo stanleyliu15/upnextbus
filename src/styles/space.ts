@@ -1,13 +1,11 @@
-import { Space } from "./types";
-
-export const space: Space = {
+export const space = {
   zero: "0px",
-  nano: "2px",
-  small: "4px",
-  medium: "6px",
-  large: "8px",
-  xLarge: "12px",
-  xxLarge: "16px",
-  xxxLarge: "20px",
-  massive: "40px"
+  xxxs: "2px",
+  xxs: "4px",
+  xs: "6px",
+  sm: "8px",
+  md: "12px",
+  lg: "16px",
+  xlg: "20px",
+  xxxlg: "40px"
 };

@@ -5,8 +5,9 @@
 
 // TODO: optimize fonts/icons
 
-export default [
+const fonts = [
   {
+    FontAwesome: require("../../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"),
     FontAwesome5_Brands: require("../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"),
     FontAwesome5_Regular: require("../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"),
     FontAwesome5_Solid: require("../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"),
@@ -22,3 +23,5 @@ export default [
     "open-sans-bold": require("../../assets/fonts/OpenSans-Bold.ttf")
   }
 ];
+
+export default fonts;

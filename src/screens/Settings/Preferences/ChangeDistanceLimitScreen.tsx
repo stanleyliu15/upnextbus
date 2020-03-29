@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ScrollView } from "react-native";
+import { range } from "lodash";
 
+import { SafeArea, SelectItem } from "../../../components";
 import { selectDistanceLimit, setMaxStopDistance } from "../../../store/features/settings";
-import { SaveButton, SelectItem } from "../../../components/organisms/Settings";
-import SafeArea from "../../../layouts/SafeArea";
+import { SaveButton } from "../settingStyles";
 import { NavigationProps } from "../../../../types";
 
-const DISTANCE_LIMITS = [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5];
+const DISTANCE_RANGE = range(0.5, 5.5, 0.5);
 
-export default function({ navigation }: NavigationProps) {
+const ChangeDistanceLimitScreen: React.FC<NavigationProps> = ({ navigation }) => {
   const dispatch = useDispatch();
   const distanceLimit = useSelector(selectDistanceLimit);
   const [selectedDistanceLimit, setSelectedDistanceLimit] = useState(distanceLimit);
@@ -21,17 +22,19 @@ export default function({ navigation }: NavigationProps) {
   return (
     <SafeArea>
       <ScrollView>
-        {DISTANCE_LIMITS.map((limit, index) => (
+        {DISTANCE_RANGE.map((limit, index) => (
           <SelectItem
             key={limit}
             name={`${limit} miles`}
             selected={limit === selectedDistanceLimit}
             onSelect={() => setSelectedDistanceLimit(limit)}
-            lastItem={index === DISTANCE_LIMITS.length - 1}
+            lastItem={index === DISTANCE_RANGE.length - 1}
           />
         ))}
       </ScrollView>
-      <SaveButton onSave={handleSave} />
+      <SaveButton onPress={handleSave} />
     </SafeArea>
   );
-}
+};
+
+export default ChangeDistanceLimitScreen;

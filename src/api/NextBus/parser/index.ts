@@ -4,10 +4,12 @@ import parseRouteInfo from "./parseRouteInfo";
 import parsePredictions from "./parsePredictions";
 import parseVehicle from "./parseVehicle";
 
-export default {
+const parser = {
   parseAgency,
   parseRoute,
   parseRouteInfo,
   parsePredictions,
   parseVehicle
 };
+
+export default parser;

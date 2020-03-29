@@ -17,6 +17,4 @@ export const selectAgency = (state: RootState) => {
   return agencies.data.find(agency => agency.id === agencyId);
 };
 
-export const selectFavorites = (state: RootState) => {
-  return state.nextBus.favorites;
-};
+export const selectFavorites = (state: RootState) => state.nextBus.favorites;

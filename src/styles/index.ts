@@ -1,5 +1,5 @@
-export * from "./types";
-export * from "./misc";
+export * from "./consts";
 export * from "./space";
 export * from "./theme";
 export * from "./typography";
+export * from "./palette";

@@ -2,11 +2,11 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { ThemeProvider } from "styled-components/native";
 
-import Navigator from "../layouts/Navigator";
+import Navigator from "../Navigator";
 import { selectThemeColor } from "../store/features/settings";
 import { fromThemeColor } from "../styles";
 
-function RootScreen() {
+const RootScreen: React.FC = _props => {
   const themeColor = useSelector(selectThemeColor);
 
   return (
@@ -14,6 +14,6 @@ function RootScreen() {
       <Navigator />
     </ThemeProvider>
   );
-}
+};
 
 export default RootScreen;

@@ -1,67 +1,43 @@
 import React from "react";
 import styled from "styled-components/native";
-import AntDesign from "react-native-vector-icons/AntDesign";
 
-import SafeArea from "../../layouts/SafeArea";
-import { Text } from "../../components/atoms";
-import { VerticalSeperator } from "../../components/organisms/Nearby/itemStyles";
-import { space, border } from "../../styles";
-import { NavigationProps, NextBus } from "../../../types";
-
-function ServiceAlertsScreen({ navigation }: NavigationProps) {
-  const serviceAlerts: NextBus.ServiceAlert[] = navigation.getParam("serviceAlerts");
-
-  return (
-    <SafeArea>
-      {serviceAlerts.map(serviceAlert => (
-        <Container key={serviceAlert.message}>
-          <Alert>
-            <AlertIcon />
-            <MyVerticalSeperator />
-            <AlertMessage>{`${serviceAlert.message}`}</AlertMessage>
-          </Alert>
-        </Container>
-      ))}
-    </SafeArea>
-  );
-}
-
-const AlertIcon = styled(AntDesign).attrs(props => ({
-  name: "warning",
-  size: 20,
-  color: props.theme.warning,
-  ...props
-}))`
-  padding-horizontal: ${space.large};
-`;
-
-const MyVerticalSeperator = styled(VerticalSeperator)`
-  border-width: 1px;
-  border-color: ${({ theme }) => theme.warning};
-  margin-top: ${space.zero};
-  margin-bottom: ${space.zero};
-  flex: 0;
-`;
-
-const AlertMessage = styled(Text)`
-  flex: 1;
-  padding-horizontal: ${space.large};
-`;
+import { SafeArea, Text, Icon } from "../../components";
+import { space, borderRadius } from "../../styles";
+import { NavigationProps } from "../../../types";
 
 const Alert = styled.View`
   display: flex;
   flex-direction: row;
 
-  border-radius: ${border.round};
-  margin: ${space.zero} ${space.large} ${space.large};
-  padding: ${space.large};
-
-  border-color: ${({ theme }) => theme.warning};
-  border-width: 0.66px;
+  margin: ${space.md};
+  padding: ${space.md};
+  border: 1px solid ${({ theme }) => theme.yellow};
+  border-radius: ${borderRadius.round};
 `;
 
-const Container = styled.View`
-  margin-top: ${space.large};
+const AlertMessage = styled(Text)`
+  flex: 1;
 `;
+
+const VerticalSeperator = styled.View`
+  border: 1px solid ${({ theme }) => theme.yellow};
+  margin-horizontal: ${space.md};
+`;
+
+const ServiceAlertsScreen: React.FC<NavigationProps> = ({ navigation }) => {
+  const serviceAlerts = navigation.getParam("serviceAlerts");
+
+  return (
+    <SafeArea>
+      {serviceAlerts.map(serviceAlert => (
+        <Alert key={serviceAlert.message}>
+          <Icon icon="AntDesign" name="warning" size={20} color="yellow" />
+          <VerticalSeperator />
+          <AlertMessage>{`${serviceAlert.message}`}</AlertMessage>
+        </Alert>
+      ))}
+    </SafeArea>
+  );
+};
 
 export default ServiceAlertsScreen;

@@ -1,8 +1,8 @@
 import { combineReducers } from "redux";
 import { createReducer } from "typesafe-actions";
 
-import { NextBusState } from "./types";
 import * as actions from "./actions";
+import { NextBusState } from "./types";
 
 const reducer = combineReducers<NextBusState>({
   agencies: combineReducers({

@@ -1,6 +1,6 @@
 import request from "./request";
 import { NextBus } from "../../../types";
-import { NextBusSourceMaximumRouteError } from "../../errors";
+import { NextBusSourceMaximumRouteError, NextBusUnavaliableRouteError } from "../../errors";
 
 const NextBusAPI = {
   getAgencies: (): Promise<NextBus.Agency[]> => request("agencyList"),
@@ -30,11 +30,31 @@ const NextBusAPI = {
     queryOptions: NextBus.PredictionsQueryOptions,
     parseOptions: NextBus.PredictionsParseOptions
   ): Promise<NextBus.Predictions> => request("predictions", queryOptions, parseOptions),
-  getPredictionsList: (
+  getPredictionsList: async (
     queryOptions: NextBus.PredictionsListQueryOptions,
     parseOptions: NextBus.PredictionsListParseOptions
-  ): Promise<NextBus.Predictions[]> =>
-    request("predictionsForMultiStops", queryOptions, parseOptions),
+  ): Promise<NextBus.Predictions[]> => {
+    try {
+      const predictionsList = await request("predictionsForMultiStops", queryOptions, parseOptions);
+      return predictionsList;
+    } catch (error) {
+      if (error instanceof NextBusUnavaliableRouteError) {
+        const stopLabels = queryOptions.stopLabels.filter(
+          stopLabel => stopLabel.routeId !== error.routeId
+        );
+
+        const predictionsList = await request(
+          "predictionsForMultiStops",
+          { ...queryOptions, stopLabels },
+          parseOptions
+        );
+
+        return predictionsList;
+      }
+
+      throw error;
+    }
+  },
   getVehicles: (queryOptions: NextBus.VehiclesQueryOptions): Promise<NextBus.Vehicle[]> =>
     request("vehicleLocations", queryOptions)
 };

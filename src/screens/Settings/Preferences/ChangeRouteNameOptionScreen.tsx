@@ -7,11 +7,11 @@ import {
   selectRouteNameOption,
   RouteNameOption
 } from "../../../store/features/settings";
-import { SelectItem, SaveButton } from "../../../components/organisms/Settings";
-import SafeArea from "../../../layouts/SafeArea";
+import { SafeArea, SelectItem } from "../../../components";
+import { SaveButton } from "../settingStyles";
 import { NavigationProps } from "../../../../types";
 
-export default function({ navigation }: NavigationProps) {
+const ChangeRouteNameOptionScreen: React.FC<NavigationProps> = ({ navigation }) => {
   const dispatch = useDispatch();
   const routeNameOption = useSelector(selectRouteNameOption);
   const [selectedRouteNameOption, setSelectedRouteNameOption] = useState(routeNameOption);
@@ -36,7 +36,9 @@ export default function({ navigation }: NavigationProps) {
           );
         })}
       </ScrollView>
-      <SaveButton onSave={handleSave} />
+      <SaveButton onPress={handleSave} />
     </SafeArea>
   );
-}
+};
+
+export default ChangeRouteNameOptionScreen;

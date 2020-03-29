@@ -1,68 +1,76 @@
 import { lighten } from "polished";
 
-import { BaseColors, StatusColors, AppColors } from "./types";
+export enum ThemeColor {
+  LIGHT = "LIGHT",
+  DARK = "DARK"
+}
 
-export const baseColors: BaseColors = {
+type ThemeColors = {
+  primary: string;
+  primaryLight: string;
+  primaryDark: string;
+  secondary: string;
+  secondaryLight: string;
+
+  text: string;
+  textLight: string;
+  textLighter: string;
+
+  background: string;
+  backgroundDark: string;
+  backgroundDarker: string;
+  backgroundLight: string;
+};
+
+export const colors = {
   white: "#fff",
-  black: "#000",
   light: "#999",
   lighter: "#d3d3d3",
+  black: "#000",
   dark: "#333",
-  darker: "#222"
+  darker: "#222",
+  green: "#99cc33",
+  yellow: "#ffcc00",
+  blue: "#0d47a1",
+  blueLight: "#2979ff",
+  navyBlue: "#002171",
+  indigo: "#5472d3",
+  blueIndigo: "#75a7ff",
+  orange: "#ff9506",
+  purple: "#9852f9"
 };
 
-export const baseAppColors = {
-  primary: "#0d47a1",
-  secondary: "#2979ff"
-};
+export const themeColors: { [key in ThemeColor]: ThemeColors } = {
+  [ThemeColor.LIGHT]: {
+    primary: colors.blue,
+    primaryLight: colors.indigo,
+    primaryDark: colors.navyBlue,
+    secondary: colors.blueLight,
+    secondaryLight: colors.blueIndigo,
 
-export const lightColors: AppColors = {
-  primary: baseAppColors.primary,
-  primaryLight: "#5472d3",
-  primaryDark: "#002171",
-  secondary: baseAppColors.secondary,
-  secondaryLight: "#75a7ff",
-  secondaryDark: "#004ecb",
+    text: colors.black,
+    textLight: "#555",
+    textLighter: "#777",
 
-  text: "#000",
-  textLight: "#555",
-  textLighter: "#777",
-  textLightest: "#999",
-  background: "#f4f4f4",
-  backgroundLight: "#fff",
-  backgroundDark: "#e0e0e0",
-  backgroundDarker: "#c0c0c0"
-};
+    background: "#f4f4f4",
+    backgroundLight: "#fff",
+    backgroundDark: "#e0e0e0",
+    backgroundDarker: "#c0c0c0"
+  },
+  [ThemeColor.DARK]: {
+    primary: lighten(0.25, colors.blue),
+    primaryLight: lighten(0.025, colors.indigo),
+    primaryDark: lighten(0.2, colors.navyBlue),
+    secondary: colors.blueLight,
+    secondaryLight: colors.blueIndigo,
 
-export const darkColors: AppColors = {
-  primary: lighten(0.25, lightColors.primary),
-  primaryLight: lighten(0.025, lightColors.primaryLight),
-  primaryDark: lighten(0.2, lightColors.primaryDark),
-  secondary: lightColors.secondary,
-  secondaryLight: lightColors.secondaryLight,
-  secondaryDark: lightColors.secondaryDark,
+    text: colors.white,
+    textLight: colors.lighter,
+    textLighter: "#e0e0e0",
 
-  text: "#fff",
-  textLight: "#d3d3d3",
-  textLighter: "#e0e0e0",
-  textLightest: "#ededed",
-
-  background: "#4d4d4d",
-  backgroundDark: "#333",
-  backgroundDarker: "#222",
-  backgroundLight: "#404040"
-};
-
-export const lightStatusColors: StatusColors = {
-  success: "#99cc33",
-  warning: "#ffcc00",
-  disabled: "#d3d3d3",
-  error: lightColors.primary
-};
-
-export const darkStatusColors: StatusColors = {
-  success: "#99cc33",
-  warning: "#ffcc00",
-  disabled: "#d3d3d3",
-  error: darkColors.primary
+    background: "#4d4d4d",
+    backgroundDark: "#333",
+    backgroundDarker: "#222",
+    backgroundLight: "#404040"
+  }
 };

@@ -13,9 +13,11 @@ const commandQueryOptionsBuilder = {
 /**
  * Builds the query options used by this api to Nextbus API based on the command
  */
-export default (
+const buildQueryOptionsByCommand = (
   command: NextBusSource.Command,
   queryOptionsParam: NextBus.QueryOptions
 ): NextBusSource.QueryOptions => {
   return commandQueryOptionsBuilder[command](command, queryOptionsParam);
 };
+
+export default buildQueryOptionsByCommand;

@@ -4,7 +4,7 @@ const buildQueryOptionsForRoutes: NextBus.QueryOptionsBuilder = (
   command: NextBusSource.Command,
   queryOptionsParam: NextBus.RoutesQueryOptions
 ): NextBusSource.RoutesQueryOptions => {
-  const queryOptions = {};
+  const queryOptions = ({} as any) as NextBusSource.RoutesQueryOptions;
   queryOptions.command = command;
   queryOptions.a = queryOptionsParam.agencyId;
 

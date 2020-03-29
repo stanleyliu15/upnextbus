@@ -9,13 +9,11 @@ import {
   getRoutes,
   getAgencies
 } from "../../../store/features/nextbus";
-import { Loader } from "../../../components/atoms";
-import { ErrorInfo } from "../../../components/molecules";
-import { SelectItem, SaveButton } from "../../../components/organisms/Settings";
-import SafeArea from "../../../layouts/SafeArea";
+import { Loader, SafeArea, ErrorInfo, SelectItem } from "../../../components";
+import { SaveButton } from "../settingStyles";
 import { NavigationProps, NextBus } from "../../../../types";
 
-function ChangeAgencyScreen({ navigation }: NavigationProps) {
+const ChangeAgencyScreen: React.FC<NavigationProps> = ({ navigation }) => {
   const dispatch = useDispatch();
   const agencies = useSelector(selectAgencies);
   const selectedAgencyId = useSelector(selectSelectedAgencyId);
@@ -54,9 +52,9 @@ function ChangeAgencyScreen({ navigation }: NavigationProps) {
         )}
         extraData={agencyId}
       />
-      <SaveButton onSave={handleSave} />
+      <SaveButton onPress={handleSave} />
     </SafeArea>
   );
-}
+};
 
 export default ChangeAgencyScreen;

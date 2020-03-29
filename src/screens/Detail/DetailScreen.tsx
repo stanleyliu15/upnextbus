@@ -1,36 +1,57 @@
-import React, { useState, useEffect, useContext, Fragment, useRef } from "react";
+import React, { useState, useEffect, useContext, useRef, useCallback } from "react";
+import { Platform } from "react-native";
 import MapView, { Marker, Polyline, Callout } from "react-native-maps";
 import styled, { ThemeContext } from "styled-components/native";
 import { useSelector } from "react-redux";
 import * as Location from "expo-location";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-
 import { getStatusBarHeight, getInset } from "react-native-safe-area-view";
-import { withNavigationFocus, NavigationActions } from "react-navigation";
+import {
+  withNavigationFocus,
+  NavigationActions,
+  NavigationFocusInjectedProps
+} from "react-navigation";
 
-import { NextBus } from "../../../types";
+import { NextBus, NavigationProps } from "../../../types";
 import { selectSelectedAgencyId } from "../../store/features/nextbus";
 import {
   selectThemeColor,
   selectPredictionListLimit,
   selectDistanceLimit
 } from "../../store/features/settings";
-import { ThemeColor, space, border } from "../../styles";
-import { DARK_MAP_STYLE } from "../../config/mapStyle";
-import { Loader, Strong } from "../../components/atoms";
+import { ThemeColor, space, borderRadius, fontSize } from "../../styles";
+import { DARK_MAP_STYLE } from "../../config/mapStyles";
+import {
+  Loader,
+  Icon,
+  Text,
+  Strong,
+  ErrorInfo,
+  CircleIconButton,
+  DetailItem
+} from "../../components";
 import { getDistanceBetween, getMiddleLocation } from "../../utils/geolocation";
 import NextBusAPI from "../../api/NextBus/api";
-import { ErrorInfo, CircularIconButton } from "../../components/molecules";
-import { DetailItem, Between } from "../../components/organisms/Nearby";
+
 import { getNearestStop } from "../../services/nextbus-service";
-import { PanelContainer, Unit, PredictionTime } from "../../components/organisms/Nearby/itemStyles";
-import {
-  StartPointSvg,
-  EndPointSvg,
-  PointSvg,
-  BusSvg
-} from "../../components/organisms/Detail/svgs";
+import { StartPointSvg, EndPointSvg, PointSvg, BusSvg } from "../../svgs";
 import { useInterval, useTimer } from "../../utils";
+
+export const Distance = styled.View`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+export const DistanceValue = styled(Strong)`
+  color: ${({ theme }) => theme.primaryDark};
+  font-size: ${fontSize.md};
+`;
+
+export const DistanceUnit = styled(Text)`
+  color: ${({ theme }) => theme.primaryDark};
+  font-size: ${fontSize.xs};
+  margin-left: ${space.xxxs};
+`;
 
 const LAT_DELTA = 0.05;
 const LON_DELTA = 0.05;
@@ -39,12 +60,14 @@ const AUTO_REFRESH_DATA_TIME = 10000;
 
 const MAP_PROVIDER = null;
 
-const DetailScreen = function({ navigation, isFocused }) {
-  const predictionsParam: NextBus.Predictions = navigation.getParam("predictions");
-  const routeParam: NextBus.Route = navigation.getParam("route");
-  const directionsParam: NextBus.Direction[] = navigation.getParam("directions");
-  const directionParam: NextBus.Direction = navigation.getParam("direction");
-  const stopParam: NextBus.Stop = navigation.getParam("stop");
+type DetailScreenProps = NavigationProps & NavigationFocusInjectedProps;
+
+const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, isFocused }) => {
+  const predictionsParam = navigation.getParam("predictions");
+  const routeParam = navigation.getParam("route");
+  const directionsParam = navigation.getParam("directions");
+  const directionParam = navigation.getParam("direction");
+  const stopParam = navigation.getParam("stop");
 
   const mapRef = useRef<MapView>(null);
 
@@ -53,6 +76,7 @@ const DetailScreen = function({ navigation, isFocused }) {
 
   const theme = useContext(ThemeContext);
   const themeColor = useSelector(selectThemeColor);
+  const isDarkMap = themeColor === ThemeColor.DARK && MAP_PROVIDER === "google";
 
   const [distance, setDistance] = useState(null);
   const [location, setLocation] = useState(null);
@@ -68,16 +92,15 @@ const DetailScreen = function({ navigation, isFocused }) {
   const [direction, setDirection] = useState(directionParam);
   const [stop, setStop] = useState(stopParam);
 
-  const [vehicles, setVehicles] = useState([]);
+  const [vehicles, setVehicles] = useState<NextBus.Vehicle[]>([]);
 
   const [autoRefresh, setAutoRefresh] = useState(false);
-  const isDarkThemeColor = themeColor === ThemeColor.DARK;
 
-  const closeScreen = () => {
+  const closeScreen = useCallback(() => {
     setAutoRefresh(false);
     stopTimer();
     navigation.dispatch(NavigationActions.back());
-  };
+  }, [navigation, stopTimer]);
 
   const handleServiceAlertsPress = _event => {
     navigation.navigate("ServiceAlertsScreen", { serviceAlerts: predictions.serviceAlerts });
@@ -122,14 +145,16 @@ const DetailScreen = function({ navigation, isFocused }) {
     });
   };
 
-  const handleLocationButtonPress = () => {
-    mapRef.current.animateCamera({
-      center: {
-        latitude: location.lat,
-        longitude: location.lon
-      }
-    });
-  };
+  const handleLocationButtonPress = useCallback(() => {
+    if (location) {
+      mapRef.current.animateCamera({
+        center: {
+          latitude: location.lat,
+          longitude: location.lon
+        }
+      });
+    }
+  }, [location]);
 
   const fetchData = async () => {
     try {
@@ -162,9 +187,9 @@ const DetailScreen = function({ navigation, isFocused }) {
         setAutoRefresh(false);
         stopTimer();
       };
-    } catch (err) {
+    } catch (_error) {
       if (isFocused) {
-        setError(err);
+        setError(_error);
       }
     }
   };
@@ -222,21 +247,28 @@ const DetailScreen = function({ navigation, isFocused }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function renderStopMarkers() {
+  const renderStopMarkers = () => {
     return direction.stops.map((stop, index) => {
       const coordinate = {
         latitude: stop.location.lat,
         longitude: stop.location.lon
       };
+      const isStartPoint = index === 0;
+      const isEndPoint = index === direction.stops.length - 1;
 
       function getMarkerComponent() {
-        if (index === 0) return <StartPointSvg />;
-        if (index === direction.stops.length - 1) return <EndPointSvg />;
+        if (isStartPoint) return <StartPointSvg />;
+        if (isEndPoint) return <EndPointSvg />;
         return <PointSvg fill={routeParam.color} />;
       }
 
       return (
-        <Marker key={stop.id} coordinate={coordinate} onPress={handleStopPress(stop)}>
+        <Marker
+          key={stop.id}
+          coordinate={coordinate}
+          centerOffset={isStartPoint || isEndPoint ? { x: -35, y: -35 } : undefined}
+          onPress={handleStopPress(stop)}
+        >
           {getMarkerComponent()}
           <Callout tooltip>
             <CalloutView>
@@ -246,9 +278,9 @@ const DetailScreen = function({ navigation, isFocused }) {
         </Marker>
       );
     });
-  }
+  };
 
-  function renderRoutePolyline() {
+  const renderRoutePolyline = () => {
     const coordinates = direction.stops.reduce((coordinates, stop) => {
       return coordinates.concat({
         latitude: stop.location.lat,
@@ -257,88 +289,64 @@ const DetailScreen = function({ navigation, isFocused }) {
     }, []);
 
     return <Polyline coordinates={coordinates} strokeColor={routeParam.color} strokeWidth={3} />;
-  }
+  };
 
-  function renderBusMarkers() {
-    return vehicles.map((vehicle: NextBus.Vehicle) => {
-      const coordinate = {
-        latitude: vehicle.location.lat,
-        longitude: vehicle.location.lon
-      };
+  const renderBusMarker = (vehicle: NextBus.Vehicle) => {
+    const coordinate = {
+      latitude: vehicle.location.lat,
+      longitude: vehicle.location.lon
+    };
 
-      return (
-        <Marker key={vehicle.id} coordinate={coordinate}>
-          <BusSvg
-            fill={isDarkThemeColor && MAP_PROVIDER === "google" ? theme.white : theme.black}
-            label={`${vehicle.secondsSinceRecord + seconds}s`}
-          />
-        </Marker>
-      );
-    });
-  }
-
-  function renderDistance() {
     return (
-      walkMiddlePoint &&
-      location && (
-        <Marker
-          coordinate={{
-            latitude: walkMiddlePoint.lat,
-            longitude: walkMiddlePoint.lon
-          }}
-          anchor={{ x: 0.00000001, y: 0 }}
-        >
-          {distance && (
-            <>
-              <PredictionTime>
-                <Strong>{distance.toFixed(2)}</Strong>
-                <Unit>miles</Unit>
-              </PredictionTime>
-            </>
-          )}
-        </Marker>
-      )
-    );
-  }
-
-  function renderWalkPolyline() {
-    return (
-      location && (
-        <Polyline
-          coordinates={[
-            {
-              latitude: location.lat,
-              longitude: location.lon
-            },
-            {
-              latitude: stop.location.lat,
-              longitude: stop.location.lon
-            }
-          ]}
-          strokeColor={theme.primary}
-          strokeWidth={3}
-          lineDashPattern={[30, 30]}
+      <Marker key={vehicle.id} coordinate={coordinate}>
+        <BusSvg
+          fill={isDarkMap ? theme.white : theme.black}
+          label={`${vehicle.secondsSinceRecord + seconds}s`}
         />
-      )
+      </Marker>
     );
-  }
+  };
 
-  function renderPanel() {
+  const renderDistance = () => {
     return (
-      <PanelContainer>
-        <DetailItem
-          predictions={predictions}
-          onDirectionPress={directionsParam.length > 1 ? handleChangeDirectionPress : undefined}
-          onStopPress={direction.stops.length > 1 ? handleChangeStopPress : undefined}
-          canRefresh={!loading}
-          onRefreshPress={handleRefreshPress}
-          onServiceAlertsPress={
-            predictions.serviceAlerts.length > 0 ? handleServiceAlertsPress : undefined
+      <Marker
+        coordinate={{
+          latitude: walkMiddlePoint.lat,
+          longitude: walkMiddlePoint.lon
+        }}
+        centerOffset={{ x: -15, y: -15 }}
+      >
+        {distance && (
+          <>
+            <Distance>
+              <DistanceValue>{distance.toFixed(2)}</DistanceValue>
+              <DistanceUnit>miles</DistanceUnit>
+            </Distance>
+          </>
+        )}
+      </Marker>
+    );
+  };
+
+  const renderWalkPolyline = () => {
+    return (
+      <Polyline
+        coordinates={[
+          {
+            latitude: location.lat,
+            longitude: location.lon
+          },
+          {
+            latitude: stop.location.lat,
+            longitude: stop.location.lon
           }
-        />
-      </PanelContainer>
+        ]}
+        strokeColor={theme.primary}
+        strokeWidth={3}
+        lineDashPattern={[30, 30]}
+      />
     );
-  }
+  };
 
   if (error) {
     return <ErrorInfo message={error.message} />;
@@ -356,55 +364,59 @@ const DetailScreen = function({ navigation, isFocused }) {
           longitudeDelta: LON_DELTA
         }}
         showsUserLocation={true}
-        customMapStyle={isDarkThemeColor ? DARK_MAP_STYLE : undefined}
+        customMapStyle={isDarkMap ? DARK_MAP_STYLE : undefined}
       >
-        <Fragment>
-          {renderWalkPolyline()}
-          {renderDistance()}
-          {renderRoutePolyline()}
-          {renderStopMarkers()}
-          {renderBusMarkers()}
-        </Fragment>
+        {location && renderWalkPolyline()}
+        {walkMiddlePoint && location && renderDistance()}
+        {renderRoutePolyline()}
+        {renderStopMarkers()}
+        {vehicles.map(vehicle => renderBusMarker(vehicle))}
       </Map>
-      {loading && (
-        <LoaderWrapper>
-          <MyLoader />
-        </LoaderWrapper>
-      )}
+      {loading && <DataLoader />}
       <UtilityButtons>
-        <CloseButton onPress={closeScreen} />
-        <MyLocationButton onPress={handleLocationButtonPress} />
+        <CloseButton onPress={closeScreen}>
+          <Icon icon="MaterialCommunityIcons" name="close" size={22.5} color="text" />
+        </CloseButton>
+        <LocationButton onPress={handleLocationButtonPress}>
+          <Icon icon="MaterialCommunityIcons" name="near-me" size={22.5} color="primary" />
+        </LocationButton>
       </UtilityButtons>
-      <BottomPanel>{renderPanel()}</BottomPanel>
+      <Panel>
+        <DetailItem
+          predictions={predictions}
+          onDirectionPress={directionsParam.length > 1 ? handleChangeDirectionPress : undefined}
+          onStopPress={direction.stops.length > 1 ? handleChangeStopPress : undefined}
+          canRefresh={!loading}
+          onRefreshPress={handleRefreshPress}
+          onServiceAlertsPress={
+            predictions.serviceAlerts.length > 0 ? handleServiceAlertsPress : undefined
+          }
+        />
+      </Panel>
     </Container>
   );
 };
 
-const LoaderWrapper = styled.View`
-  position: relative;
-`;
-
-const MyLoader = styled(Loader)`
+const DataLoader = styled(Loader)`
   position: absolute;
   top: 20;
   left: 20;
 
-  padding: ${space.medium};
-  border-radius: ${border.round};
-  background-color: ${({ theme }) => theme.background};
+  padding: ${space.xs};
+  border-radius: ${borderRadius.round};
+  background-color: ${({ theme }) => (Platform.OS === "ios" ? "transparent" : theme.background)};
 `;
 
 const Container = styled.View`
   flex: 1;
 `;
 
-const BottomPanel = styled.View`
+const Panel = styled.View`
   position: absolute;
-
   bottom: ${getInset("bottom")};
   width: 100%;
 
-  padding: ${space.medium};
+  padding: ${space.xs};
 `;
 
 const Map = styled(MapView)`
@@ -417,41 +429,42 @@ const Map = styled(MapView)`
   bottom: 0;
 `;
 
-const UtilityButtons = styled(Between)`
+const UtilityButtons = styled.View`
   position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 `;
 
-export const CloseButton = styled(CircularIconButton).attrs(props => ({
-  underlayColor: props.theme.background,
-  iconSize: 22.5,
-  children: <MaterialCommunityIcons name="close" size={22.5} color={props.theme.text} />
+export const CloseButton = styled(CircleIconButton).attrs(({ theme }) => ({
+  underlayColor: theme.background,
+  iconSize: 20
 }))`
   position: absolute;
-  top: ${getStatusBarHeight()};
+  top: ${getStatusBarHeight() + 5};
   right: 10;
 
   background-color: ${({ theme }) => theme.backgroundLight};
 `;
 
-const MyLocationButton = styled(CircularIconButton).attrs(props => ({
-  underlayColor: props.theme.background,
-  iconSize: 22.5,
-  children: <MaterialCommunityIcons name="near-me" size={22.5} color={props.theme.primary} />
+const LocationButton = styled(CircleIconButton).attrs(({ theme }) => ({
+  underlayColor: theme.background,
+  iconSize: 20
 }))`
   position: absolute;
-  top: ${getStatusBarHeight() + 60};
+  top: ${getStatusBarHeight() + 55};
   right: 10;
 
   background-color: ${({ theme }) => theme.backgroundLight};
 `;
 
 const CalloutView = styled.View`
-  margin-bottom: ${space.large};
-
   width: 160px;
+  padding: ${space.md};
+  margin-bottom: ${space.md};
 
-  padding: ${space.xLarge};
-  border-radius: ${border.round};
+  border-radius: ${borderRadius.round};
   background-color: ${({ theme }) => theme.backgroundLight};
 `;
 

@@ -1,4 +1,4 @@
-import { ThemeColor } from "../../../styles/types";
+import { ThemeColor } from "../../../styles";
 
 export enum RouteNameOption {
   "Identifier" = "routeId",

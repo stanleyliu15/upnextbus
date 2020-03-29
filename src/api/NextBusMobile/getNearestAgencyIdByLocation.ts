@@ -1,6 +1,7 @@
 import { API_URL } from "./config";
 import { objectToQueryParameters } from "../../utils";
 import { GeoLocation } from "../../../types";
+import { NextBusNoNearbyAgencyError } from "../../errors";
 
 const extractNearestAgencyId = (responseJson: any) => {
   const { preds } = responseJson;
@@ -8,7 +9,8 @@ const extractNearestAgencyId = (responseJson: any) => {
     // the first item in preds is already sorted to be the nearest to the location
     return preds[0].agency_tag;
   }
-  return null;
+
+  throw new NextBusNoNearbyAgencyError();
 };
 
 const getNearestAgencyIdByLocation = async (location: GeoLocation) => {

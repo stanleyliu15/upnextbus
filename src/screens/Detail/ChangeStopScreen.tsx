@@ -1,10 +1,10 @@
 import React from "react";
 import { ScrollView } from "react-native";
-import { SelectItem } from "../../components/organisms/Settings";
-import SafeArea from "../../layouts/SafeArea";
+
+import { SafeArea, SelectItem } from "../../components";
 import { NavigationProps } from "../../../types";
 
-const ChangeStopScreen = ({ navigation }: NavigationProps) => {
+const ChangeStopScreen: React.FC<NavigationProps> = ({ navigation }) => {
   const stop = navigation.getParam("stop");
   const stops = navigation.getParam("stops");
   const onStopPress = navigation.getParam("onStopPress");

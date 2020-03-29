@@ -6,15 +6,15 @@ import {
   setShowInactivePredictions,
   selectShowInactivePredictions
 } from "../../../store/features/settings";
-import { SelectItem, SaveButton } from "../../../components/organisms/Settings";
-import SafeArea from "../../../layouts/SafeArea";
+import { SafeArea, SelectItem } from "../../../components";
+import { SaveButton } from "../settingStyles";
+import { NavigationProps } from "../../../../types";
 
 const OPTIONS = ["Yes", "No"];
 
-export default function({ navigation }) {
+const ChangeShowInactivePredictionsScreen: React.FC<NavigationProps> = ({ navigation }) => {
   const dispatch = useDispatch();
   const showInactivePredictions = useSelector(selectShowInactivePredictions);
-
   const [selectedOption, setSelectedOption] = useState(showInactivePredictions ? "Yes" : "No");
   const handleSave = _event => {
     dispatch(setShowInactivePredictions(selectedOption === "Yes"));
@@ -34,7 +34,9 @@ export default function({ navigation }) {
           />
         ))}
       </ScrollView>
-      <SaveButton onSave={handleSave} />
+      <SaveButton onPress={handleSave} />
     </SafeArea>
   );
-}
+};
+
+export default ChangeShowInactivePredictionsScreen;

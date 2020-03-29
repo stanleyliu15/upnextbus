@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ScrollView } from "react-native";
-import capitalize from "lodash/capitalize";
+import { capitalize } from "lodash";
 
 import { selectThemeColor, setThemeColor } from "../../../store/features/settings";
-import { SelectItem, SaveButton } from "../../../components/organisms/Settings";
+import { SafeArea, SelectItem } from "../../../components";
+import { SaveButton } from "../settingStyles";
 import { ThemeColor } from "../../../styles";
-import SafeArea from "../../../layouts/SafeArea";
 
-export default function() {
+const ChangeThemeScreen: React.FC = _props => {
   const dispatch = useDispatch();
   const themeColor = useSelector(selectThemeColor);
   const [selectedThemeColor, setSelectedThemeColor] = useState(themeColor);
-  const handleSave = _event => dispatch(setThemeColor(selectedThemeColor));
   const themeColors = Object.values(ThemeColor);
+  const handleSave = _event => dispatch(setThemeColor(selectedThemeColor));
+
   return (
     <SafeArea>
       <ScrollView>
@@ -27,7 +28,9 @@ export default function() {
           />
         ))}
       </ScrollView>
-      <SaveButton onSave={handleSave} />
+      <SaveButton onPress={handleSave} />
     </SafeArea>
   );
-}
+};
+
+export default ChangeThemeScreen;

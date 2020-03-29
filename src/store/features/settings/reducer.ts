@@ -12,7 +12,7 @@ const initialState: SettingsState = {
   showInactivePredictions: true
 };
 
-const reducer = createReducer<SettingsState>(initialState)
+const reducer = createReducer(initialState)
   .handleAction(actions.setThemeColor, (state, action) => ({
     ...state,
     themeColor: action.payload

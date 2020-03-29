@@ -50,6 +50,16 @@ module.exports = {
     /* Imports */
     "import/prefer-default-export": "off",
     "import/no-extraneous-dependencies": "off",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        js: "never",
+        jsx: "never",
+        ts: "never",
+        tsx: "never"
+      }
+    ],
     /* Other */
     "func-names": "off",
     "no-shadow": "off",

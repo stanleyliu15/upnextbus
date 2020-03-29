@@ -1,15 +1,17 @@
-import React, { useEffect, useState, useContext, useRef, Fragment } from "react";
+import React, { useEffect, useState, useContext, useRef, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { FlatList, RefreshControl, GestureResponderEvent, Linking } from "react-native";
+import { FlatList, RefreshControl, Linking } from "react-native";
 import { ThemeContext } from "styled-components/native";
-import Feather from "react-native-vector-icons/Feather";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
-import SafeArea from "../layouts/SafeArea";
-import { PredictionsItem } from "../components/organisms/Nearby";
-import { NextBus, NavigationProps } from "../../types";
-import { AppLoader } from "../components/atoms";
-import { ErrorInfo, FloatingButton } from "../components/molecules";
+import { NextBus, NavigationProps, OnPressHandler } from "../../types";
+import {
+  AppLoader,
+  Icon,
+  SafeArea,
+  ErrorInfo,
+  FloatingButton,
+  PredictionsItem
+} from "../components";
 import {
   getNearbyPredictionsList,
   selectNearbyPredictionList,
@@ -22,7 +24,7 @@ import {
   NextBusNoNearbyAgencyError
 } from "../errors";
 
-function NearbyScreen({ navigation }: NavigationProps) {
+const NearbyScreen: React.FC<NavigationProps> = ({ navigation }) => {
   const dispatch = useDispatch();
   const nearby = useSelector(selectNearbyPredictionList);
   const theme = useContext(ThemeContext);
@@ -30,6 +32,43 @@ function NearbyScreen({ navigation }: NavigationProps) {
   const [refreshing, setRefreshing] = useState(false);
   const { data: routes } = useSelector(selectRoutes);
   const favorites = useSelector(selectFavorites);
+  const handleRefresh = useCallback(() => setRefreshing(true), []);
+  const openSettings = useCallback(() => navigation.navigate("SettingsScreen"), [navigation]);
+  const getErrorComponent = error => {
+    if (error instanceof LocationPermissionDeniedError) {
+      return (
+        <ErrorInfo
+          title="Location permissions"
+          message={error.message}
+          onRetry={_event => Linking.openURL("app-settings:")}
+          onRetryTitle="Go to settings"
+          externalLink
+        />
+      );
+    }
+
+    if (error instanceof NextBusNoNearbyError) {
+      return (
+        <ErrorInfo
+          message={error.message}
+          onRetry={_event => dispatch(getNearbyPredictionsList())}
+        />
+      );
+    }
+
+    if (error instanceof NextBusNoNearbyAgencyError) {
+      return (
+        <ErrorInfo
+          message={error.message}
+          onRetry={_event => navigation.navigate("ChangeAgencyScreen")}
+          onRetryTitle="Set Agency"
+          externalLink
+        />
+      );
+    }
+
+    return <ErrorInfo message={error.message} />;
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -46,91 +85,54 @@ function NearbyScreen({ navigation }: NavigationProps) {
     fetchData();
   }, [dispatch, refreshing]);
 
-  const handleRefresh = () => setRefreshing(true);
-  const openSettings = () => navigation.navigate("SettingsScreen");
-  const getErrorView = error => {
-    if (error instanceof LocationPermissionDeniedError) {
-      return (
-        <ErrorInfo
-          title="Location permissions"
-          message={nearby.error.message}
-          onRetry={_event => Linking.openURL("app-settings:")}
-          onRetryTitle="Go to settings"
-          externalLink
-        />
-      );
-    }
-
-    if (error instanceof NextBusNoNearbyError) {
-      return (
-        <ErrorInfo
-          message={nearby.error.message}
-          onRetry={_event => dispatch(getNearbyPredictionsList())}
-        />
-      );
-    }
-
-    if (error instanceof NextBusNoNearbyAgencyError) {
-      return (
-        <ErrorInfo
-          message={nearby.error.message}
-          onRetry={_event => navigation.navigate("ChangeAgencyScreen")}
-          onRetryTitle="Set Agency"
-          externalLink
-        />
-      );
-    }
-
-    return <ErrorInfo message={nearby.error.message} />;
-  };
-
   if (nearby.loading && firstUpdate.current) {
     return <AppLoader />;
   }
 
   return (
     <SafeArea>
-      <FloatingButton onPress={openSettings} iconSize={28} position="bottom-right">
-        <Feather name="settings" size={28} color={theme.primary} />
+      <FloatingButton onPress={openSettings} iconSize={25} position="bottom-right">
+        <Icon icon="Feather" name="settings" size={28} color="primary" />
       </FloatingButton>
       {nearby.error ? (
-        getErrorView(nearby.error)
+        getErrorComponent(nearby.error)
       ) : (
-        <Fragment>
-          <FloatingButton onPress={handleRefresh} iconSize={28} position="bottom-left">
-            <MaterialIcons name="refresh" size={35} color={theme.primary} />
+        <>
+          <FloatingButton onPress={handleRefresh} iconSize={25} position="bottom-left">
+            <Icon icon="MaterialIcons" name="refresh" size={35} color="primary" />
           </FloatingButton>
           <FlatList
-            style={{
-              backgroundColor: theme.backgroundLight
-            }}
+            style={{ backgroundColor: theme.backgroundLight }}
             data={nearby.data}
             keyExtractor={(item: NextBus.Predictions) => `${item.routeId}-${item.stopId}`}
-            renderItem={({ item }) => (
-              <PredictionsItem
-                favorited={favorites.some(
-                  favorite => favorite.routeId === item.routeId && favorite.stopId === item.stopId
-                )}
-                predictions={item}
-                onPredictionsPress={(_event: GestureResponderEvent): void => {
-                  const route = routes.find(route => route.id === item.routeId);
-                  const { directions } = route;
-                  const direction = directions.find(dir => {
-                    return dir.stops.some(stop => stop.id === item.stopId);
-                  });
-                  const stop = direction.stops.find(stop => {
-                    return stop.id === item.stopId;
-                  });
-                  navigation.navigate("DetailScreen", {
-                    predictions: item,
-                    route,
-                    directions,
-                    direction,
-                    stop
-                  });
-                }}
-              />
-            )}
+            renderItem={({ item }) => {
+              const favorited = favorites.some(
+                favorite => favorite.routeId === item.routeId && favorite.stopId === item.stopId
+              );
+              const handlePredictionsPress: OnPressHandler = _event => {
+                const route = routes.find(route => route.id === item.routeId);
+                const { directions } = route;
+                const direction = directions.find(direction =>
+                  direction.stops.some(stop => stop.id === item.stopId)
+                );
+                const stop = direction.stops.find(stop => stop.id === item.stopId);
+                navigation.navigate("DetailScreen", {
+                  predictions: item,
+                  route,
+                  directions,
+                  direction,
+                  stop
+                });
+              };
+
+              return (
+                <PredictionsItem
+                  favorited={favorited}
+                  predictions={item}
+                  onPredictionsPress={handlePredictionsPress}
+                />
+              );
+            }}
             refreshControl={
               <RefreshControl
                 refreshing={refreshing}
@@ -139,10 +141,10 @@ function NearbyScreen({ navigation }: NavigationProps) {
               />
             }
           />
-        </Fragment>
+        </>
       )}
     </SafeArea>
   );
-}
+};
 
 export default NearbyScreen;

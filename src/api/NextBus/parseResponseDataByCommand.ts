@@ -24,10 +24,12 @@ const commandParser = {
 /**
  * Parsers the data of the response based on the command
  */
-export default (
+const parseResponseDataByCommand = (
   command: NextBusSource.Command,
   responseData: any,
   parseOptions: NextBus.ParseOptions
 ): any => {
   return commandParser[command](responseData, parseOptions);
 };
+
+export default parseResponseDataByCommand;
