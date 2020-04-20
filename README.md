@@ -29,10 +29,27 @@ Supports:
 
 ## installation
 
-- run through react native quickstart https://facebook.github.io/react-native/docs/getting-started
-- clone the project `git clone https://github.com/stanleyliu15/upnextbus.git`
-- `cd upnextbus`
-- download dependencies
+- follow general guidelines under React Native CLI Quickstart:
+  https://reactnative.dev/docs/environment-setup
+
+* clone the project `git clone https://github.com/stanleyliu15/upnextbus.git`
+* `cd upnextbus`
+* download dependencies
+
   - `npm install` or `yarn install`
-  - `cd ios && pod install`
-- run the project `yarn ios` (currently untested on android)
+  - for ios users: `cd ios && pod install`
+
+* run the project
+
+  - ios: `yarn ios`
+  - android: `yarn android`
+
+* instructions to get google maps for android: https://developers.google.com/maps/documentation/javascript/get-api-key
+
+```
+# insert the api key
+# android/app/src/main/AndroidManifest.xml
+<meta-data
+  android:name="com.google.android.geo.API_KEY"
+  android:value="GOOGLE_MAPS_API_KEY"/>
+```
