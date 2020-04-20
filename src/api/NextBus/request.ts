@@ -9,7 +9,7 @@ const request = async (
   command: NextBusSource.Command,
   queryOptions: NextBus.QueryOptions = {},
   parseOptions: NextBus.ParseOptions = {}
-): Promise<any> => {
+) => {
   const builtQueryOptions = buildQueryOptionsByCommand(command, queryOptions);
   const queryParameters = objectToQueryParameters(builtQueryOptions);
   const url = `${API_URL}?${queryParameters}`;

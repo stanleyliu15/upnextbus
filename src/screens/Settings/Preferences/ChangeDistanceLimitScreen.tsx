@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ScrollView } from "react-native";
 import { range } from "lodash";
@@ -14,10 +14,13 @@ const ChangeDistanceLimitScreen: React.FC<NavigationProps> = ({ navigation }) =>
   const dispatch = useDispatch();
   const distanceLimit = useSelector(selectDistanceLimit);
   const [selectedDistanceLimit, setSelectedDistanceLimit] = useState(distanceLimit);
-  const handleSave = _event => {
-    dispatch(setMaxStopDistance(selectedDistanceLimit));
-    navigation.goBack();
-  };
+  const handleSave = useCallback(
+    _event => {
+      dispatch(setMaxStopDistance(selectedDistanceLimit));
+      navigation.goBack();
+    },
+    [dispatch, navigation, selectedDistanceLimit]
+  );
 
   return (
     <SafeArea>

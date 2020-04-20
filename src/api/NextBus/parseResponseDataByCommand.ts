@@ -28,7 +28,7 @@ const parseResponseDataByCommand = (
   command: NextBusSource.Command,
   responseData: any,
   parseOptions: NextBus.ParseOptions
-): any => {
+) => {
   return commandParser[command](responseData, parseOptions);
 };
 

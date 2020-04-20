@@ -1,4 +1,4 @@
 export const borderRadius = {
-  round: "6px",
-  full: "9999px"
+  round: 6,
+  full: 9999
 };

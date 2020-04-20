@@ -5,7 +5,7 @@ import buildQueryOptionsForPredictions from "./buildQueryOptionsForPredictions";
 import buildQueryOptionsForPredictionsList from "./buildQueryOptionsForPredictionsList";
 import buildQueryOptionsForVehicles from "./buildQueryOptionsForVehicles";
 
-export default {
+const queryOptionBuilders = {
   buildQueryOptionsForAgencies,
   buildQueryOptionsForRoutes,
   buildQueryOptionsForRouteInfos,
@@ -13,3 +13,5 @@ export default {
   buildQueryOptionsForPredictionsList,
   buildQueryOptionsForVehicles
 };
+
+export default queryOptionBuilders;

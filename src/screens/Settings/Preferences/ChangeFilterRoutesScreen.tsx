@@ -23,18 +23,22 @@ const ChangeFilterRoutesScreen: React.FC<NavigationProps> & {
   const routes = useSelector(selectRoutes);
   const filterRouteIds = useSelector(selectFilterRouteIds);
   const [routeIds, setRouteIds] = useState(filterRouteIds);
-  const handleRetry = _event => dispatch(getRoutes());
-  const handleSave = _event => {
-    dispatch(setFilterRouteIds(routeIds));
-    navigation.goBack();
-  };
+  const handleRetry = useCallback(_event => dispatch(getRoutes()), [dispatch]);
+  const handleSave = useCallback(
+    _event => {
+      dispatch(setFilterRouteIds(routeIds));
+      navigation.goBack();
+    },
+    [dispatch, navigation, routeIds]
+  );
 
   useEffect(() => {
     ChangeFilterRoutesScreen.setRouteIds = setRouteIds;
+    dispatch(getRoutes());
     return () => {
       ChangeFilterRoutesScreen.setRouteIds = null;
     };
-  }, []);
+  }, [dispatch]);
 
   if (routes.loading) {
     return <Loader />;

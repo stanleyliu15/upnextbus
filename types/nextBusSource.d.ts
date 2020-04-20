@@ -185,9 +185,7 @@ export declare namespace NextBusSource {
       | Error
       | Error[];
     // Only exists on VehicleLocations command
-    lastTime?: {
-      time: string;
-    };
+    lastTime?: { time: string };
     copyright: string;
   }
 }

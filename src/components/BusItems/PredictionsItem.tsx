@@ -4,7 +4,6 @@ import styled from "styled-components/native";
 
 import Icon from "../Icon";
 import { Strong } from "../Typography";
-
 import { NextBus, OnPressHandler } from "../../../types";
 import { normalizeRouteName } from "../../utils";
 import { selectRouteNameOption } from "../../store/features/settings";
@@ -27,8 +26,8 @@ type PredictionsItemProps = {
 const ItemButton = styled.TouchableHighlight.attrs(({ theme }) => ({
   underlayColor: theme.backgroundDark
 }))`
-  border-bottom-color: ${({ theme }) => theme.lighter};
-  border-bottom-width: 0.33px;
+  border-bottom-color: ${({ theme }) => theme.grayLight};
+  border-bottom-width: 0.33;
 `;
 
 const Container = styled.View`
@@ -46,19 +45,19 @@ const Block = styled.View`
 
 const GeneralSection = styled.View`
   flex: 8.4;
-  padding: ${space.md} ${space.md} ${space.md} ${space.md};
+  padding: ${space.md}px;
 `;
 
 const VerticalSeperator = styled.View`
   flex: 0.2;
-  border-color: ${({ theme }) => theme.lighter};
-  border-left-width: 0.25px;
-  margin: ${space.md} ${space.xxs} ${space.xxs} ${space.md};
+  border-color: ${({ theme }) => theme.grayLight};
+  border-left-width: 0.25;
+  margin: ${space.md}px ${space.xxs}px ${space.xxs}px ${space.md}px;
 `;
 
 export const PredictionTimeSection = styled.View`
   flex: 1.4;
-  padding: ${space.md} ${space.md} ${space.xs};
+  padding: ${space.md}px ${space.md}px ${space.xs}px;
 `;
 
 const PredictionsItem: React.FC<PredictionsItemProps> = ({

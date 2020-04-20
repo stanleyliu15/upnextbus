@@ -8,5 +8,5 @@ export const BackIcon = styled(Icon).attrs({
   name: "chevron-thin-left",
   size: 20
 })`
-  margin: 0 ${space.md};
+  margin: 0 ${space.md}px;
 `;

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { Linking, ScrollView } from "react-native";
 import styled from "styled-components/native";
 import { useSelector, useDispatch } from "react-redux";
@@ -15,10 +15,7 @@ import { enumKeyFromValue } from "../../utils";
 import { NavigationProps } from "../../../types";
 import { ThemeColor } from "../../styles";
 
-const CloseButton = styled(CircleIconButton).attrs(({ theme }) => ({
-  underlayColor: theme.background,
-  iconSize: 20
-}))`
+const CloseButton = styled(CircleIconButton).attrs({ iconSize: 20 })`
   background-color: ${({ theme }) => theme.backgroundLight};
 `;
 
@@ -28,9 +25,9 @@ const SettingsScreen: React.FC<NavigationProps> = ({ navigation }) => {
   const settings = useSelector(selectSettings);
   const agencies = useSelector(selectAgencies);
   const agency = useSelector(selectAgency);
-  const goBack = () => {
+  const goBack = useCallback(() => {
     navigation.dispatch(NavigationActions.back());
-  };
+  }, [navigation]);
 
   useEffect(() => {
     if (agencies.data.length === 0) {

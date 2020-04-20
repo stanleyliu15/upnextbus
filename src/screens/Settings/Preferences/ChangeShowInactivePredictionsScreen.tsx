@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ScrollView } from "react-native";
 
@@ -16,10 +16,13 @@ const ChangeShowInactivePredictionsScreen: React.FC<NavigationProps> = ({ naviga
   const dispatch = useDispatch();
   const showInactivePredictions = useSelector(selectShowInactivePredictions);
   const [selectedOption, setSelectedOption] = useState(showInactivePredictions ? "Yes" : "No");
-  const handleSave = _event => {
-    dispatch(setShowInactivePredictions(selectedOption === "Yes"));
-    navigation.goBack();
-  };
+  const handleSave = useCallback(
+    _event => {
+      dispatch(setShowInactivePredictions(selectedOption === "Yes"));
+      navigation.goBack();
+    },
+    [dispatch, navigation, selectedOption]
+  );
 
   return (
     <SafeArea>

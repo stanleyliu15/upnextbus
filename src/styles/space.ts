@@ -1,11 +1,11 @@
 export const space = {
-  zero: "0px",
-  xxxs: "2px",
-  xxs: "4px",
-  xs: "6px",
-  sm: "8px",
-  md: "12px",
-  lg: "16px",
-  xlg: "20px",
-  xxxlg: "40px"
+  zero: 0,
+  xxxs: 2,
+  xxs: 4,
+  xs: 6,
+  sm: 8,
+  md: 12,
+  lg: 16,
+  xlg: 20,
+  xxxlg: 40
 };

@@ -8,7 +8,7 @@ import { LinkButton } from "./Buttons";
 import { OnPressHandler } from "../../types";
 import { fontSize } from "../styles";
 
-const SelectLinkButton = styled(LinkButton)`
+const ItemButton = styled(LinkButton)`
   border-radius: 0;
 `;
 
@@ -46,12 +46,12 @@ const SelectItem: React.FC<SelectItemProps> = ({
   fixedHeight = true,
   lastItem = true
 }) => (
-  <SelectLinkButton onPress={onSelect} includeBottomBorder={!lastItem}>
+  <ItemButton onPress={onSelect} includeBottomBorder={!lastItem}>
     <HighlightContent>
       <Icon
         icon="Feather"
         name={selected ? "check-circle" : "circle"}
-        color={selected ? "primary" : "light"}
+        color={selected ? "primary" : "gray"}
         size={20}
       />
       <Item>
@@ -61,7 +61,7 @@ const SelectItem: React.FC<SelectItemProps> = ({
         {description && <Description iconSpace>{description}</Description>}
       </Item>
     </HighlightContent>
-  </SelectLinkButton>
+  </ItemButton>
 );
 
 export default SelectItem;

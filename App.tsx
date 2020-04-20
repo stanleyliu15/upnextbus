@@ -38,7 +38,6 @@ function App() {
       const fontAssets = cacheFonts(fonts);
 
       await Promise.all([...fontAssets, ...imageAssets]);
-
       handleFinish();
     }
 

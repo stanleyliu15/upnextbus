@@ -8,33 +8,34 @@ export const Header = styled.View`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 
-  padding: ${space.sm};
+  padding: ${space.sm}px;
 `;
 
 export const Section = styled.View`
-  padding: ${space.sm};
+  padding: ${space.sm}px;
 `;
 
 export const GroupTitle = styled(Text)`
-  margin: 0 0 ${space.xs} ${space.xxs};
+  margin: 0 0 ${space.xs}px ${space.xxs}px;
   font-family: ${fontFamily.bold};
 `;
 
 export const SectionContent = styled.View`
   background-color: ${({ theme }) => theme.backgroundLight};
   border-radius: ${borderRadius.round};
-  padding: ${space.xxs};
+  padding: ${space.xxs}px;
 `;
 
 export const ProSectionContent = styled(SectionContent)`
   background-color: ${({ theme }) => theme.primaryDark};
-  padding: ${space.xlg};
+  padding: ${space.xlg}px;
 `;
 
 export const Version = styled(Text)`
   margin-top: ${space.xxs};
-  color: ${({ theme }) => theme.light};
+  color: ${({ theme }) => theme.gray};
   font-size: ${fontSize.sm};
 `;
 
@@ -45,5 +46,5 @@ export const SaveButton = styled(Button).attrs({
     </Text>
   )
 })`
-  margin: ${space.xlg};
+  margin: ${space.xlg}px;
 `;

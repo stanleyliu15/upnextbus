@@ -3,6 +3,11 @@ import styled from "styled-components/native";
 import { Text } from "../Typography";
 import { space, fontFamily, fontSize } from "../../styles";
 
+export const RouteName = styled(Text)`
+  font-size: ${fontSize.xlg};
+  font-family: ${fontFamily.bold};
+`;
+
 export const DirectionName = styled(Text)`
   color: ${({ theme }) => theme.textLighter};
   margin-top: ${space.md};
@@ -10,11 +15,6 @@ export const DirectionName = styled(Text)`
 
 export const StopName = styled(Text)`
   color: ${({ theme }) => theme.textLighter};
-`;
-
-export const RouteName = styled(Text)`
-  font-size: ${fontSize.xlg};
-  font-family: ${fontFamily.bold};
 `;
 
 export const PredictionTime = styled.View`

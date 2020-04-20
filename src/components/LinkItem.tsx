@@ -107,7 +107,7 @@ const LinkItem: React.FC<LinkItemProps> = ({
               icon={externalLink ? "AntDesign" : "Entypo"}
               name={externalLink ? "arrowright" : "chevron-thin-right"}
               size={20}
-              color={linkIconColor || "light"}
+              color={linkIconColor || "gray"}
             />
           )
         )}

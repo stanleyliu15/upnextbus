@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { FlatList } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -18,11 +18,14 @@ const ChangeAgencyScreen: React.FC<NavigationProps> = ({ navigation }) => {
   const agencies = useSelector(selectAgencies);
   const selectedAgencyId = useSelector(selectSelectedAgencyId);
   const [agencyId, setAgencyId] = useState(selectedAgencyId);
-  const handleSave = _event => {
-    dispatch(selectAgencyId(agencyId));
-    dispatch(getRoutes());
-    navigation.goBack();
-  };
+  const handleSave = useCallback(
+    _event => {
+      dispatch(selectAgencyId(agencyId));
+      dispatch(getRoutes());
+      navigation.goBack();
+    },
+    [agencyId, dispatch, navigation]
+  );
 
   useEffect(() => {
     dispatch(getAgencies());

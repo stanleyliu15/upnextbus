@@ -1,5 +1,4 @@
 import NextBusAPI from "../api/NextBus/api";
-import { NextBusNoNearbyError } from "../errors";
 import { GeoLocation, NextBus } from "../../types";
 import * as Geolocation from "../utils/geolocation";
 
@@ -78,16 +77,12 @@ export const getNearbyPredictionsList = async (
       routeIdFilters.length > 0
         ? routes.filter(route => routeIdFilters.includes(route.id))
         : routes;
-
+    const nearbyStopLabels = getNearestStopLabels(routesFiltered, location, maxStopDistance);
     const favoriteStopLabels = favorites.map(favorite =>
       createStopLabel(favorite.routeId, favorite.stopId)
     );
-
-    const nearbyStopLabels = getNearestStopLabels(routesFiltered, location, maxStopDistance);
-
     const allStopLabels = favoriteStopLabels.concat(nearbyStopLabels);
 
-    if (allStopLabels.length === 0) throw new NextBusNoNearbyError();
     const queryOptions = {
       agencyId,
       stopLabels: allStopLabels
@@ -99,15 +94,14 @@ export const getNearbyPredictionsList = async (
       const isFavorite = favorites.some(
         favorite => item.routeId === favorite.routeId && item.stopId === favorite.stopId
       );
+
       if (isFavorite) {
         return [item, ...list];
-      } else {
-        if (filterInactivePredictions && item.predictionList.length === 0) {
-          return list;
-        } else {
-          return [...list, item];
-        }
       }
+      if (filterInactivePredictions && item.predictionList.length === 0) {
+        return list;
+      }
+      return [...list, item];
     }, []);
   } catch (error) {
     throw error;

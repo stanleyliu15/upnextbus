@@ -13,8 +13,8 @@ export const Loader = styled.ActivityIndicator.attrs(({ theme, color, size }) =>
   background-color: ${({ theme }) => theme.background};
 `;
 
-export const AppLoader = styled(Loader).attrs(_props => ({
+export const AppLoader = styled(Loader).attrs({
   color: colors.white
-}))`
+})`
   background-color: ${colors.blue};
 `;

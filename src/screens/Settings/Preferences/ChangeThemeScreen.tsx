@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ScrollView } from "react-native";
 import { capitalize } from "lodash";
@@ -12,8 +12,11 @@ const ChangeThemeScreen: React.FC = _props => {
   const dispatch = useDispatch();
   const themeColor = useSelector(selectThemeColor);
   const [selectedThemeColor, setSelectedThemeColor] = useState(themeColor);
+  const handleSave = useCallback(_event => dispatch(setThemeColor(selectedThemeColor)), [
+    dispatch,
+    selectedThemeColor
+  ]);
   const themeColors = Object.values(ThemeColor);
-  const handleSave = _event => dispatch(setThemeColor(selectedThemeColor));
 
   return (
     <SafeArea>

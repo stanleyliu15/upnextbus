@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ScrollView } from "react-native";
 import { range } from "lodash";
@@ -17,10 +17,13 @@ const ChangePredictionsLimitScreen: React.FC<NavigationProps> = ({ navigation })
   const dispatch = useDispatch();
   const predictionListLimit = useSelector(selectPredictionListLimit);
   const [selectedListLimit, setSelectedListLimit] = useState(predictionListLimit);
-  const handleSave = _event => {
-    dispatch(setPredictionListLimit(selectedListLimit));
-    navigation.goBack();
-  };
+  const handleSave = useCallback(
+    _event => {
+      dispatch(setPredictionListLimit(selectedListLimit));
+      navigation.goBack();
+    },
+    [dispatch, navigation, selectedListLimit]
+  );
 
   return (
     <SafeArea>

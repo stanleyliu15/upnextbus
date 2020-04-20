@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ScrollView } from "react-native";
 
@@ -15,10 +15,13 @@ const ChangeRouteNameOptionScreen: React.FC<NavigationProps> = ({ navigation }) 
   const dispatch = useDispatch();
   const routeNameOption = useSelector(selectRouteNameOption);
   const [selectedRouteNameOption, setSelectedRouteNameOption] = useState(routeNameOption);
-  const handleSave = _event => {
-    dispatch(setRouteNameOption(selectedRouteNameOption));
-    navigation.goBack();
-  };
+  const handleSave = useCallback(
+    _event => {
+      dispatch(setRouteNameOption(selectedRouteNameOption));
+      navigation.goBack();
+    },
+    [dispatch, navigation, selectedRouteNameOption]
+  );
 
   const keys = Object.keys(RouteNameOption);
   return (

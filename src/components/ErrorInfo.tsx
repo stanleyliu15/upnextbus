@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components/native";
+import { View } from "react-native";
 
 import Icon from "./Icon";
-import { Strong, Text } from "./Typography";
+import { Strong, Text, Title } from "./Typography";
 import { Button } from "./Buttons";
-
-import { fontFamily, fontSize, space } from "../styles";
+import { fontSize, space } from "../styles";
 import { OnPressHandler } from "../../types";
 
 const Container = styled.View`
@@ -14,14 +14,8 @@ const Container = styled.View`
   align-items: center;
 `;
 
-const Title = styled(Text)`
-  color: ${({ theme }) => theme.text};
-  font-family: ${fontFamily.bold};
-  font-size: ${fontSize.lg};
-`;
-
 const Message = styled(Text)`
-  margin-top: ${space.xlg};
+  margin: ${space.lg}px 0 ${space.xxxlg}px;
   padding-horizontal: ${space.xxxlg};
   color: ${({ theme }) => theme.textLight};
 `;
@@ -51,16 +45,18 @@ const ErrorInfo: React.FC<ErrorInfoProps> = ({
   externalLink = false
 }) => (
   <Container>
-    <Title>{title || "Something went wrong"}</Title>
+    <Title color="red">{title || "Something went wrong"}</Title>
     {message && <Message>{message}</Message>}
     {onRetry && (
       <RetryButton onPress={onRetry}>
-        <Strong iconSpace={externalLink} hasIconRight color="text">
-          {onRetryTitle || "Try Again"}
-        </Strong>
-        {externalLink && (
-          <Icon icon="AntDesign" name="arrowright" size={fontSize.md} color="white" />
-        )}
+        <View>
+          <Strong iconSpace={externalLink} hasIconRight>
+            {onRetryTitle || "Try Again"}
+          </Strong>
+          {externalLink && (
+            <Icon icon="AntDesign" name="arrowright" size={fontSize.md} color="white" />
+          )}
+        </View>
       </RetryButton>
     )}
   </Container>

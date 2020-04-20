@@ -1,28 +1,47 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Platform,
   TouchableOpacity,
   TouchableNativeFeedback,
   TouchableOpacityProps,
   TouchableNativeFeedbackProps,
-  TouchableHighlight
+  StyleSheet,
+  View
 } from "react-native";
-import styled from "styled-components/native";
+import styled, { ThemeContext } from "styled-components/native";
 
 import { space, borderRadius } from "../styles";
-
-export const ButtonComponent: React.ComponentType =
-  Platform.OS === "ios" ? TouchableOpacity : TouchableNativeFeedback;
 
 type ButtonProps =
   | Pick<TouchableOpacityProps, keyof TouchableOpacityProps>
   | Pick<TouchableNativeFeedbackProps, keyof TouchableNativeFeedbackProps>;
 
-export const Button = styled(ButtonComponent)<ButtonProps>`
-  padding: ${space.md} ${space.xxxlg};
-  border-radius: ${borderRadius.round};
-  background-color: ${({ theme }) => theme.primary};
-`;
+export const Button: React.FC<ButtonProps> = ({ children, style, ...rest }) => {
+  const theme = useContext(ThemeContext);
+  const buttonStyle = StyleSheet.flatten([
+    {
+      paddingVertical: space.md,
+      paddingHorizontal: space.xxxlg,
+      borderRadius: borderRadius.round,
+      backgroundColor: theme.primary
+    },
+    style
+  ]);
+
+  if (Platform.OS === "ios") {
+    return (
+      <TouchableOpacity style={buttonStyle} {...rest}>
+        {children}
+      </TouchableOpacity>
+    );
+  }
+
+  return (
+    <TouchableNativeFeedback {...rest}>
+      <View style={buttonStyle}>{children}</View>
+    </TouchableNativeFeedback>
+  );
+};
 
 type LinkButtonProps = { includeBottomBorder?: boolean };
 export const LinkButton = styled.TouchableHighlight.attrs(({ theme }) => ({
@@ -30,67 +49,58 @@ export const LinkButton = styled.TouchableHighlight.attrs(({ theme }) => ({
 }))<LinkButtonProps>`
   display: flex;
   justify-content: center;
-  min-height: 50px;
 
   border-radius: ${borderRadius.round};
-  padding: ${space.md} ${space.xs} ${space.md} ${space.md};
+  padding: ${space.lg}px ${space.xs}px ${space.lg}px ${space.md}px;
 
   ${({ theme, includeBottomBorder }) => {
     if (includeBottomBorder) {
-      return `border-bottom-width: 0.33px; border-bottom-color: ${theme.lighter}`;
+      return `border-bottom-width: 0.33; border-bottom-color: ${theme.grayLight}`;
     }
   }};
 `;
 
-const Wrapper = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
+type CircleIconButtonProps = ButtonProps & { iconSize: number };
+export const CircleIconButton: React.FC<CircleIconButtonProps> = ({
+  children,
+  iconSize,
+  style,
+  ...rest
+}) => {
+  const buttonStyle = StyleSheet.flatten([
+    {
+      justifyContent: "center",
+      alignItems: "center",
+      width: iconSize * 2,
+      height: iconSize * 2,
+      borderRadius: borderRadius.full
+    },
+    style
+  ]);
 
-const CircleIconButtonComponent = ({ children, ...props }) => (
-  <ButtonComponent {...props}>
-    <Wrapper>{children}</Wrapper>
-  </ButtonComponent>
-);
+  if (Platform.OS === "ios") {
+    return (
+      <TouchableOpacity style={buttonStyle} {...rest}>
+        {children}
+      </TouchableOpacity>
+    );
+  }
 
-type CircleIconButtonProps = {
-  iconSize?: number;
-  inverse?: boolean;
+  return (
+    <TouchableNativeFeedback {...rest}>
+      <View style={buttonStyle}>{children}</View>
+    </TouchableNativeFeedback>
+  );
 };
 
-export const CircleIconButton = styled(CircleIconButtonComponent)<CircleIconButtonProps>`
-  justify-content: center;
-  align-items: center;
-
-  /** to get circle 2x the size of the icon */
-  width: ${({ iconSize }) => iconSize * 2};
-  height: ${({ iconSize }) => iconSize * 2};
-
-  border-radius: ${borderRadius.full};
-`;
-
-type FloatingButtonProps = {
-  position: "bottom-left" | "bottom-right";
-};
-
-const BaseFloatingButton = styled(CircleIconButton).attrs(({ theme }) => ({
-  underlayColor: theme.backgroundDark
-}))<FloatingButtonProps>`
+type FloatingButtonProps = { position: "bottom-left" | "bottom-right" };
+export const FloatingButton = styled(CircleIconButton)<FloatingButtonProps>`
   position: absolute;
-  bottom: ${space.xlg};
-  left: ${({ position }) => {
-    if (position === "bottom-left") return space.xlg;
-    return "auto";
-  }};
-  right: ${({ position }) => {
-    if (position === "bottom-right") return space.xlg;
-    return "auto";
-  }};
-  z-index: 1px;
+  bottom: ${space.md};
+  left: ${({ position }) => (position === "bottom-left" ? space.md : "auto")};
+  right: ${({ position }) => (position === "bottom-right" ? space.md : "auto")};
+  z-index: 1;
+  padding: 0;
 
   background-color: ${({ theme }) => theme.background};
-  padding: 0;
 `;
-
-export const FloatingButton = props => <BaseFloatingButton as={TouchableHighlight} {...props} />;

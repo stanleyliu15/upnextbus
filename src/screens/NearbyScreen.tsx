@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { FlatList, RefreshControl, Linking } from "react-native";
 import { ThemeContext } from "styled-components/native";
 
-import { NextBus, NavigationProps, OnPressHandler } from "../../types";
+import { NavigationProps } from "../../types";
 import {
   AppLoader,
   Icon,
@@ -16,7 +16,8 @@ import {
   getNearbyPredictionsList,
   selectNearbyPredictionList,
   selectRoutes,
-  selectFavorites
+  selectFavorites,
+  getRoutes
 } from "../store/features/nextbus";
 import {
   LocationPermissionDeniedError,
@@ -34,58 +35,65 @@ const NearbyScreen: React.FC<NavigationProps> = ({ navigation }) => {
   const favorites = useSelector(selectFavorites);
   const handleRefresh = useCallback(() => setRefreshing(true), []);
   const openSettings = useCallback(() => navigation.navigate("SettingsScreen"), [navigation]);
-  const getErrorComponent = error => {
-    if (error instanceof LocationPermissionDeniedError) {
+  const renderNearbyError = useCallback(() => {
+    if (nearby.error instanceof LocationPermissionDeniedError) {
       return (
         <ErrorInfo
+          message={nearby.error.message}
           title="Location permissions"
-          message={error.message}
           onRetry={_event => Linking.openURL("app-settings:")}
           onRetryTitle="Go to settings"
-          externalLink
+          externalLink={true}
         />
       );
     }
 
-    if (error instanceof NextBusNoNearbyError) {
+    if (nearby.error instanceof NextBusNoNearbyError) {
       return (
         <ErrorInfo
-          message={error.message}
+          message={nearby.error.message}
           onRetry={_event => dispatch(getNearbyPredictionsList())}
         />
       );
     }
 
-    if (error instanceof NextBusNoNearbyAgencyError) {
+    if (nearby.error instanceof NextBusNoNearbyAgencyError) {
       return (
         <ErrorInfo
-          message={error.message}
+          message={nearby.error.message}
           onRetry={_event => navigation.navigate("ChangeAgencyScreen")}
           onRetryTitle="Set Agency"
-          externalLink
+          externalLink={true}
         />
       );
     }
 
-    return <ErrorInfo message={error.message} />;
-  };
+    return <ErrorInfo message={nearby.error.message} />;
+  }, [dispatch, navigation, nearby.error]);
 
   useEffect(() => {
-    async function fetchData() {
+    let didCancel = false;
+    function fetchData() {
       if (firstUpdate.current) {
         firstUpdate.current = false;
-        await dispatch(getNearbyPredictionsList());
+        dispatch(getRoutes());
+        dispatch(getNearbyPredictionsList());
       }
       if (refreshing) {
-        await dispatch(getNearbyPredictionsList());
-        setRefreshing(false);
+        dispatch(getNearbyPredictionsList());
+        if (!didCancel) {
+          setRefreshing(false);
+        }
       }
+      return () => {
+        didCancel = true;
+      };
     }
 
     fetchData();
   }, [dispatch, refreshing]);
 
-  if (nearby.loading && firstUpdate.current) {
+  if ((nearby.loading && firstUpdate.current) || (nearby.loading && nearby.data.length === 0)) {
     return <AppLoader />;
   }
 
@@ -95,7 +103,7 @@ const NearbyScreen: React.FC<NavigationProps> = ({ navigation }) => {
         <Icon icon="Feather" name="settings" size={28} color="primary" />
       </FloatingButton>
       {nearby.error ? (
-        getErrorComponent(nearby.error)
+        renderNearbyError()
       ) : (
         <>
           <FloatingButton onPress={handleRefresh} iconSize={25} position="bottom-left">
@@ -104,12 +112,12 @@ const NearbyScreen: React.FC<NavigationProps> = ({ navigation }) => {
           <FlatList
             style={{ backgroundColor: theme.backgroundLight }}
             data={nearby.data}
-            keyExtractor={(item: NextBus.Predictions) => `${item.routeId}-${item.stopId}`}
+            keyExtractor={item => `${item.routeId}-${item.stopId}`}
             renderItem={({ item }) => {
               const favorited = favorites.some(
                 favorite => favorite.routeId === item.routeId && favorite.stopId === item.stopId
               );
-              const handlePredictionsPress: OnPressHandler = _event => {
+              const handlePredictionsPress = _event => {
                 const route = routes.find(route => route.id === item.routeId);
                 const { directions } = route;
                 const direction = directions.find(direction =>

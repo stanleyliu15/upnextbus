@@ -9,7 +9,7 @@ const initialState: SettingsState = {
   maxStopDistance: 1,
   predictionListLimit: 3,
   routeNameOption: RouteNameOption.Name,
-  showInactivePredictions: true
+  showInactivePredictions: false
 };
 
 const reducer = createReducer(initialState)

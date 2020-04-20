@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import styled from "styled-components/native";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -17,7 +17,7 @@ import { selectFavorites, favorite, unfavorite } from "../../store/features/next
 const Container = styled.View`
   background-color: ${({ theme }) => theme.backgroundLight};
   border-radius: ${borderRadius.round};
-  padding: ${space.md} ${space.xxs} ${space.xxs};
+  padding: ${space.md}px ${space.xxs}px ${space.xxs}px;
 `;
 
 const DetailRouteName = styled(RouteName)`
@@ -43,6 +43,7 @@ export const FavoriteButton = styled(CircleIconButton).attrs({ iconSize: 20 })`
 
 type DetailItemProps = {
   predictions: NextBus.Predictions;
+  stopDistance: number;
   canRefresh: boolean;
   onRefreshPress: OnPressHandler;
   onDirectionPress?: OnPressHandler;
@@ -52,6 +53,7 @@ type DetailItemProps = {
 
 const DetailItem: React.FC<DetailItemProps> = ({
   predictions,
+  stopDistance,
   canRefresh,
   onRefreshPress,
   onDirectionPress = undefined,
@@ -63,16 +65,14 @@ const DetailItem: React.FC<DetailItemProps> = ({
   const predictionMinutes = predictionList.map(prediction => prediction.minutes).join(", ");
   const routeNameOption = useSelector(selectRouteNameOption);
   const favorites = useSelector(selectFavorites);
-  const favorited = favorites.some(
-    favorite => favorite.routeId === routeId && favorite.stopId === stopId
+  const favorited = useMemo(
+    () => favorites.some(favorite => favorite.routeId === routeId && favorite.stopId === stopId),
+    [favorites, routeId, stopId]
   );
-  const handleFavorite = () => {
-    if (favorited) {
-      dispatch(unfavorite(routeId, stopId));
-    } else {
-      dispatch(favorite(routeId, stopId));
-    }
-  };
+  const handleFavorite = useCallback(
+    () => dispatch(favorited ? unfavorite(routeId, stopId) : favorite(routeId, stopId)),
+    [dispatch, favorited, routeId, stopId]
+  );
 
   return (
     <Container>
@@ -100,6 +100,7 @@ const DetailItem: React.FC<DetailItemProps> = ({
         titleStyle={{ fontFamily: fontFamily.normal }}
         prioritizePropertySpace
         externalLink
+        value={stopDistance && `${stopDistance.toFixed(2)} miles`}
       />
       {onServiceAlertsPress && (
         <LinkItem

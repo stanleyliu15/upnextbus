@@ -53,10 +53,11 @@ const uniformalizeResponseData = (command: NextBusSource.Command, responseData: 
   }
 
   if (command === COMMANDS.vehicleLocations) {
-    // eslint-disable-next-line no-prototype-builtins
-    return responseData.hasOwnProperty(COMMAND_PATH_MAP[command])
-      ? arrayify(responseData[COMMAND_PATH_MAP[command]])
-      : [];
+    if (responseData[COMMAND_PATH_MAP[command]]) {
+      return arrayify(responseData[COMMAND_PATH_MAP[command]]);
+    }
+
+    return [];
   }
 
   return arrayify(responseData);
