@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef, useCallback } from "react";
+import React, { useEffect, useState, useContext, useRef, useCallback, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { FlatList, RefreshControl, Linking } from "react-native";
 import { ThemeContext } from "styled-components/native";
@@ -44,8 +44,13 @@ const NearbyScreen: React.FC<NearbyScreenProps> = ({ navigation }) => {
   const { data: routes } = useSelector(selectRoutes);
   const favorites = useSelector(selectFavorites);
   const handleRefresh = useCallback(() => setRefreshing(true), []);
+  const fetchData = useCallback(() => dispatch(getNearbyPredictionsList()), [dispatch]);
   const openSettings = useCallback(() => navigation.navigate("Settings"), [navigation]);
-  const renderNearbyError = useCallback(() => {
+  const renderNearbyError = useMemo(() => {
+    if (!nearby.error) {
+      return null;
+    }
+
     if (nearby.error instanceof LocationPermissionDeniedError) {
       return (
         <ErrorInfo
@@ -59,12 +64,7 @@ const NearbyScreen: React.FC<NearbyScreenProps> = ({ navigation }) => {
     }
 
     if (nearby.error instanceof NextBusNoNearbyError) {
-      return (
-        <ErrorInfo
-          message={nearby.error.message}
-          onRetry={_event => dispatch(getNearbyPredictionsList())}
-        />
-      );
+      return <ErrorInfo message={nearby.error.message} onRetry={fetchData} />;
     }
 
     if (nearby.error instanceof NextBusNoNearbyAgencyError) {
@@ -82,35 +82,31 @@ const NearbyScreen: React.FC<NearbyScreenProps> = ({ navigation }) => {
       return (
         <ErrorInfo
           message={nearby.error.message}
-          onRetry={nearby.error.retriable ? handleRefresh : undefined}
+          onRetry={nearby.error.retriable ? fetchData : undefined}
         />
       );
     }
 
     return <ErrorInfo message={nearby.error.message} />;
-  }, [dispatch, handleRefresh, navigation, nearby.error]);
+  }, [fetchData, navigation, nearby.error]);
 
   useEffect(() => {
     let didCancel = false;
 
-    function fetchData() {
-      if (firstUpdate.current) {
-        firstUpdate.current = false;
-        dispatch(getNearbyPredictionsList());
-      }
-      if (refreshing) {
-        dispatch(getNearbyPredictionsList());
-        if (!didCancel) {
-          setRefreshing(false);
-        }
-      }
-      return () => {
-        didCancel = true;
-      };
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+      fetchData();
     }
-
-    fetchData();
-  }, [dispatch, refreshing]);
+    if (refreshing) {
+      fetchData();
+      if (!didCancel) {
+        setRefreshing(false);
+      }
+    }
+    return () => {
+      didCancel = true;
+    };
+  }, [fetchData, refreshing]);
 
   if (nearby.loading && (firstUpdate.current || nearby.data.length === 0)) {
     return <AppLoader />;
@@ -122,11 +118,10 @@ const NearbyScreen: React.FC<NearbyScreenProps> = ({ navigation }) => {
         <Icon icon="Feather" name="settings" size={25} color="primary" />
       </FloatingButton>
       {nearby.error ? (
-        renderNearbyError()
+        renderNearbyError
       ) : (
         <>
-          {/* todo: refreshing should be seperate function from just refetching */}
-          <FloatingButton onPress={handleRefresh} iconSize={25} position="bottom-left">
+          <FloatingButton onPress={fetchData} iconSize={25} position="bottom-left">
             <Icon icon="MaterialIcons" name="refresh" size={30} color="primary" />
           </FloatingButton>
           <FlatList

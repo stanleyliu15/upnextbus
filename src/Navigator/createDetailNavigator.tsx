@@ -7,8 +7,9 @@ import ChangeStopScreen from "../screens/Detail/ChangeStopScreen";
 import ChangeDirectionScreen from "../screens/Detail/ChangeDirectionScreen";
 import { BackIcon } from "./styles";
 import { Theme } from "../styles";
+import { DetailStackParamList } from "../../types";
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<DetailStackParamList>();
 
 const createDetailNavigator = (parentStackConfig, theme: Theme) => {
   return (_props: any) => {

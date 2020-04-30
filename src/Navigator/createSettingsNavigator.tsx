@@ -10,8 +10,9 @@ import RouteNameOptionScreen from "../screens/Settings/Preferences/ChangeRouteNa
 import ThemeScreen from "../screens/Settings/Preferences/ChangeThemeScreen";
 import ChangeShowInactivePredictionsScreen from "../screens/Settings/Preferences/ChangeShowInactivePredictionsScreen";
 import { Theme } from "../styles";
+import { SettingsStackParamList } from "../../types";
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<SettingsStackParamList>();
 
 const createSettingsNavigator = (parentStackConfig, _theme: Theme) => {
   return (_props: any) => {
