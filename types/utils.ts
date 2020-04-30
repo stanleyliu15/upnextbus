@@ -1,12 +1,7 @@
 import { GestureResponderEvent } from "react-native";
-import { NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation";
 
 export interface OnPressHandler {
   (event: GestureResponderEvent): void;
-}
-
-export interface NavigationProps {
-  navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }
 
 export interface Point {

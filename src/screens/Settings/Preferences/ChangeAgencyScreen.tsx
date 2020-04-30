@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { FlatList } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
+import { RouteProp, CompositeNavigationProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 import {
   selectAgencies,
@@ -11,9 +13,17 @@ import {
 } from "../../../store/features/nextbus";
 import { Loader, SafeArea, ErrorInfo, SelectItem } from "../../../components";
 import { SaveButton } from "../settingStyles";
-import { NavigationProps, NextBus } from "../../../../types";
+import { NextBus, SettingsStackParamList, RootStackParamList } from "../../../../types";
 
-const ChangeAgencyScreen: React.FC<NavigationProps> = ({ navigation }) => {
+type ChangeAgencyScreenProps = {
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<SettingsStackParamList, "ChangeAgencyScreen">,
+    StackNavigationProp<RootStackParamList>
+  >;
+  route: RouteProp<SettingsStackParamList, "ChangeAgencyScreen">;
+};
+
+const ChangeAgencyScreen: React.FC<ChangeAgencyScreenProps> = ({ navigation }) => {
   const dispatch = useDispatch();
   const agencies = useSelector(selectAgencies);
   const selectedAgencyId = useSelector(selectSelectedAgencyId);

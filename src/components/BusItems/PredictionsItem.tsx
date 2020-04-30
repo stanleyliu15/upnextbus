@@ -15,7 +15,7 @@ import {
   PredictionMinute,
   PredictionUnit
 } from "./itemStyles";
-import { space } from "../../styles";
+import { space, borderSize } from "../../styles";
 
 type PredictionsItemProps = {
   predictions: NextBus.Predictions;
@@ -27,7 +27,7 @@ const ItemButton = styled.TouchableHighlight.attrs(({ theme }) => ({
   underlayColor: theme.backgroundDark
 }))`
   border-bottom-color: ${({ theme }) => theme.grayLight};
-  border-bottom-width: 0.33;
+  border-bottom-width: ${borderSize.xs};
 `;
 
 const Container = styled.View`
@@ -45,19 +45,19 @@ const Block = styled.View`
 
 const GeneralSection = styled.View`
   flex: 8.4;
-  padding: ${space.md}px;
+  padding: ${space.md};
 `;
 
 const VerticalSeperator = styled.View`
   flex: 0.2;
   border-color: ${({ theme }) => theme.grayLight};
-  border-left-width: 0.25;
-  margin: ${space.md}px ${space.xxs}px ${space.xxs}px ${space.md}px;
+  border-left-width: ${borderSize.xs};
+  margin: ${space.md} ${space.xxs} ${space.xxs} ${space.md};
 `;
 
 export const PredictionTimeSection = styled.View`
   flex: 1.4;
-  padding: ${space.md}px ${space.md}px ${space.xs}px;
+  padding: ${space.md} ${space.md} ${space.xs};
 `;
 
 const PredictionsItem: React.FC<PredictionsItemProps> = ({

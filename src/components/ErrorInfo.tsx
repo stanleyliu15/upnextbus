@@ -15,7 +15,7 @@ const Container = styled.View`
 `;
 
 const Message = styled(Text)`
-  margin: ${space.lg}px 0 ${space.xxxlg}px;
+  margin: ${space.lg} 0 ${space.xxxlg};
   padding-horizontal: ${space.xxxlg};
   color: ${({ theme }) => theme.textLight};
 `;

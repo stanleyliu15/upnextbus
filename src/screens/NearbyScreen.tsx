@@ -2,8 +2,9 @@ import React, { useEffect, useState, useContext, useRef, useCallback } from "rea
 import { useSelector, useDispatch } from "react-redux";
 import { FlatList, RefreshControl, Linking } from "react-native";
 import { ThemeContext } from "styled-components/native";
+import { RouteProp, CompositeNavigationProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-import { NavigationProps } from "../../types";
 import {
   AppLoader,
   Icon,
@@ -16,16 +17,25 @@ import {
   getNearbyPredictionsList,
   selectNearbyPredictionList,
   selectRoutes,
-  selectFavorites,
-  getRoutes
+  selectFavorites
 } from "../store/features/nextbus";
 import {
   LocationPermissionDeniedError,
   NextBusNoNearbyError,
-  NextBusNoNearbyAgencyError
+  NextBusNoNearbyAgencyError,
+  NextBusAPIError
 } from "../errors";
+import { RootStackParamList } from "../../types";
 
-const NearbyScreen: React.FC<NavigationProps> = ({ navigation }) => {
+type NearbyScreenProps = {
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<RootStackParamList, "Nearby">,
+    StackNavigationProp<RootStackParamList>
+  >;
+  route: RouteProp<RootStackParamList, "Nearby">;
+};
+
+const NearbyScreen: React.FC<NearbyScreenProps> = ({ navigation }) => {
   const dispatch = useDispatch();
   const nearby = useSelector(selectNearbyPredictionList);
   const theme = useContext(ThemeContext);
@@ -34,7 +44,7 @@ const NearbyScreen: React.FC<NavigationProps> = ({ navigation }) => {
   const { data: routes } = useSelector(selectRoutes);
   const favorites = useSelector(selectFavorites);
   const handleRefresh = useCallback(() => setRefreshing(true), []);
-  const openSettings = useCallback(() => navigation.navigate("SettingsScreen"), [navigation]);
+  const openSettings = useCallback(() => navigation.navigate("Settings"), [navigation]);
   const renderNearbyError = useCallback(() => {
     if (nearby.error instanceof LocationPermissionDeniedError) {
       return (
@@ -68,15 +78,24 @@ const NearbyScreen: React.FC<NavigationProps> = ({ navigation }) => {
       );
     }
 
+    if (nearby.error instanceof NextBusAPIError) {
+      return (
+        <ErrorInfo
+          message={nearby.error.message}
+          onRetry={nearby.error.retriable ? handleRefresh : undefined}
+        />
+      );
+    }
+
     return <ErrorInfo message={nearby.error.message} />;
-  }, [dispatch, navigation, nearby.error]);
+  }, [dispatch, handleRefresh, navigation, nearby.error]);
 
   useEffect(() => {
     let didCancel = false;
+
     function fetchData() {
       if (firstUpdate.current) {
         firstUpdate.current = false;
-        dispatch(getRoutes());
         dispatch(getNearbyPredictionsList());
       }
       if (refreshing) {
@@ -93,50 +112,55 @@ const NearbyScreen: React.FC<NavigationProps> = ({ navigation }) => {
     fetchData();
   }, [dispatch, refreshing]);
 
-  if ((nearby.loading && firstUpdate.current) || (nearby.loading && nearby.data.length === 0)) {
+  if (nearby.loading && (firstUpdate.current || nearby.data.length === 0)) {
     return <AppLoader />;
   }
 
   return (
     <SafeArea>
       <FloatingButton onPress={openSettings} iconSize={25} position="bottom-right">
-        <Icon icon="Feather" name="settings" size={28} color="primary" />
+        <Icon icon="Feather" name="settings" size={25} color="primary" />
       </FloatingButton>
       {nearby.error ? (
         renderNearbyError()
       ) : (
         <>
+          {/* todo: refreshing should be seperate function from just refetching */}
           <FloatingButton onPress={handleRefresh} iconSize={25} position="bottom-left">
-            <Icon icon="MaterialIcons" name="refresh" size={35} color="primary" />
+            <Icon icon="MaterialIcons" name="refresh" size={30} color="primary" />
           </FloatingButton>
           <FlatList
             style={{ backgroundColor: theme.backgroundLight }}
             data={nearby.data}
-            keyExtractor={item => `${item.routeId}-${item.stopId}`}
-            renderItem={({ item }) => {
+            keyExtractor={predictions => `${predictions.routeId}-${predictions.stopId}`}
+            renderItem={({ item: predictions }) => {
               const favorited = favorites.some(
-                favorite => favorite.routeId === item.routeId && favorite.stopId === item.stopId
+                favorite =>
+                  favorite.routeId === predictions.routeId && favorite.stopId === predictions.stopId
               );
               const handlePredictionsPress = _event => {
-                const route = routes.find(route => route.id === item.routeId);
+                const route = routes.find(route => route.id === predictions.routeId);
                 const { directions } = route;
                 const direction = directions.find(direction =>
-                  direction.stops.some(stop => stop.id === item.stopId)
+                  direction.stops.some(stop => stop.id === predictions.stopId)
                 );
-                const stop = direction.stops.find(stop => stop.id === item.stopId);
-                navigation.navigate("DetailScreen", {
-                  predictions: item,
-                  route,
-                  directions,
-                  direction,
-                  stop
+                const stop = direction.stops.find(stop => stop.id === predictions.stopId);
+                navigation.navigate("Detail", {
+                  screen: "DetailScreen",
+                  params: {
+                    predictions,
+                    route,
+                    directions,
+                    direction,
+                    stop
+                  }
                 });
               };
 
               return (
                 <PredictionsItem
                   favorited={favorited}
-                  predictions={item}
+                  predictions={predictions}
                   onPredictionsPress={handlePredictionsPress}
                 />
               );

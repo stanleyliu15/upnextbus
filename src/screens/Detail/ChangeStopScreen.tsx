@@ -1,13 +1,21 @@
 import React from "react";
 import { ScrollView } from "react-native";
+import { RouteProp, CompositeNavigationProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 import { SafeArea, SelectItem } from "../../components";
-import { NavigationProps } from "../../../types";
+import { DetailStackParamList, RootStackParamList } from "../../../types";
 
-const ChangeStopScreen: React.FC<NavigationProps> = ({ navigation }) => {
-  const stop = navigation.getParam("stop");
-  const stops = navigation.getParam("stops");
-  const onStopPress = navigation.getParam("onStopPress");
+type ChangeStopScreenProps = {
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<DetailStackParamList, "ChangeStopScreen">,
+    StackNavigationProp<RootStackParamList>
+  >;
+  route: RouteProp<DetailStackParamList, "ChangeStopScreen">;
+};
+
+const ChangeStopScreen: React.FC<ChangeStopScreenProps> = ({ navigation, route }) => {
+  const { stop, stops } = route.params;
 
   return (
     <SafeArea>
@@ -18,9 +26,8 @@ const ChangeStopScreen: React.FC<NavigationProps> = ({ navigation }) => {
               key={stopToSelect.id}
               name={stopToSelect.name}
               selected={stopToSelect.id === stop.id}
-              onSelect={event => {
-                onStopPress(stopToSelect)(event);
-                navigation.goBack();
+              onSelect={_event => {
+                navigation.navigate("DetailScreen", { stop: stopToSelect });
               }}
               fixedHeight={false}
               lastItem={index === stops.length - 1}

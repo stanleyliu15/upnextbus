@@ -1,48 +1,42 @@
 import React, { useContext } from "react";
-import { createAppContainer } from "react-navigation";
-import { createStackNavigator } from "react-navigation-stack";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 import { ThemeContext } from "styled-components/native";
 
-import SettingsNavigator from "./SettingsNavigator";
-import DetailNavigator from "./DetailNavigator";
+import createSettingsNavigator from "./createSettingsNavigator";
+import createDetailNavigator from "./createDetailNavigator";
 import NearbyScreen from "../screens/NearbyScreen";
 import { BackIcon } from "./styles";
+import { RootStackParamList } from "../../types";
 
-const Navigator: React.FC = _props => {
+const Stack = createStackNavigator<RootStackParamList>();
+
+const RootNavigator: React.FC = _props => {
   const theme = useContext(ThemeContext);
-
   const baseStackConfig = {
-    defaultNavigationOptions: {
+    screenOptions: {
       headerStyle: {
         backgroundColor: theme.background
       },
       headerTitleStyle: {
         color: theme.text
       },
-      headerBackTitle: null,
+      headerBackTitleVisible: false,
       headerBackImage: _props => <BackIcon color="text" />
     },
     mode: "modal" as "modal",
     headerMode: "none" as "none"
   };
 
-  const routeConfigs = {
-    NearbyScreen: {
-      screen: NearbyScreen
-    },
-    Detail: DetailNavigator(baseStackConfig, theme),
-    SettingsScreen: SettingsNavigator(baseStackConfig, theme)
-  };
-
-  const stackConfig = {
-    ...baseStackConfig,
-    initialRouteName: "NearbyScreen"
-  };
-
-  const AppNavigator = createStackNavigator(routeConfigs, stackConfig);
-  const AppContainer = createAppContainer(AppNavigator);
-
-  return <AppContainer />;
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Nearby" {...baseStackConfig}>
+        <Stack.Screen name="Nearby" component={NearbyScreen} />
+        <Stack.Screen name="Settings" component={createSettingsNavigator(baseStackConfig, theme)} />
+        <Stack.Screen name="Detail" component={createDetailNavigator(baseStackConfig, theme)} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 };
 
-export default Navigator;
+export default RootNavigator;

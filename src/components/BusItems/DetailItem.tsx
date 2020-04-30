@@ -1,7 +1,8 @@
-import React, { useCallback, useMemo } from "react";
-import styled from "styled-components/native";
+import React, { useCallback, useMemo, useContext } from "react";
+import styled, { ThemeContext } from "styled-components/native";
 import { useSelector, useDispatch } from "react-redux";
 
+import { transparentize } from "polished";
 import Icon from "../Icon";
 import LinkItem from "../LinkItem";
 import { Strong } from "../Typography";
@@ -17,7 +18,7 @@ import { selectFavorites, favorite, unfavorite } from "../../store/features/next
 const Container = styled.View`
   background-color: ${({ theme }) => theme.backgroundLight};
   border-radius: ${borderRadius.round};
-  padding: ${space.md}px ${space.xxs}px ${space.xxs}px;
+  padding: ${space.md} ${space.xxs} ${space.xxs};
 `;
 
 const DetailRouteName = styled(RouteName)`
@@ -62,9 +63,13 @@ const DetailItem: React.FC<DetailItemProps> = ({
 }) => {
   const { directionName, stopName, predictionList, stopId, routeId } = predictions;
   const dispatch = useDispatch();
-  const predictionMinutes = predictionList.map(prediction => prediction.minutes).join(", ");
+  const theme = useContext(ThemeContext);
   const routeNameOption = useSelector(selectRouteNameOption);
   const favorites = useSelector(selectFavorites);
+  const predictionMinutes = useMemo(
+    () => predictionList.map(prediction => prediction.minutes).join(", "),
+    [predictionList]
+  );
   const favorited = useMemo(
     () => favorites.some(favorite => favorite.routeId === routeId && favorite.stopId === stopId),
     [favorites, routeId, stopId]
@@ -111,11 +116,12 @@ const DetailItem: React.FC<DetailItemProps> = ({
           prioritizePropertySpace
           externalLink
           linkIconColor="yellow"
+          underlayColor={transparentize(0.4, theme.yellow)}
         />
       )}
       <RowBetween>
         <RefreshButton onPress={canRefresh ? onRefreshPress : undefined}>
-          <Icon icon="MaterialIcons" name="refresh" size={33} color="primary" />
+          <Icon icon="MaterialIcons" name="refresh" size={30} color="primary" />
         </RefreshButton>
         <PredictionTime>
           {predictionList.length > 0 ? (

@@ -2,13 +2,24 @@ import React, { useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ScrollView } from "react-native";
 import { capitalize } from "lodash";
+import { RouteProp, CompositeNavigationProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 import { selectThemeColor, setThemeColor } from "../../../store/features/settings";
 import { SafeArea, SelectItem } from "../../../components";
 import { SaveButton } from "../settingStyles";
 import { ThemeColor } from "../../../styles";
+import { SettingsStackParamList, RootStackParamList } from "../../../../types";
 
-const ChangeThemeScreen: React.FC = _props => {
+type ChangeThemeScreenProps = {
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<SettingsStackParamList, "ChangeThemeScreen">,
+    StackNavigationProp<RootStackParamList>
+  >;
+  route: RouteProp<SettingsStackParamList, "ChangeThemeScreen">;
+};
+
+const ChangeThemeScreen: React.FC<ChangeThemeScreenProps> = _props => {
   const dispatch = useDispatch();
   const themeColor = useSelector(selectThemeColor);
   const [selectedThemeColor, setSelectedThemeColor] = useState(themeColor);

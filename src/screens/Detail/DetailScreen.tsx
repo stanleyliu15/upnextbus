@@ -6,18 +6,16 @@ import { useSelector } from "react-redux";
 import * as Location from "expo-location";
 import { getStatusBarHeight, getInset } from "react-native-safe-area-view";
 import {
-  withNavigationFocus,
-  NavigationActions,
-  NavigationFocusInjectedProps
-} from "react-navigation";
+  CommonActions,
+  RouteProp,
+  CompositeNavigationProp,
+  useFocusEffect
+} from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-import { NextBus, NavigationProps } from "../../../types";
+import { DetailStackParamList, RootStackParamList, NextBus, GeoLocation } from "../../../types";
 import { selectSelectedAgencyId } from "../../store/features/nextbus";
-import {
-  selectThemeColor,
-  selectPredictionListLimit,
-  selectDistanceLimit
-} from "../../store/features/settings";
+import { selectThemeColor, selectPredictionListLimit } from "../../store/features/settings";
 import { ThemeColor, space, borderRadius, fontSize } from "../../styles";
 import { DARK_MAP_STYLE } from "../../config/mapStyles";
 import {
@@ -31,7 +29,6 @@ import {
 } from "../../components";
 import { getDistanceBetween } from "../../utils/geolocation";
 import NextBusAPI from "../../api/NextBus/api";
-import { getNearestStop } from "../../services/nextbus-service";
 import { StartPointSvg, EndPointSvg, PointSvg, BusSvg } from "../../svgs";
 import { useInterval, useTimer } from "../../utils";
 
@@ -40,160 +37,165 @@ const LON_DELTA = 0.05;
 const AUTO_REFRESH_DATA_TIME = 10000;
 const MAP_PROVIDER = Platform.OS === "android" ? PROVIDER_GOOGLE : null;
 
-type DetailScreenProps = NavigationProps & NavigationFocusInjectedProps;
+type DetailScreenProps = {
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<DetailStackParamList, "DetailScreen">,
+    StackNavigationProp<RootStackParamList>
+  >;
+  route: RouteProp<DetailStackParamList, "DetailScreen">;
+};
 
-const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, isFocused }) => {
-  const predictionsParam = navigation.getParam("predictions");
-  const routeParam = navigation.getParam("route");
-  const directionsParam = navigation.getParam("directions");
-  const directionParam = navigation.getParam("direction");
-  const stopParam = navigation.getParam("stop");
-
+const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigationRoute }) => {
+  const { predictions, route, directions, direction, stop } = navigationRoute.params;
   const mapRef = useRef<MapView>(null);
-
-  const [loading, setLoading] = useState(false);
+  const agencyId = useSelector(selectSelectedAgencyId);
+  const predictionsListLimit = useSelector(selectPredictionListLimit);
+  const [vehicles, setVehicles] = useState<NextBus.Vehicle[]>([]);
+  const [distance, setDistance] = useState<number>(null);
+  const [location, setLocation] = useState<GeoLocation>(null);
+  const [fetching, setFetching] = useState(false);
   const [fetchError, setFetchError] = useState(null);
-
+  const [autoRefresh, setAutoRefresh] = useState(false);
+  const { seconds, stopTimer, restartTimer } = useTimer();
   const theme = useContext(ThemeContext);
   const themeColor = useSelector(selectThemeColor);
   const isDarkMap = themeColor === ThemeColor.DARK && MAP_PROVIDER === PROVIDER_GOOGLE;
-
-  const [distance, setDistance] = useState(null);
-  const [location, setLocation] = useState(null);
-
-  const { seconds, stopTimer, restartTimer } = useTimer();
-
-  const agencyId = useSelector(selectSelectedAgencyId);
-  const predictionsListLimit = useSelector(selectPredictionListLimit);
-  const distanceLimit = useSelector(selectDistanceLimit);
-
-  const [predictions, setPredictions] = useState(predictionsParam);
-  const [direction, setDirection] = useState(directionParam);
-  const [stop, setStop] = useState(stopParam);
-
-  const [vehicles, setVehicles] = useState<NextBus.Vehicle[]>([]);
-
-  const [autoRefresh, setAutoRefresh] = useState(false);
-
+  const setPredictions = useCallback(predictions => navigation.setParams({ predictions }), [
+    navigation
+  ]);
+  const setStop = useCallback(stop => navigation.setParams({ stop }), [navigation]);
+  const handleRefreshPress = useCallback(_event => setAutoRefresh(false), []);
   const closeScreen = useCallback(() => {
     setAutoRefresh(false);
     stopTimer();
-    navigation.dispatch(NavigationActions.back());
+    navigation.dispatch(CommonActions.goBack());
   }, [navigation, stopTimer]);
+  const handleChangeDirectionPress = useCallback(() => {
+    navigation.navigate("ChangeDirectionScreen", {
+      direction,
+      directions,
+      directionIds: predictions.directionIds,
+      predictionsDirectionName: predictions.directionName,
+      location
+    });
+  }, [
+    direction,
+    directions,
+    location,
+    navigation,
+    predictions.directionIds,
+    predictions.directionName
+  ]);
+  const handleChangeStopPress = useCallback(() => {
+    navigation.navigate("ChangeStopScreen", {
+      stop,
+      stops: direction.stops
+    });
+  }, [direction.stops, navigation, stop]);
 
   const handleServiceAlertsPress = useCallback(
     _event => {
-      navigation.navigate("ServiceAlertsScreen", { serviceAlerts: predictions.serviceAlerts });
+      navigation.navigate("ServiceAlertsScreen", {
+        serviceAlerts: predictions.serviceAlerts
+      });
     },
     [navigation, predictions.serviceAlerts]
   );
 
-  const handleDirectionPress = directionToPress => _event => {
-    if (direction.id !== directionToPress.id) {
-      const nearestStop = getNearestStop(directionToPress.stops, location, distanceLimit);
-      if (stop.id !== nearestStop.id) {
-        setDistance(getDistanceBetween(location, nearestStop.location));
-        setStop(nearestStop);
-      }
-
-      setDirection(directionToPress);
-    }
-  };
-
-  const handleStopPress = useCallback(
-    stopToPress => _event => {
-      if (stop.id !== stopToPress.id) {
-        setDistance(getDistanceBetween(location, stopToPress.location));
-        setStop(stopToPress);
-      }
-    },
-    [location, stop.id]
-  );
-
-  const handleChangeDirectionPress = () => {
-    navigation.navigate("ChangeDirectionScreen", {
-      direction,
-      directions: directionsParam,
-      directionIds: predictionsParam.directionIds,
-      predictionsDirectionName: predictionsParam.directionName,
-      onDirectionPress: handleDirectionPress
-    });
-  };
-
-  const handleChangeStopPress = useCallback(() => {
-    navigation.navigate("ChangeStopScreen", {
-      stop,
-      stops: direction.stops,
-      onStopPress: handleStopPress
-    });
-  }, [direction.stops, stop, handleStopPress, navigation]);
-
   const handleLocationButtonPress = useCallback(() => {
-    if (location) {
-      mapRef.current.animateCamera({
-        center: {
-          latitude: location.lat,
-          longitude: location.lon
-        }
-      });
-    }
+    if (!location) return;
+    mapRef.current.animateCamera({
+      center: {
+        latitude: location.lat,
+        longitude: location.lon
+      }
+    });
   }, [location]);
 
-  const handleRefreshPress = useCallback(_event => setAutoRefresh(false), []);
   useInterval(handleRefreshPress, autoRefresh ? AUTO_REFRESH_DATA_TIME : null);
 
   useEffect(() => {
-    let didCancel = false;
+    if (!location) return;
+    setDistance(getDistanceBetween(location, stop.location));
+  }, [location, stop]);
 
-    const fetchData = async () => {
-      try {
-        setLoading(true);
+  useFocusEffect(
+    useCallback(() => {
+      let watchPositionSubscription = null;
 
-        const newPredictions = await NextBusAPI.getPredictions(
-          {
-            agencyId,
-            routeId: routeParam.id,
-            stopId: stop.id
-          },
-          { listLimit: predictionsListLimit }
+      async function watchPosition() {
+        watchPositionSubscription = await Location.watchPositionAsync(
+          { distanceInterval: 20 },
+          locationData =>
+            setLocation({
+              lat: locationData.coords.latitude,
+              lon: locationData.coords.longitude
+            })
         );
-
-        const newVehicles = await NextBusAPI.getVehicles({
-          agencyId,
-          routeId: routeParam.id,
-          lastTime: "-1"
-        });
-
-        if (!didCancel) {
-          setPredictions(newPredictions);
-          setVehicles(newVehicles);
-          setLoading(false);
-          restartTimer();
-          setAutoRefresh(true);
-        }
-      } catch (error) {
-        if (!didCancel) {
-          setFetchError(error);
-        }
       }
-    };
 
-    if (isFocused && !autoRefresh) {
-      fetchData();
-    }
-    return () => {
-      didCancel = true;
-    };
-  }, [
-    agencyId,
-    routeParam.id,
-    direction.id,
-    stop.id,
-    autoRefresh,
-    isFocused,
-    predictionsListLimit,
-    restartTimer
-  ]);
+      watchPosition();
+
+      return () => {
+        watchPositionSubscription.remove();
+      };
+    }, [])
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      let didCancel = false;
+
+      const fetchData = async () => {
+        try {
+          setFetching(true);
+
+          const newPredictions = await NextBusAPI.getPredictions(
+            {
+              agencyId,
+              routeId: route.id,
+              stopId: stop.id
+            },
+            { listLimit: predictionsListLimit }
+          );
+
+          const newVehicles = await NextBusAPI.getVehicles({
+            agencyId,
+            routeId: route.id,
+            lastTime: "-1"
+          });
+
+          if (!didCancel) {
+            setPredictions(newPredictions);
+            setVehicles(newVehicles);
+            setFetching(false);
+            restartTimer();
+            setAutoRefresh(true);
+          }
+        } catch (error) {
+          if (!didCancel) {
+            setFetchError(error);
+          }
+        }
+      };
+
+      if (!autoRefresh) {
+        fetchData();
+      }
+
+      return () => {
+        didCancel = true;
+      };
+    }, [
+      agencyId,
+      autoRefresh,
+      predictionsListLimit,
+      restartTimer,
+      route.id,
+      setPredictions,
+      stop.id
+    ])
+  );
 
   useEffect(() => {
     mapRef.current.animateCamera({
@@ -203,32 +205,6 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, isFocused }) =>
       }
     });
   }, [stop.location.lat, stop.location.lon]);
-
-  useEffect(() => {
-    let watchPositionSubscription = null;
-
-    async function watchPosition() {
-      watchPositionSubscription = await Location.watchPositionAsync(
-        { distanceInterval: 20 },
-        loc => {
-          const newLocation = {
-            lat: loc.coords.latitude,
-            lon: loc.coords.longitude
-          };
-          const newDistance = getDistanceBetween(newLocation, stop.location);
-
-          setLocation(newLocation);
-          setDistance(newDistance);
-        }
-      );
-    }
-
-    watchPosition();
-
-    return () => {
-      watchPositionSubscription.remove();
-    };
-  }, [stop.location]);
 
   const renderStopMarkers = useMemo(() => {
     return direction.stops.map((stop, index) => {
@@ -242,7 +218,7 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, isFocused }) =>
       function getMarkerComponent() {
         if (isStartPoint) return <StartPointSvg />;
         if (isEndPoint) return <EndPointSvg />;
-        return <PointSvg fill={routeParam.color} />;
+        return <PointSvg fill={route.color} />;
       }
 
       return (
@@ -250,7 +226,9 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, isFocused }) =>
           key={stop.id}
           coordinate={coordinate}
           centerOffset={isStartPoint || isEndPoint ? { x: -35, y: -35 } : undefined}
-          onPress={handleStopPress(stop)}
+          onPress={_event => {
+            setStop(stop);
+          }}
         >
           {getMarkerComponent()}
           <Callout tooltip>
@@ -261,7 +239,7 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, isFocused }) =>
         </Marker>
       );
     });
-  }, [direction.stops, handleStopPress, routeParam.color]);
+  }, [direction.stops, route.color, setStop]);
 
   const renderRoutePolyline = useMemo(() => {
     const coordinates = direction.stops.reduce((coordinates, stop) => {
@@ -271,8 +249,8 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, isFocused }) =>
       });
     }, []);
 
-    return <Polyline coordinates={coordinates} strokeColor={routeParam.color} strokeWidth={3} />;
-  }, [direction.stops, routeParam.color]);
+    return <Polyline coordinates={coordinates} strokeColor={route.color} strokeWidth={3} />;
+  }, [direction.stops, route.color]);
 
   const renderBusMarker = (vehicle: NextBus.Vehicle) => {
     const coordinate = {
@@ -290,27 +268,29 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, isFocused }) =>
     );
   };
 
-  const renderWalkPolyline = useMemo(() => {
-    if (location) {
-      return (
-        <Polyline
-          coordinates={[
-            {
-              latitude: location.lat,
-              longitude: location.lon
-            },
-            {
-              latitude: stop.location.lat,
-              longitude: stop.location.lon
-            }
-          ]}
-          strokeColor={theme.primary}
-          strokeWidth={3}
-          lineDashPattern={[5, 5]}
-        />
-      );
+  const renderWalkPolyline = () => {
+    if (!location) {
+      return null;
     }
-  }, [location, stop.location.lat, stop.location.lon, theme.primary]);
+
+    return (
+      <Polyline
+        coordinates={[
+          {
+            latitude: location.lat,
+            longitude: location.lon
+          },
+          {
+            latitude: stop.location.lat,
+            longitude: stop.location.lon
+          }
+        ]}
+        strokeColor={theme.primary}
+        strokeWidth={3}
+        lineDashPattern={[5, 5]}
+      />
+    );
+  };
 
   if (fetchError) {
     return <ErrorInfo message={fetchError.message} />;
@@ -322,35 +302,35 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, isFocused }) =>
         ref={mapRef}
         provider={MAP_PROVIDER}
         initialRegion={{
-          latitude: stopParam.location.lat,
-          longitude: stopParam.location.lon,
+          latitude: stop.location.lat,
+          longitude: stop.location.lon,
           latitudeDelta: LAT_DELTA,
           longitudeDelta: LON_DELTA
         }}
         showsUserLocation={true}
         customMapStyle={isDarkMap ? DARK_MAP_STYLE : undefined}
       >
-        {renderWalkPolyline}
+        {renderWalkPolyline()}
         {renderRoutePolyline}
         {renderStopMarkers}
         {vehicles.map(vehicle => renderBusMarker(vehicle))}
       </Map>
-      {loading && <DataLoader />}
+      {fetching && <DataLoader />}
       <UtilityButtons>
         <CloseButton onPress={closeScreen}>
-          <Icon icon="MaterialCommunityIcons" name="close" size={22.5} color="text" />
+          <Icon icon="MaterialCommunityIcons" name="close" size={20} color="text" />
         </CloseButton>
         <LocationButton onPress={handleLocationButtonPress}>
-          <Icon icon="MaterialCommunityIcons" name="near-me" size={22.5} color="primary" />
+          <Icon icon="MaterialCommunityIcons" name="near-me" size={20} color="primary" />
         </LocationButton>
       </UtilityButtons>
       <Panel>
         <DetailItem
           predictions={predictions}
           stopDistance={distance}
-          onDirectionPress={directionsParam.length > 1 ? handleChangeDirectionPress : undefined}
+          canRefresh={!fetching}
+          onDirectionPress={directions.length > 1 ? handleChangeDirectionPress : undefined}
           onStopPress={direction.stops.length > 1 ? handleChangeStopPress : undefined}
-          canRefresh={!loading}
           onRefreshPress={handleRefreshPress}
           onServiceAlertsPress={
             predictions.serviceAlerts.length > 0 ? handleServiceAlertsPress : undefined
@@ -366,7 +346,7 @@ const DataLoader = styled(Loader)`
   top: ${getStatusBarHeight() + 5};
   left: 5;
 
-  padding: ${space.xs}px;
+  padding: ${space.xs};
   border-radius: ${borderRadius.round};
   background-color: ${({ theme }) => (Platform.OS === "ios" ? "transparent" : theme.background)};
 `;
@@ -380,7 +360,7 @@ const Panel = styled.View`
   bottom: ${getInset("bottom")};
   width: 100%;
 
-  padding: ${space.xs}px;
+  padding: ${space.xs};
 `;
 
 const Map = styled(MapView)`
@@ -419,7 +399,7 @@ const LocationButton = styled(CircleIconButton).attrs({ iconSize: 20 })`
 
 const CalloutView = styled.View`
   width: 160;
-  padding: ${space.md}px;
+  padding: ${space.md};
   margin-bottom: ${space.md};
 
   border-radius: ${borderRadius.round};
@@ -431,7 +411,7 @@ export const Distance = styled.View`
   flex-direction: row;
   align-items: center;
 
-  padding: ${space.xxxs}px ${space.xs}px;
+  padding: ${space.xxxs} ${space.xs};
   background-color: ${({ theme }) => theme.primaryDark};
   border-radius: ${borderRadius.full};
 `;
@@ -447,4 +427,4 @@ export const DistanceUnit = styled(Text)`
   margin-left: ${space.xxxs};
 `;
 
-export default withNavigationFocus(DetailScreen);
+export default DetailScreen;

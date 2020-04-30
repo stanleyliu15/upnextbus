@@ -22,6 +22,8 @@ export function getAgencies(): ThunkAction<Promise<void>> {
   };
 }
 
+// todo: some agencies add/remove routes so should merge the current with the new set
+// maybe should be called updateRoutes
 export function getRoutes(): ThunkAction<Promise<void>> {
   return async function(dispatch: ThunkDispatch, getState) {
     const {

@@ -1,7 +1,9 @@
-import React, { useState, useEffect, Dispatch, SetStateAction, useCallback } from "react";
+import React, { useState, useEffect, Dispatch, SetStateAction, useCallback, useMemo } from "react";
 import { FlatList } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components/native";
+import { RouteProp, CompositeNavigationProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 import {
   selectFilterRouteIds,
@@ -13,9 +15,17 @@ import { Loader, Icon, SafeArea, SelectItem, ErrorInfo } from "../../../componen
 import { SaveButton } from "../settingStyles";
 import { normalizeRouteName, useToggle } from "../../../utils";
 import { space } from "../../../styles";
-import { NavigationProps, NextBus } from "../../../../types";
+import { SettingsStackParamList, RootStackParamList, NextBus } from "../../../../types";
 
-const ChangeFilterRoutesScreen: React.FC<NavigationProps> & {
+type ChangeFilterRoutesScreenProps = {
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<SettingsStackParamList, "ChangeFilterRoutesScreen">,
+    StackNavigationProp<RootStackParamList>
+  >;
+  route: RouteProp<SettingsStackParamList, "ChangeFilterRoutesScreen">;
+};
+
+const ChangeFilterRoutesScreen: React.FC<ChangeFilterRoutesScreenProps> & {
   setRouteIds: Dispatch<SetStateAction<string[]>>;
   HeaderRight: React.FC;
 } = ({ navigation }) => {
@@ -34,6 +44,7 @@ const ChangeFilterRoutesScreen: React.FC<NavigationProps> & {
 
   useEffect(() => {
     ChangeFilterRoutesScreen.setRouteIds = setRouteIds;
+    // todo: put update routes as a setting
     dispatch(getRoutes());
     return () => {
       ChangeFilterRoutesScreen.setRouteIds = null;
@@ -76,7 +87,7 @@ const ChangeFilterRoutesScreen: React.FC<NavigationProps> & {
 ChangeFilterRoutesScreen.setRouteIds = null;
 ChangeFilterRoutesScreen.HeaderRight = function(_props) {
   const routes = useSelector(selectRoutes);
-  const routeIds = routes.data.map(route => route.id);
+  const routeIds = useMemo(() => routes.data.map(route => route.id), [routes.data]);
   const [toggled, toggle] = useToggle(false);
   const filterAll = useCallback(() => {
     ChangeFilterRoutesScreen.setRouteIds([]);

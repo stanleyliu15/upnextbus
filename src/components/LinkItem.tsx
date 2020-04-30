@@ -1,6 +1,7 @@
 import React from "react";
-import { TextStyle, StyleProp } from "react-native";
+import { TextStyle, StyleProp, TouchableHighlightProps } from "react-native";
 import styled from "styled-components/native";
+import { noop } from "lodash";
 
 import Icon from "./Icon";
 import { Strong, Text } from "./Typography";
@@ -69,7 +70,7 @@ type LinkItemProps = {
   includeBottomBorder?: boolean;
   prioritizePropertySpace?: boolean;
   linkIconColor?: keyof Theme | string;
-};
+} & TouchableHighlightProps;
 
 const LinkItem: React.FC<LinkItemProps> = ({
   title,
@@ -82,12 +83,14 @@ const LinkItem: React.FC<LinkItemProps> = ({
   externalLink = false,
   onPress = null,
   prioritizePropertySpace = false,
-  includeBottomBorder = false
+  includeBottomBorder = false,
+  ...rest
 }) => (
   <LinkButton
-    onPress={loading ? null : onPress}
+    onPress={loading ? noop : onPress}
     disabled={!onPress}
     includeBottomBorder={includeBottomBorder}
+    {...rest}
   >
     <ItemContainer>
       <PropertyColumn>

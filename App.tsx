@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { Image } from "react-native";
-import { useScreens } from "react-native-screens";
+import { enableScreens } from "react-native-screens";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 
@@ -12,7 +12,7 @@ import fonts from "./src/config/fonts";
 import images from "./src/config/images";
 import { AppLoader } from "./src/components";
 
-useScreens();
+enableScreens();
 
 function cacheFonts(fonts) {
   return fonts.map(font => Font.loadAsync(font));

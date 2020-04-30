@@ -6,11 +6,13 @@ import {
   TouchableOpacityProps,
   TouchableNativeFeedbackProps,
   StyleSheet,
-  View
+  View,
+  ViewStyle,
+  StyleProp
 } from "react-native";
 import styled, { ThemeContext } from "styled-components/native";
 
-import { space, borderRadius } from "../styles";
+import { space, borderSize, borderRadius } from "../styles";
 
 type ButtonProps =
   | Pick<TouchableOpacityProps, keyof TouchableOpacityProps>
@@ -20,8 +22,8 @@ export const Button: React.FC<ButtonProps> = ({ children, style, ...rest }) => {
   const theme = useContext(ThemeContext);
   const buttonStyle = StyleSheet.flatten([
     {
-      paddingVertical: space.md,
-      paddingHorizontal: space.xxxlg,
+      paddingVertical: parseInt(space.md, 10),
+      paddingHorizontal: parseInt(space.xxxlg, 10),
       borderRadius: borderRadius.round,
       backgroundColor: theme.primary
     },
@@ -44,20 +46,17 @@ export const Button: React.FC<ButtonProps> = ({ children, style, ...rest }) => {
 };
 
 type LinkButtonProps = { includeBottomBorder?: boolean };
-export const LinkButton = styled.TouchableHighlight.attrs(({ theme }) => ({
-  underlayColor: theme.backgroundDark
+export const LinkButton = styled.TouchableHighlight.attrs(({ theme, underlayColor }) => ({
+  underlayColor: theme[underlayColor] || underlayColor || theme.backgroundDark
 }))<LinkButtonProps>`
   display: flex;
   justify-content: center;
 
+  padding: ${space.lg} ${space.xs} ${space.lg} ${space.md};
   border-radius: ${borderRadius.round};
-  padding: ${space.lg}px ${space.xs}px ${space.lg}px ${space.md}px;
-
-  ${({ theme, includeBottomBorder }) => {
-    if (includeBottomBorder) {
-      return `border-bottom-width: 0.33; border-bottom-color: ${theme.grayLight}`;
-    }
-  }};
+  border-bottom-width: ${({ includeBottomBorder }) => (includeBottomBorder ? borderSize.sm : 0)};
+  border-bottom-color: ${({ includeBottomBorder, theme }) =>
+    includeBottomBorder ? theme.grayLight : "transparent"};
 `;
 
 type CircleIconButtonProps = ButtonProps & { iconSize: number };
@@ -76,7 +75,7 @@ export const CircleIconButton: React.FC<CircleIconButtonProps> = ({
       borderRadius: borderRadius.full
     },
     style
-  ]);
+  ]) as StyleProp<ViewStyle>;
 
   if (Platform.OS === "ios") {
     return (

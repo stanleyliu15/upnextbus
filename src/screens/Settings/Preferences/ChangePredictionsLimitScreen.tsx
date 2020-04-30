@@ -2,6 +2,8 @@ import React, { useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ScrollView } from "react-native";
 import { range } from "lodash";
+import { RouteProp, CompositeNavigationProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 import {
   selectPredictionListLimit,
@@ -9,11 +11,21 @@ import {
 } from "../../../store/features/settings";
 import { SafeArea, SelectItem } from "../../../components";
 import { SaveButton } from "../settingStyles";
-import { NavigationProps } from "../../../../types";
+import { SettingsStackParamList, RootStackParamList } from "../../../../types";
 
 const PREDICTION_LIST_LIMIT_RANGE = range(1, 6);
 
-const ChangePredictionsLimitScreen: React.FC<NavigationProps> = ({ navigation }) => {
+type ChangePredictionsLimitScreenProps = {
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<SettingsStackParamList, "ChangePredictionsLimitScreen">,
+    StackNavigationProp<RootStackParamList>
+  >;
+  route: RouteProp<SettingsStackParamList, "ChangePredictionsLimitScreen">;
+};
+
+const ChangePredictionsLimitScreen: React.FC<ChangePredictionsLimitScreenProps> = ({
+  navigation
+}) => {
   const dispatch = useDispatch();
   const predictionListLimit = useSelector(selectPredictionListLimit);
   const [selectedListLimit, setSelectedListLimit] = useState(predictionListLimit);

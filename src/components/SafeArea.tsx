@@ -1,3 +1,5 @@
+// todo: look into react-native-safe-area-context
+
 import styled from "styled-components/native";
 
 type SafeAreaProps = {

@@ -1,6 +1,8 @@
 import React, { useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ScrollView } from "react-native";
+import { RouteProp, CompositeNavigationProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 import {
   setRouteNameOption,
@@ -9,9 +11,19 @@ import {
 } from "../../../store/features/settings";
 import { SafeArea, SelectItem } from "../../../components";
 import { SaveButton } from "../settingStyles";
-import { NavigationProps } from "../../../../types";
+import { SettingsStackParamList, RootStackParamList } from "../../../../types";
 
-const ChangeRouteNameOptionScreen: React.FC<NavigationProps> = ({ navigation }) => {
+type ChangeRouteNameOptionScreenProps = {
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<SettingsStackParamList, "ChangeRouteNameOptionScreen">,
+    StackNavigationProp<RootStackParamList>
+  >;
+  route: RouteProp<SettingsStackParamList, "ChangeRouteNameOptionScreen">;
+};
+
+const ChangeRouteNameOptionScreen: React.FC<ChangeRouteNameOptionScreenProps> = ({
+  navigation
+}) => {
   const dispatch = useDispatch();
   const routeNameOption = useSelector(selectRouteNameOption);
   const [selectedRouteNameOption, setSelectedRouteNameOption] = useState(routeNameOption);

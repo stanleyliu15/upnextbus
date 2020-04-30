@@ -16,7 +16,7 @@ const request = async (
 
   try {
     const response = await fetch(url);
-    const responseJson: NextBusSource.ResponseJson = await response.json();
+    const responseJson = (await response.json()) as NextBusSource.ResponseJson;
 
     const responseData = processResponseJsonForParseByCommand(command, responseJson);
     const responseDataParsed = parseResponseDataByCommand(command, responseData, parseOptions);

@@ -5,28 +5,33 @@ import { useSelector, useDispatch } from "react-redux";
 import * as StoreReview from "expo-store-review";
 import Constants from "expo-constants";
 import { capitalize } from "lodash";
+import { CommonActions, CompositeNavigationProp, RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-import { NavigationActions } from "react-navigation";
 import { LinkItem, Title, Icon, SafeArea, CircleIconButton } from "../../components";
 import { Header, Section, GroupTitle, SectionContent, Version } from "./settingStyles";
 import { selectSettings, RouteNameOption } from "../../store/features/settings";
 import { selectAgency, getAgencies, selectAgencies } from "../../store/features/nextbus";
 import { enumKeyFromValue } from "../../utils";
-import { NavigationProps } from "../../../types";
+import { SettingsStackParamList, RootStackParamList } from "../../../types";
 import { ThemeColor } from "../../styles";
 
-const CloseButton = styled(CircleIconButton).attrs({ iconSize: 20 })`
-  background-color: ${({ theme }) => theme.backgroundLight};
-`;
+type SettingsScreenProps = {
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<SettingsStackParamList, "SettingsScreen">,
+    StackNavigationProp<RootStackParamList>
+  >;
+  route: RouteProp<SettingsStackParamList, "SettingsScreen">;
+};
 
-const SettingsScreen: React.FC<NavigationProps> = ({ navigation }) => {
+const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
   const { navigate } = navigation;
   const dispatch = useDispatch();
   const settings = useSelector(selectSettings);
   const agencies = useSelector(selectAgencies);
   const agency = useSelector(selectAgency);
   const goBack = useCallback(() => {
-    navigation.dispatch(NavigationActions.back());
+    navigation.dispatch(CommonActions.goBack());
   }, [navigation]);
 
   useEffect(() => {
@@ -41,7 +46,7 @@ const SettingsScreen: React.FC<NavigationProps> = ({ navigation }) => {
         <Header>
           <Title>Settings</Title>
           <CloseButton onPress={goBack}>
-            <Icon icon="MaterialCommunityIcons" name="close" size={22.5} color="text" />
+            <Icon icon="MaterialCommunityIcons" name="close" size={20} color="text" />
           </CloseButton>
         </Header>
         <Section>
@@ -140,5 +145,9 @@ const SettingsScreen: React.FC<NavigationProps> = ({ navigation }) => {
     </SafeArea>
   );
 };
+
+const CloseButton = styled(CircleIconButton).attrs({ iconSize: 20 })`
+  background-color: ${({ theme }) => theme.backgroundLight};
+`;
 
 export default SettingsScreen;

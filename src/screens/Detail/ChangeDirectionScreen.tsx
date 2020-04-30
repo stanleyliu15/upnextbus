@@ -1,14 +1,24 @@
 import React from "react";
+import { RouteProp, CompositeNavigationProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { useSelector } from "react-redux";
 
 import { SafeArea, SelectItem } from "../../components";
-import { NavigationProps } from "../../../types";
+import { DetailStackParamList, RootStackParamList } from "../../../types";
+import { selectDistanceLimit } from "../../store/features/settings";
+import { getNearestStop } from "../../services/nextbus-service";
 
-const ChangeDirectionScreen: React.FC<NavigationProps> = ({ navigation }) => {
-  const direction = navigation.getParam("direction");
-  const directions = navigation.getParam("directions");
-  const directionIds = navigation.getParam("directionIds");
-  const predictionsDirectionName = navigation.getParam("predictionsDirectionName");
-  const onDirectionPress = navigation.getParam("onDirectionPress");
+type ChangeDirectionScreenProps = {
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<DetailStackParamList, "ChangeDirectionScreen">,
+    StackNavigationProp<RootStackParamList>
+  >;
+  route: RouteProp<DetailStackParamList, "ChangeDirectionScreen">;
+};
+
+const ChangeDirectionScreen: React.FC<ChangeDirectionScreenProps> = ({ navigation, route }) => {
+  const { direction, directions, directionIds, predictionsDirectionName, location } = route.params;
+  const distanceLimit = useSelector(selectDistanceLimit);
 
   return (
     <SafeArea>
@@ -21,9 +31,14 @@ const ChangeDirectionScreen: React.FC<NavigationProps> = ({ navigation }) => {
               : directionToSelect.name
           }
           selected={directionToSelect.id === direction.id}
-          onSelect={event => {
-            onDirectionPress(directionToSelect)(event);
-            navigation.goBack();
+          onSelect={_event => {
+            if (!location) return;
+
+            const nearestStop = getNearestStop(directionToSelect.stops, location, distanceLimit);
+            navigation.navigate("DetailScreen", {
+              direction: directionToSelect,
+              stop: nearestStop
+            });
           }}
           fixedHeight={false}
           lastItem={index === directions.length - 1}

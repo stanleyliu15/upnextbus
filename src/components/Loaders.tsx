@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 import { colors } from "../styles/palette";
 
 export const Loader = styled.ActivityIndicator.attrs(({ theme, color, size }) => ({
-  color: color || theme.primary,
+  color: theme[color] || color || theme.primary,
   size: size || "small"
 }))`
   flex: 1;

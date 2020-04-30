@@ -60,6 +60,9 @@ export interface NearbyPredictionListConfig {
   filterInactivePredictions: boolean;
 }
 
+// todo: if route is currently unavaliable but favorited
+// we still want the user to see it in the nearby list UI,
+// also see showInactiveBus's setting
 export const getNearbyPredictionsList = async (
   {
     agencyId,
