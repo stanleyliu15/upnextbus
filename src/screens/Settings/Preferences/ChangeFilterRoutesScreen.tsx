@@ -44,19 +44,17 @@ const ChangeFilterRoutesScreen: React.FC<ChangeFilterRoutesScreenProps> & {
 
   useEffect(() => {
     ChangeFilterRoutesScreen.setRouteIds = setRouteIds;
-    // todo: put update routes as a setting
-    dispatch(getRoutes());
     return () => {
       ChangeFilterRoutesScreen.setRouteIds = null;
     };
   }, [dispatch]);
 
-  if (routes.loading) {
-    return <Loader />;
-  }
-
   if (routes.error) {
     return <ErrorInfo message={routes.error.message} onRetry={handleRetry} />;
+  }
+
+  if (routes.loading) {
+    return <Loader />;
   }
 
   return (
@@ -80,6 +78,7 @@ const ChangeFilterRoutesScreen: React.FC<ChangeFilterRoutesScreenProps> & {
         )}
         extraData={routeIds}
       />
+
       <SaveButton onPress={handleSave} />
     </SafeArea>
   );

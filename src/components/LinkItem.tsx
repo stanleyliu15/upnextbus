@@ -70,6 +70,7 @@ type LinkItemProps = {
   includeBottomBorder?: boolean;
   prioritizePropertySpace?: boolean;
   linkIconColor?: keyof Theme | string;
+  hideLinkIcon?: boolean;
 } & TouchableHighlightProps;
 
 const LinkItem: React.FC<LinkItemProps> = ({
@@ -84,6 +85,7 @@ const LinkItem: React.FC<LinkItemProps> = ({
   onPress = null,
   prioritizePropertySpace = false,
   includeBottomBorder = false,
+  hideLinkIcon = false,
   ...rest
 }) => (
   <LinkButton
@@ -105,7 +107,8 @@ const LinkItem: React.FC<LinkItemProps> = ({
         {loading ? (
           <LinkLoader />
         ) : (
-          onPress && (
+          onPress &&
+          !hideLinkIcon && (
             <Icon
               icon={externalLink ? "AntDesign" : "Entypo"}
               name={externalLink ? "arrowright" : "chevron-thin-right"}

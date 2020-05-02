@@ -11,7 +11,13 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { LinkItem, Title, Icon, SafeArea, CircleIconButton } from "../../components";
 import { Header, Section, GroupTitle, SectionContent, Version } from "./settingStyles";
 import { selectSettings, RouteNameOption } from "../../store/features/settings";
-import { selectAgency, getAgencies, selectAgencies } from "../../store/features/nextbus";
+import {
+  selectAgency,
+  getAgencies,
+  selectAgencies,
+  getRoutes,
+  selectRoutes
+} from "../../store/features/nextbus";
 import { enumKeyFromValue } from "../../utils";
 import { SettingsStackParamList, RootStackParamList } from "../../../types";
 import { ThemeColor } from "../../styles";
@@ -29,6 +35,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
   const dispatch = useDispatch();
   const settings = useSelector(selectSettings);
   const agencies = useSelector(selectAgencies);
+  const routes = useSelector(selectRoutes);
   const agency = useSelector(selectAgency);
   const goBack = useCallback(() => {
     navigation.dispatch(CommonActions.goBack());
@@ -53,6 +60,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
           <GroupTitle>Preferences</GroupTitle>
           <SectionContent>
             <LinkItem
+              icon={<Icon icon="FontAwesome5" name="building" size={20} color="green" />}
               title="Agency"
               loading={agencies.loading}
               value={agencies.loading || agencies.error || !agency ? null : agency.name}
@@ -60,6 +68,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
               includeBottomBorder
             />
             <LinkItem
+              icon={<Icon icon="FontAwesome5" name="route" size={20} color="orange" />}
               title="Routes"
               description="choose which routes you want to see"
               onPress={_event => navigate("ChangeFilterRoutesScreen")}
@@ -93,6 +102,13 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
               value={settings.showInactivePredictions ? "Yes" : "No"}
               onPress={_event => navigate("ChangeShowInactivePredictionsScreen")}
               prioritizePropertySpace
+              includeBottomBorder
+            />
+            <LinkItem
+              title="Update Routes"
+              loading={routes.loading}
+              onPress={_event => dispatch(getRoutes())}
+              hideLinkIcon={true}
             />
           </SectionContent>
         </Section>
