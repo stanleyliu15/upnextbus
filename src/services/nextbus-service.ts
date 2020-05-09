@@ -1,8 +1,8 @@
+import { isEqual } from "lodash";
+
 import NextBusAPI from "../api/NextBus/api";
 import { GeoLocation, NextBus } from "../../types";
 import * as Geolocation from "../utils/geolocation";
-
-const createStopLabel = (routeId, stopId) => ({ routeId, stopId });
 
 export const getNearestStop = (
   stops: NextBus.Stop[],
@@ -40,7 +40,7 @@ const getNearestStopLabels = (
         const nearestStop = getNearestStop(direction.stops, location, maxStopDistance);
 
         if (nearestStop) {
-          const stopLabel = createStopLabel(route.id, nearestStop.id);
+          const stopLabel = { routeId: route.id, stopId: nearestStop.id };
           stopLabels.push(stopLabel);
         }
       }
@@ -55,7 +55,7 @@ export interface NearbyPredictionListConfig {
   routes?: NextBus.Route[];
   maxStopDistance?: number;
   location: GeoLocation;
-  favorites: NextBus.StopLabel[];
+  favoriteStopLabels: NextBus.StopLabel[];
   routeIdFilters: string[];
   filterInactivePredictions: boolean;
 }
@@ -69,44 +69,38 @@ export const getNearbyPredictionsList = async (
     routes,
     location,
     maxStopDistance,
-    favorites,
+    favoriteStopLabels,
     routeIdFilters,
     filterInactivePredictions
   }: NearbyPredictionListConfig,
   parseOptions: NextBus.PredictionsListParseOptions
 ): Promise<NextBus.Predictions[]> => {
-  try {
-    const routesFiltered =
-      routeIdFilters.length > 0
-        ? routes.filter(route => routeIdFilters.includes(route.id))
-        : routes;
-    const nearbyStopLabels = getNearestStopLabels(routesFiltered, location, maxStopDistance);
-    const favoriteStopLabels = favorites.map(favorite =>
-      createStopLabel(favorite.routeId, favorite.stopId)
+  const routesFiltered =
+    routeIdFilters.length > 0 ? routes.filter(route => routeIdFilters.includes(route.id)) : routes;
+  const stopLabels = favoriteStopLabels.concat(
+    getNearestStopLabels(routesFiltered, location, maxStopDistance)
+  );
+
+  const queryOptions = {
+    agencyId,
+    stopLabels
+  };
+
+  const predictionsList = await NextBusAPI.getPredictionsList(queryOptions, parseOptions);
+
+  return predictionsList.reduce((list, predictions) => {
+    const favorited = favoriteStopLabels.some(stopLabel =>
+      isEqual(stopLabel, predictions.stopLabel)
     );
-    const allStopLabels = favoriteStopLabels.concat(nearbyStopLabels);
 
-    const queryOptions = {
-      agencyId,
-      stopLabels: allStopLabels
-    };
+    if (favorited) {
+      return [predictions, ...list];
+    }
 
-    const predictionsList = await NextBusAPI.getPredictionsList(queryOptions, parseOptions);
+    if (filterInactivePredictions && predictions.predictionList.length === 0) {
+      return list;
+    }
 
-    return predictionsList.reduce((list, item) => {
-      const isFavorite = favorites.some(
-        favorite => item.routeId === favorite.routeId && item.stopId === favorite.stopId
-      );
-
-      if (isFavorite) {
-        return [item, ...list];
-      }
-      if (filterInactivePredictions && item.predictionList.length === 0) {
-        return list;
-      }
-      return [...list, item];
-    }, []);
-  } catch (error) {
-    throw error;
-  }
+    return [...list, predictions];
+  }, []);
 };

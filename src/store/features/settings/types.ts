@@ -1,14 +1,13 @@
 import { ThemeColor } from "../../../styles";
-
-export enum RouteNameOption {
-  "Identifier" = "routeId",
-  "Name" = "routeName"
-}
+import { NextBus } from "../../../../types";
 
 export interface SettingsState {
   themeColor: ThemeColor;
   maxStopDistance: number;
   predictionListLimit: number;
-  routeNameOption: RouteNameOption;
+  showRouteIdForDisplay: boolean;
   showInactivePredictions: boolean;
+  selectedAgencyId: string | null;
+  favoriteStopLabels: { [agencyId: string]: NextBus.StopLabel[] };
+  routeIdFilters: { [agencyId: string]: string[] };
 }

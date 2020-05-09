@@ -66,6 +66,7 @@ export declare namespace NextBus {
     stopName: string;
     predictionList: Prediction[];
     serviceAlerts: ServiceAlert[];
+    stopLabel: NextBus.StopLabel;
   }
 
   interface Prediction {

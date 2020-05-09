@@ -14,8 +14,11 @@ import {
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { DetailStackParamList, RootStackParamList, NextBus, GeoLocation } from "../../../types";
-import { selectSelectedAgencyId } from "../../store/features/nextbus";
-import { selectThemeColor, selectPredictionListLimit } from "../../store/features/settings";
+import {
+  selectThemeColor,
+  selectPredictionListLimit,
+  selectSelectedAgencyId
+} from "../../store/features/settings";
 import { ThemeColor, space, borderRadius, fontSize } from "../../styles";
 import { DARK_MAP_STYLE } from "../../config/mapStyles";
 import {
@@ -46,7 +49,9 @@ type DetailScreenProps = {
 };
 
 const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigationRoute }) => {
-  const { predictions, route, directions, direction, stop } = navigationRoute.params;
+  const { predictions, route, direction, stop } = navigationRoute.params;
+  const { directions } = route;
+  const { stops } = direction;
   const mapRef = useRef<MapView>(null);
   const agencyId = useSelector(selectSelectedAgencyId);
   const predictionsListLimit = useSelector(selectPredictionListLimit);
@@ -89,9 +94,9 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
   const handleChangeStopPress = useCallback(() => {
     navigation.navigate("ChangeStopScreen", {
       stop,
-      stops: direction.stops
+      stops
     });
-  }, [direction.stops, navigation, stop]);
+  }, [stops, navigation, stop]);
 
   const handleServiceAlertsPress = useCallback(
     _event => {
@@ -121,7 +126,7 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
 
   useFocusEffect(
     useCallback(() => {
-      let watchPositionSubscription = null;
+      let watchPositionSubscription;
 
       async function watchPosition() {
         watchPositionSubscription = await Location.watchPositionAsync(
@@ -138,6 +143,7 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
 
       return () => {
         watchPositionSubscription.remove();
+        watchPositionSubscription = null;
       };
     }, [])
   );

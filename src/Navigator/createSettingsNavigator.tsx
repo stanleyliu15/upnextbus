@@ -2,13 +2,12 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import SettingsScreen from "../screens/Settings/SettingsScreen";
-import FilterRoutesScreen from "../screens/Settings/Preferences/ChangeFilterRoutesScreen";
+import ChangeFilterRoutesScreen from "../screens/Settings/Preferences/ChangeFilterRoutesScreen";
 import ChangeAgencyScreen from "../screens/Settings/Preferences/ChangeAgencyScreen";
-import DistanceLimitScreen from "../screens/Settings/Preferences/ChangeDistanceLimitScreen";
-import PredictionsLimitScreen from "../screens/Settings/Preferences/ChangePredictionsLimitScreen";
-import RouteNameOptionScreen from "../screens/Settings/Preferences/ChangeRouteNameOptionScreen";
-import ThemeScreen from "../screens/Settings/Preferences/ChangeThemeScreen";
-import ChangeShowInactivePredictionsScreen from "../screens/Settings/Preferences/ChangeShowInactivePredictionsScreen";
+import ChangeDistanceLimitScreen from "../screens/Settings/Preferences/ChangeDistanceLimitScreen";
+import ChangePredictionsLimitScreen from "../screens/Settings/Preferences/ChangePredictionsLimitScreen";
+import ChangeThemeScreen from "../screens/Settings/Preferences/ChangeThemeScreen";
+import ChangeFavoriteStopLabelsScreen from "../screens/Settings/Preferences/ChangeFavoriteStopLabelsScreen";
 import { Theme } from "../styles";
 import { SettingsStackParamList } from "../../types";
 
@@ -34,45 +33,38 @@ const createSettingsNavigator = (parentStackConfig, _theme: Theme) => {
         />
         <Stack.Screen
           name="ChangeFilterRoutesScreen"
-          component={FilterRoutesScreen}
+          component={ChangeFilterRoutesScreen}
           options={{
             headerTitle: "Configure Routes",
-            headerRight: _props => <FilterRoutesScreen.HeaderRight />
+            headerRight: _props => <ChangeFilterRoutesScreen.HeaderRight />
           }}
         />
         <Stack.Screen
           name="ChangeDistanceLimitScreen"
-          component={DistanceLimitScreen}
+          component={ChangeDistanceLimitScreen}
           options={{
             headerTitle: "Distance Limit"
           }}
         />
         <Stack.Screen
           name="ChangePredictionsLimitScreen"
-          component={PredictionsLimitScreen}
+          component={ChangePredictionsLimitScreen}
           options={{
             headerTitle: "Predictions Limit"
           }}
         />
         <Stack.Screen
-          name="ChangeRouteNameOptionScreen"
-          component={RouteNameOptionScreen}
-          options={{
-            headerTitle: "Bus Naming"
-          }}
-        />
-        <Stack.Screen
           name="ChangeThemeScreen"
-          component={ThemeScreen}
+          component={ChangeThemeScreen}
           options={{
             headerTitle: "Theme"
           }}
         />
         <Stack.Screen
-          name="ChangeShowInactivePredictionsScreen"
-          component={ChangeShowInactivePredictionsScreen}
+          name="ChangeFavoriteStopLabelsScreen"
+          component={ChangeFavoriteStopLabelsScreen}
           options={{
-            headerTitle: "Show Inactive Buses"
+            headerTitle: "Favorites"
           }}
         />
       </Stack.Navigator>

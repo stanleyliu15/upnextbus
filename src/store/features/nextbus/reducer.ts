@@ -64,19 +64,6 @@ const reducer = combineReducers<NextBusState>({
       .handleAction(actions.getNearbyPredictionListAsync.request, (_state, _action) => {
         return null;
       })
-  }),
-  selectedAgencyId: createReducer(null).handleAction(actions.selectAgencyId, (_state, action) => {
-    return action.payload;
-  }),
-  favorites: createReducer([])
-    .handleAction(actions.favorite, (state, action) => {
-      return [...state, action.payload];
-    })
-    .handleAction(actions.unfavorite, (state, action) => {
-      return state.filter(routeId => routeId === action.payload);
-    }),
-  routeIdFilters: createReducer([]).handleAction(actions.filterRouteIds, (_state, action) => {
-    return action.payload;
   })
 });
 

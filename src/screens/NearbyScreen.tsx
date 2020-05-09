@@ -4,6 +4,7 @@ import { FlatList, RefreshControl, Linking } from "react-native";
 import { ThemeContext } from "styled-components/native";
 import { RouteProp, CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { isEqual } from "lodash";
 
 import {
   AppLoader,
@@ -16,8 +17,7 @@ import {
 import {
   getNearbyPredictionsList,
   selectNearbyPredictionList,
-  selectRoutes,
-  selectFavorites
+  selectRoutes
 } from "../store/features/nextbus";
 import {
   LocationPermissionDeniedError,
@@ -26,6 +26,8 @@ import {
   NextBusAPIError
 } from "../errors";
 import { RootStackParamList } from "../../types";
+import { selectFavoriteStopLabels } from "../store/features/settings";
+import { findBusInfo } from "../utils";
 
 type NearbyScreenProps = {
   navigation: CompositeNavigationProp<
@@ -42,7 +44,7 @@ const NearbyScreen: React.FC<NearbyScreenProps> = ({ navigation }) => {
   const firstUpdate = useRef(true);
   const [refreshing, setRefreshing] = useState(false);
   const { data: routes } = useSelector(selectRoutes);
-  const favorites = useSelector(selectFavorites);
+  const favoriteStopLabels = useSelector(selectFavoriteStopLabels);
   const handleRefresh = useCallback(() => setRefreshing(true), []);
   const fetchData = useCallback(() => dispatch(getNearbyPredictionsList()), [dispatch]);
   const openSettings = useCallback(() => navigation.navigate("Settings"), [navigation]);
@@ -129,28 +131,17 @@ const NearbyScreen: React.FC<NearbyScreenProps> = ({ navigation }) => {
             data={nearby.data}
             keyExtractor={predictions => `${predictions.routeId}-${predictions.stopId}`}
             renderItem={({ item: predictions }) => {
-              const favorited = favorites.some(
-                favorite =>
-                  favorite.routeId === predictions.routeId && favorite.stopId === predictions.stopId
+              const favorited = favoriteStopLabels.some(stopLabel =>
+                isEqual(stopLabel, predictions.stopLabel)
               );
-              const handlePredictionsPress = _event => {
-                const route = routes.find(route => route.id === predictions.routeId);
-                const { directions } = route;
-                const direction = directions.find(direction =>
-                  direction.stops.some(stop => stop.id === predictions.stopId)
-                );
-                const stop = direction.stops.find(stop => stop.id === predictions.stopId);
+              const handlePredictionsPress = _event =>
                 navigation.navigate("Detail", {
                   screen: "DetailScreen",
                   params: {
                     predictions,
-                    route,
-                    directions,
-                    direction,
-                    stop
+                    ...findBusInfo(predictions.stopLabel, routes)
                   }
                 });
-              };
 
               return (
                 <PredictionsItem

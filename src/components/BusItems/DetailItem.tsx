@@ -1,19 +1,24 @@
 import React, { useCallback, useMemo, useContext } from "react";
 import styled, { ThemeContext } from "styled-components/native";
 import { useSelector, useDispatch } from "react-redux";
-
+import { isEqual } from "lodash";
 import { transparentize } from "polished";
+
 import Icon from "../Icon";
-import LinkItem from "../LinkItem";
 import { Strong } from "../Typography";
 import { CircleIconButton } from "../Buttons";
 
 import { NextBus, OnPressHandler } from "../../../types";
 import { normalizeRouteName } from "../../utils";
-import { selectRouteNameOption } from "../../store/features/settings";
+import {
+  selectShowRouteIdForDisplay,
+  selectFavoriteStopLabels,
+  favoriteStopLabel,
+  unfavoriteStopLabel
+} from "../../store/features/settings";
 import { RouteName, PredictionTime, PredictionMinute, PredictionUnit } from "./itemStyles";
 import { space, fontFamily, borderRadius } from "../../styles";
-import { selectFavorites, favorite, unfavorite } from "../../store/features/nextbus";
+import { LinkItem } from "../UserItems";
 
 const Container = styled.View`
   background-color: ${({ theme }) => theme.backgroundLight};
@@ -61,28 +66,37 @@ const DetailItem: React.FC<DetailItemProps> = ({
   onStopPress = undefined,
   onServiceAlertsPress = undefined
 }) => {
-  const { directionName, stopName, predictionList, stopId, routeId } = predictions;
+  const { directionName, stopName, predictionList, stopLabel: predictionsStopLabel } = predictions;
   const dispatch = useDispatch();
   const theme = useContext(ThemeContext);
-  const routeNameOption = useSelector(selectRouteNameOption);
-  const favorites = useSelector(selectFavorites);
+  const showRouteIdForDisplay = useSelector(selectShowRouteIdForDisplay);
+  const favoriteStopLabels = useSelector(selectFavoriteStopLabels);
+  const routeName = useMemo(
+    () => normalizeRouteName(showRouteIdForDisplay ? predictions.routeId : predictions.routeName),
+    [predictions.routeId, predictions.routeName, showRouteIdForDisplay]
+  );
   const predictionMinutes = useMemo(
     () => predictionList.map(prediction => prediction.minutes).join(", "),
     [predictionList]
   );
   const favorited = useMemo(
-    () => favorites.some(favorite => favorite.routeId === routeId && favorite.stopId === stopId),
-    [favorites, routeId, stopId]
+    () => favoriteStopLabels.some(stopLabel => isEqual(stopLabel, predictionsStopLabel)),
+    [favoriteStopLabels, predictionsStopLabel]
   );
   const handleFavorite = useCallback(
-    () => dispatch(favorited ? unfavorite(routeId, stopId) : favorite(routeId, stopId)),
-    [dispatch, favorited, routeId, stopId]
+    () =>
+      dispatch(
+        favorited
+          ? unfavoriteStopLabel(predictionsStopLabel)
+          : favoriteStopLabel(predictionsStopLabel)
+      ),
+    [dispatch, favorited, predictionsStopLabel]
   );
 
   return (
     <Container>
       <RowBetween>
-        <DetailRouteName>{normalizeRouteName(predictions[routeNameOption])}</DetailRouteName>
+        <DetailRouteName>{routeName}</DetailRouteName>
         <FavoriteButton onPress={handleFavorite}>
           <Icon
             icon="FontAwesome"
@@ -98,6 +112,7 @@ const DetailItem: React.FC<DetailItemProps> = ({
         titleStyle={{ fontFamily: fontFamily.normal }}
         prioritizePropertySpace
         externalLink
+        showBottomBorder={false}
       />
       <LinkItem
         title={stopName}
@@ -106,17 +121,19 @@ const DetailItem: React.FC<DetailItemProps> = ({
         prioritizePropertySpace
         externalLink
         value={stopDistance && `${stopDistance.toFixed(2)} miles`}
+        showBottomBorder={false}
       />
       {onServiceAlertsPress && (
         <LinkItem
-          icon={<Icon icon="Ionicons" name="ios-warning" size={25} color="yellow" />}
+          icon={<Icon icon="Ionicons" name="ios-warning" size={20} color="yellow" />}
           title="Service Alerts"
           onPress={onServiceAlertsPress}
           titleStyle={{ fontFamily: fontFamily.normal }}
           prioritizePropertySpace
           externalLink
           linkIconColor="yellow"
-          underlayColor={transparentize(0.4, theme.yellow)}
+          highlightColor={transparentize(0.4, theme.yellow)}
+          showBottomBorder={false}
         />
       )}
       <RowBetween>

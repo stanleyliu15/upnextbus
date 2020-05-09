@@ -35,10 +35,10 @@ const ChangeThemeScreen: React.FC<ChangeThemeScreenProps> = _props => {
         {themeColors.map((themeColor, index) => (
           <SelectItem
             key={themeColor}
-            name={capitalize(themeColor)}
+            title={capitalize(themeColor)}
             selected={themeColor === selectedThemeColor}
-            onSelect={() => setSelectedThemeColor(themeColor)}
-            lastItem={index === themeColors.length - 1}
+            onPress={() => setSelectedThemeColor(themeColor)}
+            showBottomBorder={index !== themeColors.length - 1}
           />
         ))}
       </ScrollView>

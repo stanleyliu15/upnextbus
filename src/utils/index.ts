@@ -1,5 +1,6 @@
 import { isNil, startCase } from "lodash";
 import { useState, useCallback, useEffect, useRef } from "react";
+import { NextBus } from "../../types";
 
 /**
  * Converts an object to a query parameters
@@ -94,4 +95,18 @@ export const useTimer = () => {
   }, [active, seconds]);
 
   return { seconds, startTimer: start, stopTimer: stop, restartTimer: restart };
+};
+
+export const findBusInfo = ({ routeId, stopId }: NextBus.StopLabel, routes: NextBus.Route[]) => {
+  const route = routes.find(route => route.id === routeId);
+  const direction = route.directions.find(direction =>
+    direction.stops.some(stop => stop.id === stopId)
+  );
+  const stop = direction.stops.find(stop => stop.id === stopId);
+
+  return {
+    route,
+    direction,
+    stop
+  };
 };

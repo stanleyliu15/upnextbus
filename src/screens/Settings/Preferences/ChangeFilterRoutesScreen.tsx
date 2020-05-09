@@ -5,12 +5,12 @@ import styled from "styled-components/native";
 import { RouteProp, CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { selectRoutes, getRoutes } from "../../../store/features/nextbus";
 import {
   selectFilterRouteIds,
   filterRouteIds as setFilterRouteIds,
-  selectRoutes,
-  getRoutes
-} from "../../../store/features/nextbus";
+  selectShowRouteIdForDisplay
+} from "../../../store/features/settings";
 import { Loader, Icon, SafeArea, SelectItem, ErrorInfo } from "../../../components";
 import { SaveButton } from "../settingStyles";
 import { normalizeRouteName, useToggle } from "../../../utils";
@@ -32,6 +32,7 @@ const ChangeFilterRoutesScreen: React.FC<ChangeFilterRoutesScreenProps> & {
   const dispatch = useDispatch();
   const routes = useSelector(selectRoutes);
   const filterRouteIds = useSelector(selectFilterRouteIds);
+  const showRouteIdForDisplay = useSelector(selectShowRouteIdForDisplay);
   const [routeIds, setRouteIds] = useState(filterRouteIds);
   const handleRetry = useCallback(_event => dispatch(getRoutes()), [dispatch]);
   const handleSave = useCallback(
@@ -61,28 +62,32 @@ const ChangeFilterRoutesScreen: React.FC<ChangeFilterRoutesScreenProps> & {
     <SafeArea>
       <FlatList
         data={routes.data}
-        keyExtractor={(item: NextBus.Route) => item.id}
-        renderItem={({ item, index }) => (
-          <SelectItem
-            name={normalizeRouteName(item.name)}
-            selected={routeIds.includes(item.id)}
-            onSelect={() => {
-              if (routeIds.includes(item.id)) {
-                setRouteIds(routeIds.filter(routeId => routeId !== item.id));
-              } else {
-                setRouteIds(routeIds.concat(item.id));
-              }
-            }}
-            lastItem={index === routes.data.length - 1}
-          />
-        )}
+        keyExtractor={item => item.id}
+        renderItem={({ item: route, index }) => {
+          const selected = routeIds.includes(route.id);
+
+          return (
+            <SelectItem
+              title={normalizeRouteName(showRouteIdForDisplay ? route.id : route.name)}
+              selected={selected}
+              onPress={() => {
+                if (selected) {
+                  setRouteIds(routeIds.filter(routeId => routeId !== route.id));
+                } else {
+                  setRouteIds(routeIds.concat(route.id));
+                }
+              }}
+              showBottomBorder={index !== routes.data.length - 1}
+            />
+          );
+        }}
         extraData={routeIds}
       />
-
       <SaveButton onPress={handleSave} />
     </SafeArea>
   );
 };
+// todo: set params on navigation object instead of static variables
 ChangeFilterRoutesScreen.setRouteIds = null;
 ChangeFilterRoutesScreen.HeaderRight = function(_props) {
   const routes = useSelector(selectRoutes);
@@ -105,7 +110,7 @@ ChangeFilterRoutesScreen.HeaderRight = function(_props) {
     <HighlightButton onPress={toggled ? filterNone : filterAll}>
       <Icon
         icon="MaterialCommunityIcons"
-        name={`checkbox-multiple-${toggled ? "marked" : "blank"}-circle-outline`}
+        name={toggled ? "checkbox-multiple-blank-circle" : "checkbox-multiple-blank-circle-outline"}
         color="text"
         size={25}
       />
@@ -113,9 +118,7 @@ ChangeFilterRoutesScreen.HeaderRight = function(_props) {
   );
 } as React.FC;
 
-const HighlightButton = styled.TouchableHighlight.attrs(({ theme }) => ({
-  underlayColor: theme.background
-}))`
+const HighlightButton = styled.TouchableHighlight.attrs({ underlayColor: "background" })`
   margin-right: ${space.md};
 `;
 

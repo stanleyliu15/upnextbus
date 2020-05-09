@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import { ScrollView } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 import { range } from "lodash";
 import { RouteProp, CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -38,10 +38,10 @@ const ChangeDistanceLimitScreen: React.FC<ChangeDistanceLimitScreenProps> = ({ n
         {DISTANCE_RANGE.map((limit, index) => (
           <SelectItem
             key={limit}
-            name={`${limit} miles`}
+            title={`${limit} miles`}
             selected={limit === selectedDistanceLimit}
-            onSelect={() => setSelectedDistanceLimit(limit)}
-            lastItem={index === DISTANCE_RANGE.length - 1}
+            onPress={() => setSelectedDistanceLimit(limit)}
+            showBottomBorder={index !== DISTANCE_RANGE.length - 1}
           />
         ))}
       </ScrollView>

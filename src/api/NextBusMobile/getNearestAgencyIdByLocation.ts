@@ -17,15 +17,11 @@ const getNearestAgencyIdByLocation = async (location: GeoLocation) => {
   const queryParameters = `preds=byLoc&${objectToQueryParameters(location)}`;
   const url = `${API_URL}?${queryParameters}`;
 
-  try {
-    const response = await fetch(url);
-    const responseJson = await response.json();
-    const agencyId = extractNearestAgencyId(responseJson);
+  const response = await fetch(url);
+  const responseJson = await response.json();
+  const agencyId = extractNearestAgencyId(responseJson);
 
-    return agencyId;
-  } catch (error) {
-    throw error;
-  }
+  return agencyId;
 };
 
 export default getNearestAgencyIdByLocation;

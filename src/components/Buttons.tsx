@@ -8,11 +8,13 @@ import {
   StyleSheet,
   View,
   ViewStyle,
-  StyleProp
+  StyleProp,
+  TouchableHighlightProps
 } from "react-native";
 import styled, { ThemeContext } from "styled-components/native";
 
-import { space, borderSize, borderRadius } from "../styles";
+import { Theme } from "@react-navigation/native/lib/typescript/src/types";
+import { space, borderRadius } from "../styles";
 
 type ButtonProps =
   | Pick<TouchableOpacityProps, keyof TouchableOpacityProps>
@@ -45,19 +47,14 @@ export const Button: React.FC<ButtonProps> = ({ children, style, ...rest }) => {
   );
 };
 
-type LinkButtonProps = { includeBottomBorder?: boolean };
-export const LinkButton = styled.TouchableHighlight.attrs(({ theme, underlayColor }) => ({
-  underlayColor: theme[underlayColor] || underlayColor || theme.backgroundDark
-}))<LinkButtonProps>`
-  display: flex;
-  justify-content: center;
-
-  padding: ${space.lg} ${space.xs} ${space.lg} ${space.md};
-  border-radius: ${borderRadius.round};
-  border-bottom-width: ${({ includeBottomBorder }) => (includeBottomBorder ? borderSize.sm : 0)};
-  border-bottom-color: ${({ includeBottomBorder, theme }) =>
-    includeBottomBorder ? theme.grayLight : "transparent"};
-`;
+export type HighlightButtonProps = TouchableHighlightProps & {
+  highlightColor: keyof Theme | string;
+};
+export const HighlightButton = styled.TouchableHighlight.attrs<HighlightButtonProps>(
+  ({ theme, highlightColor }) => ({
+    underlayColor: theme[highlightColor] || highlightColor || theme.highlight
+  })
+)``;
 
 type CircleIconButtonProps = ButtonProps & { iconSize: number };
 export const CircleIconButton: React.FC<CircleIconButtonProps> = ({

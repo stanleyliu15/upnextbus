@@ -43,10 +43,10 @@ const ChangePredictionsLimitScreen: React.FC<ChangePredictionsLimitScreenProps> 
         {PREDICTION_LIST_LIMIT_RANGE.map((limit, index) => (
           <SelectItem
             key={limit}
-            name={limit.toString()}
+            title={limit.toString()}
             selected={limit === selectedListLimit}
-            onSelect={() => setSelectedListLimit(limit)}
-            lastItem={index === PREDICTION_LIST_LIMIT_RANGE.length - 1}
+            onPress={() => setSelectedListLimit(limit)}
+            showBottomBorder={index !== PREDICTION_LIST_LIMIT_RANGE.length - 1}
           />
         ))}
       </ScrollView>

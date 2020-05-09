@@ -8,17 +8,17 @@ import { capitalize } from "lodash";
 import { CommonActions, CompositeNavigationProp, RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { LinkItem, Title, Icon, SafeArea, CircleIconButton } from "../../components";
+import { LinkItem, Title, Icon, SafeArea, CircleIconButton, SwitchItem } from "../../components";
 import { Header, Section, GroupTitle, SectionContent, Version } from "./settingStyles";
-import { selectSettings, RouteNameOption } from "../../store/features/settings";
+import { selectAgency } from "../../store/features/root-selectors";
 import {
-  selectAgency,
-  getAgencies,
-  selectAgencies,
-  getRoutes,
-  selectRoutes
-} from "../../store/features/nextbus";
-import { enumKeyFromValue } from "../../utils";
+  selectSettings,
+  selectShowInactivePredictions,
+  setShowInactivePredictions,
+  selectShowRouteIdForDisplay,
+  setShowRouteIdForDisplay
+} from "../../store/features/settings";
+import { getAgencies, selectAgencies, getRoutes, selectRoutes } from "../../store/features/nextbus";
 import { SettingsStackParamList, RootStackParamList } from "../../../types";
 import { ThemeColor } from "../../styles";
 
@@ -37,6 +37,16 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
   const agencies = useSelector(selectAgencies);
   const routes = useSelector(selectRoutes);
   const agency = useSelector(selectAgency);
+  const showRouteIdForDisplay = useSelector(selectShowRouteIdForDisplay);
+  const showInactivePredictions = useSelector(selectShowInactivePredictions);
+  const toggleShowRouteIdForDisplay = useCallback(
+    _event => dispatch(setShowRouteIdForDisplay(!showRouteIdForDisplay)),
+    [dispatch, showRouteIdForDisplay]
+  );
+  const toggleShowInactivePredictions = useCallback(
+    _event => dispatch(setShowInactivePredictions(!showInactivePredictions)),
+    [dispatch, showInactivePredictions]
+  );
   const goBack = useCallback(() => {
     navigation.dispatch(CommonActions.goBack());
   }, [navigation]);
@@ -65,7 +75,6 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
               loading={agencies.loading}
               value={agencies.loading || agencies.error || !agency ? null : agency.name}
               onPress={_event => navigate("ChangeAgencyScreen")}
-              includeBottomBorder
             />
             <LinkItem
               icon={<Icon icon="FontAwesome5" name="route" size={20} color="orange" />}
@@ -73,13 +82,16 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
               description="choose which routes you want to see"
               onPress={_event => navigate("ChangeFilterRoutesScreen")}
               prioritizePropertySpace
-              includeBottomBorder
+            />
+            <LinkItem
+              icon={<Icon icon="FontAwesome" name="heart" size={20} color="orange" />}
+              title="Favorites"
+              onPress={_event => navigate("ChangeFavoriteStopLabelsScreen")}
             />
             <LinkItem
               title="Distance Limit"
               value={`${settings.maxStopDistance} miles`}
               onPress={_event => navigate("ChangeDistanceLimitScreen")}
-              includeBottomBorder
             />
             <LinkItem
               title="Predictions Limit"
@@ -87,28 +99,24 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
               value={settings.predictionListLimit.toString()}
               onPress={_event => navigate("ChangePredictionsLimitScreen")}
               prioritizePropertySpace
-              includeBottomBorder
             />
-            <LinkItem
-              title="Bus Naming"
-              description="choose how you see bus names"
-              value={enumKeyFromValue(RouteNameOption, settings.routeNameOption)}
-              onPress={_event => navigate("ChangeRouteNameOptionScreen")}
-              prioritizePropertySpace
-              includeBottomBorder
+            <SwitchItem
+              title="Route Name"
+              description="display route names using the route ID "
+              enabled={showRouteIdForDisplay}
+              onSwitch={toggleShowRouteIdForDisplay}
             />
-            <LinkItem
+            <SwitchItem
               title="Show Inactive Buses"
-              value={settings.showInactivePredictions ? "Yes" : "No"}
-              onPress={_event => navigate("ChangeShowInactivePredictionsScreen")}
-              prioritizePropertySpace
-              includeBottomBorder
+              enabled={showInactivePredictions}
+              onSwitch={toggleShowInactivePredictions}
             />
             <LinkItem
               title="Update Routes"
               loading={routes.loading}
               onPress={_event => dispatch(getRoutes())}
               hideLinkIcon={true}
+              showBottomBorder={false}
             />
           </SectionContent>
         </Section>
@@ -127,6 +135,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                 />
               }
               onPress={_event => navigate("ChangeThemeScreen")}
+              showBottomBorder={false}
             />
           </SectionContent>
         </Section>
@@ -140,6 +149,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
               onPress={_event => StoreReview.requestReview()}
               externalLink
               prioritizePropertySpace
+              showBottomBorder={false}
             />
           </SectionContent>
           <Version center>{`Version: ${Constants.nativeAppVersion}`}</Version>
@@ -154,6 +164,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
               onPress={_event => Linking.openURL("mailto://upnextbus@gmail.com")}
               externalLink
               prioritizePropertySpace
+              showBottomBorder={false}
             />
           </SectionContent>
         </Section>

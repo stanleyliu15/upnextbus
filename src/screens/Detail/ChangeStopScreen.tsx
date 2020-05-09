@@ -24,13 +24,13 @@ const ChangeStopScreen: React.FC<ChangeStopScreenProps> = ({ navigation, route }
           return (
             <SelectItem
               key={stopToSelect.id}
-              name={stopToSelect.name}
+              title={stopToSelect.name}
               selected={stopToSelect.id === stop.id}
-              onSelect={_event => {
+              onPress={_event => {
                 navigation.navigate("DetailScreen", { stop: stopToSelect });
               }}
-              fixedHeight={false}
-              lastItem={index === stops.length - 1}
+              truncateTitle={false}
+              showBottomBorder={index !== stops.length - 1}
             />
           );
         })}

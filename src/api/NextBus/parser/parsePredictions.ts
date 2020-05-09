@@ -39,7 +39,11 @@ const parsePredictions = (
       : [],
     serviceAlerts: predictions.message
       ? arrayify(predictions.message).map(message => parseServiceAlert(message))
-      : []
+      : [],
+    stopLabel: {
+      routeId: predictions.routeTag,
+      stopId: predictions.stopTag
+    }
   };
 };
 

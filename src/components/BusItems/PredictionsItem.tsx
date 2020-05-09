@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components/native";
 
 import Icon from "../Icon";
 import { Strong } from "../Typography";
+import { HighlightButton } from "../Buttons";
 import { NextBus, OnPressHandler } from "../../../types";
 import { normalizeRouteName } from "../../utils";
-import { selectRouteNameOption } from "../../store/features/settings";
+import { selectShowRouteIdForDisplay } from "../../store/features/settings";
 import {
   RouteName,
   DirectionName,
@@ -15,7 +16,7 @@ import {
   PredictionMinute,
   PredictionUnit
 } from "./itemStyles";
-import { space, borderSize } from "../../styles";
+import { space, border } from "../../styles";
 
 type PredictionsItemProps = {
   predictions: NextBus.Predictions;
@@ -23,11 +24,8 @@ type PredictionsItemProps = {
   favorited: boolean;
 };
 
-const ItemButton = styled.TouchableHighlight.attrs(({ theme }) => ({
-  underlayColor: theme.backgroundDark
-}))`
-  border-bottom-color: ${({ theme }) => theme.grayLight};
-  border-bottom-width: ${borderSize.xs};
+const ItemButton = styled(HighlightButton)`
+  ${border({ direction: "bottom" })}
 `;
 
 const Container = styled.View`
@@ -44,19 +42,17 @@ const Block = styled.View`
 `;
 
 const GeneralSection = styled.View`
-  flex: 8.4;
+  flex: 8.5;
   padding: ${space.md};
 `;
 
 const VerticalSeperator = styled.View`
-  flex: 0.2;
-  border-color: ${({ theme }) => theme.grayLight};
-  border-left-width: ${borderSize.xs};
+  ${border({ direction: "left" })};
   margin: ${space.md} ${space.xxs} ${space.xxs} ${space.md};
 `;
 
 export const PredictionTimeSection = styled.View`
-  flex: 1.4;
+  flex: 1.5;
   padding: ${space.md} ${space.md} ${space.xs};
 `;
 
@@ -66,13 +62,17 @@ const PredictionsItem: React.FC<PredictionsItemProps> = ({
   favorited
 }) => {
   const { directionName, stopName, predictionList } = predictions;
-  const routeNameOption = useSelector(selectRouteNameOption);
+  const showRouteIdForDisplay = useSelector(selectShowRouteIdForDisplay);
+  const routeName = useMemo(
+    () => normalizeRouteName(showRouteIdForDisplay ? predictions.routeId : predictions.routeName),
+    [predictions.routeId, predictions.routeName, showRouteIdForDisplay]
+  );
 
   return (
     <ItemButton onPress={onPredictionsPress}>
       <Container>
         <GeneralSection>
-          <RouteName>{normalizeRouteName(predictions[routeNameOption])}</RouteName>
+          <RouteName>{routeName}</RouteName>
           <DirectionName>{directionName}</DirectionName>
           <Block>
             {favorited && <Icon icon="FontAwesome" name="heart" size={15} color="primary" />}

@@ -1,14 +1,10 @@
-import {
-  getAgenciesAsync,
-  getRoutesAsync,
-  getNearbyPredictionListAsync,
-  selectAgencyId
-} from "./actions";
+import { getAgenciesAsync, getRoutesAsync, getNearbyPredictionListAsync } from "./actions";
 import { ThunkDispatch, ThunkAction } from "../../types";
 import * as NextBusService from "../../../services/nextbus-service";
 import NextBusAPI from "../../../api/NextBus/api";
 import { getLocationAsync } from "../../../services/location-service";
 import NextBusMobileAPI from "../../../api/NextBusMobile/api";
+import { selectFilterRouteIds, selectFavoriteStopLabels, selectAgencyId } from "../settings";
 
 export function getAgencies(): ThunkAction<Promise<void>> {
   return async function(dispatch: ThunkDispatch, _getState) {
@@ -22,12 +18,10 @@ export function getAgencies(): ThunkAction<Promise<void>> {
   };
 }
 
-// todo: some agencies add/remove routes so should merge the current with the new set
-// maybe should be called updateRoutes
 export function getRoutes(): ThunkAction<Promise<void>> {
   return async function(dispatch: ThunkDispatch, getState) {
     const {
-      nextBus: { selectedAgencyId }
+      settings: { selectedAgencyId }
     } = getState();
     dispatch(getRoutesAsync.request());
     try {
@@ -45,23 +39,32 @@ export function getNearbyPredictionsList(): ThunkAction<Promise<void>> {
 
     try {
       const location = await getLocationAsync();
-      const { nextBus, settings } = getState();
+      const state = getState();
+      const routeIdFilters = selectFilterRouteIds(state);
+      const favoriteStopLabels = selectFavoriteStopLabels(state);
+      const { nextBus, settings } = state;
+      const { routes } = nextBus;
+      const {
+        selectedAgencyId,
+        showInactivePredictions,
+        maxStopDistance,
+        predictionListLimit
+      } = settings;
 
-      if (nextBus.selectedAgencyId === null) {
+      // todo: this check should be done once
+      if (selectedAgencyId === null) {
         const nearestAgencyId = await NextBusMobileAPI.getNearestAgencyIdByLocation(location);
         dispatch(selectAgencyId(nearestAgencyId));
         await dispatch(getRoutes());
       }
 
-      const { routes, selectedAgencyId, favorites, routeIdFilters } = nextBus;
-      const { maxStopDistance, predictionListLimit, showInactivePredictions } = settings;
       const predictionsList = await NextBusService.getNearbyPredictionsList(
         {
           agencyId: selectedAgencyId,
           routes: routes.data,
           maxStopDistance,
           location,
-          favorites,
+          favoriteStopLabels,
           routeIdFilters,
           filterInactivePredictions: !showInactivePredictions
         },

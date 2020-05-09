@@ -25,13 +25,13 @@ const ChangeDirectionScreen: React.FC<ChangeDirectionScreenProps> = ({ navigatio
       {directions.map((directionToSelect, index) => (
         <SelectItem
           key={directionToSelect.id}
-          name={
+          title={
             directionIds.includes(directionToSelect.id)
               ? predictionsDirectionName
               : directionToSelect.name
           }
           selected={directionToSelect.id === direction.id}
-          onSelect={_event => {
+          onPress={_event => {
             if (!location) return;
 
             const nearestStop = getNearestStop(directionToSelect.stops, location, distanceLimit);
@@ -40,8 +40,8 @@ const ChangeDirectionScreen: React.FC<ChangeDirectionScreenProps> = ({ navigatio
               stop: nearestStop
             });
           }}
-          fixedHeight={false}
-          lastItem={index === directions.length - 1}
+          truncateTitle={false}
+          showBottomBorder={index !== directions.length - 1}
         />
       ))}
     </SafeArea>

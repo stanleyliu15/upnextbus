@@ -15,7 +15,6 @@ export type DetailStackParamList = {
   DetailScreen: {
     predictions?: NextBus.Predictions;
     route?: NextBus.Route;
-    directions?: NextBus.Direction[];
     direction?: NextBus.Direction;
     stop?: NextBus.Stop;
   };
@@ -44,4 +43,5 @@ export type SettingsStackParamList = {
   ChangeRouteNameOptionScreen: undefined;
   ChangeThemeScreen: undefined;
   ChangeShowInactivePredictionsScreen: undefined;
+  ChangeFavoriteStopLabelsScreen: undefined;
 };

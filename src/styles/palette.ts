@@ -19,6 +19,9 @@ type ThemeColors = {
   background: string;
   backgroundDark: string;
   backgroundLight: string;
+
+  border: string;
+  highlight: string;
 };
 
 export const colors = {
@@ -52,7 +55,10 @@ export const themeColors: { [key in ThemeColor]: ThemeColors } = {
 
     background: "#f4f4f4",
     backgroundLight: colors.white,
-    backgroundDark: "#e0e0e0"
+    backgroundDark: "#e0e0e0",
+
+    border: colors.grayLight,
+    highlight: "#e0e0e0"
   },
   [ThemeColor.DARK]: {
     primary: lighten(0.25, colors.blue),
@@ -67,6 +73,9 @@ export const themeColors: { [key in ThemeColor]: ThemeColors } = {
 
     background: "#4d4d4d",
     backgroundDark: colors.blackOff,
-    backgroundLight: "#404040"
+    backgroundLight: "#404040",
+
+    border: colors.grayLight,
+    highlight: colors.blackOff
   }
 };

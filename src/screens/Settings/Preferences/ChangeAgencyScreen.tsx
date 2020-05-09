@@ -4,16 +4,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { RouteProp, CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import {
-  selectAgencies,
-  selectAgencyId,
-  selectSelectedAgencyId,
-  getRoutes,
-  getAgencies
-} from "../../../store/features/nextbus";
+import { selectAgencies, getRoutes, getAgencies } from "../../../store/features/nextbus";
 import { Loader, SafeArea, ErrorInfo, SelectItem } from "../../../components";
 import { SaveButton } from "../settingStyles";
 import { NextBus, SettingsStackParamList, RootStackParamList } from "../../../../types";
+import { selectSelectedAgencyId, selectAgencyId } from "../../../store/features/settings";
 
 type ChangeAgencyScreenProps = {
   navigation: CompositeNavigationProp<
@@ -53,14 +48,14 @@ const ChangeAgencyScreen: React.FC<ChangeAgencyScreenProps> = ({ navigation }) =
     <SafeArea>
       <FlatList
         data={agencies.data}
-        keyExtractor={(item: NextBus.Agency) => item.id}
-        renderItem={({ item, index }) => (
+        keyExtractor={item => item.id}
+        renderItem={({ item: agency, index }) => (
           <SelectItem
-            name={item.name}
-            description={item.region}
-            selected={item.id === agencyId}
-            onSelect={() => setAgencyId(item.id)}
-            lastItem={index === agencies.data.length - 1}
+            title={agency.name}
+            description={agency.region}
+            selected={agency.id === agencyId}
+            onPress={() => setAgencyId(agency.id)}
+            showBottomBorder={index !== agencies.data.length - 1}
           />
         )}
         extraData={agencyId}
