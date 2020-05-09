@@ -7,7 +7,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { selectAgencies, getRoutes, getAgencies } from "../../../store/features/nextbus";
 import { Loader, SafeArea, ErrorInfo, SelectItem } from "../../../components";
 import { SaveButton } from "../settingStyles";
-import { NextBus, SettingsStackParamList, RootStackParamList } from "../../../../types";
+import { SettingsStackParamList, RootStackParamList } from "../../../../types";
 import { selectSelectedAgencyId, selectAgencyId } from "../../../store/features/settings";
 
 type ChangeAgencyScreenProps = {

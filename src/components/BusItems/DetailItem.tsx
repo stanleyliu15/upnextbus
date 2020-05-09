@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo, useContext } from "react";
-import styled, { ThemeContext } from "styled-components/native";
+import React, { useCallback, useMemo } from "react";
+import styled, { useTheme } from "styled-components/native";
 import { useSelector, useDispatch } from "react-redux";
 import { isEqual } from "lodash";
 import { transparentize } from "polished";
@@ -68,7 +68,7 @@ const DetailItem: React.FC<DetailItemProps> = ({
 }) => {
   const { directionName, stopName, predictionList, stopLabel: predictionsStopLabel } = predictions;
   const dispatch = useDispatch();
-  const theme = useContext(ThemeContext);
+  const theme = useTheme();
   const showRouteIdForDisplay = useSelector(selectShowRouteIdForDisplay);
   const favoriteStopLabels = useSelector(selectFavoriteStopLabels);
   const routeName = useMemo(
@@ -98,12 +98,7 @@ const DetailItem: React.FC<DetailItemProps> = ({
       <RowBetween>
         <DetailRouteName>{routeName}</DetailRouteName>
         <FavoriteButton onPress={handleFavorite}>
-          <Icon
-            icon="FontAwesome"
-            name={`heart${favorited ? "" : "-o"}`}
-            size={25}
-            color="primary"
-          />
+          <Icon icon="FontAwesome" name={`heart${favorited ? "" : "-o"}`} size={25} color="red" />
         </FavoriteButton>
       </RowBetween>
       <LinkItem

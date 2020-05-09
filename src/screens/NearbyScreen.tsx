@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useContext, useRef, useCallback, useMemo } from "react";
+import React, { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { FlatList, RefreshControl, Linking } from "react-native";
-import { ThemeContext } from "styled-components/native";
+import { useTheme } from "styled-components/native";
 import { RouteProp, CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { isEqual } from "lodash";
@@ -40,7 +40,7 @@ type NearbyScreenProps = {
 const NearbyScreen: React.FC<NearbyScreenProps> = ({ navigation }) => {
   const dispatch = useDispatch();
   const nearby = useSelector(selectNearbyPredictionList);
-  const theme = useContext(ThemeContext);
+  const theme = useTheme();
   const firstUpdate = useRef(true);
   const [refreshing, setRefreshing] = useState(false);
   const { data: routes } = useSelector(selectRoutes);

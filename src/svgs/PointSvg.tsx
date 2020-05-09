@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Svg, Path, SvgProps } from "react-native-svg";
-import { ThemeContext } from "styled-components/native";
+import { useTheme } from "styled-components/native";
 
 const PointSvg: React.FC<SvgProps> = props => {
-  const theme = useContext(ThemeContext);
+  const theme = useTheme();
 
   return (
     <Svg width={8} height={8} fill="none" {...props}>

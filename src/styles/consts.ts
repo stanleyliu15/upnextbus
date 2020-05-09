@@ -7,8 +7,8 @@ export const borderSize = {
 };
 
 export const borderRadius = {
-  round: 6,
-  full: 9999
+  round: "6px",
+  full: "9999px"
 };
 
 type BorderProps = {

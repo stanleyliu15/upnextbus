@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { ThemeContext } from "styled-components/native";
+import { useTheme } from "styled-components/native";
 
 import createSettingsNavigator from "./createSettingsNavigator";
 import createDetailNavigator from "./createDetailNavigator";
@@ -12,7 +12,7 @@ import { RootStackParamList } from "../../types";
 const Stack = createStackNavigator<RootStackParamList>();
 
 const RootNavigator: React.FC = _props => {
-  const theme = useContext(ThemeContext);
+  const theme = useTheme();
   const baseStackConfig = {
     screenOptions: {
       headerStyle: {

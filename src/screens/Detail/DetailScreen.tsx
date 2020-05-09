@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext, useRef, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { Platform } from "react-native";
 import MapView, { Marker, Polyline, Callout, PROVIDER_GOOGLE } from "react-native-maps";
-import styled, { ThemeContext } from "styled-components/native";
+import styled, { useTheme } from "styled-components/native";
 import { useSelector } from "react-redux";
 import * as Location from "expo-location";
 import { getStatusBarHeight, getInset } from "react-native-safe-area-view";
@@ -62,7 +62,7 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
   const [fetchError, setFetchError] = useState(null);
   const [autoRefresh, setAutoRefresh] = useState(false);
   const { seconds, stopTimer, restartTimer } = useTimer();
-  const theme = useContext(ThemeContext);
+  const theme = useTheme();
   const themeColor = useSelector(selectThemeColor);
   const isDarkMap = themeColor === ThemeColor.DARK && MAP_PROVIDER === PROVIDER_GOOGLE;
   const setPredictions = useCallback(predictions => navigation.setParams({ predictions }), [
@@ -327,7 +327,7 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
           <Icon icon="MaterialCommunityIcons" name="close" size={20} color="text" />
         </CloseButton>
         <LocationButton onPress={handleLocationButtonPress}>
-          <Icon icon="MaterialCommunityIcons" name="near-me" size={20} color="primary" />
+          <Icon icon="MaterialCommunityIcons" name="near-me" size={20} color="green" />
         </LocationButton>
       </UtilityButtons>
       <Panel>
@@ -347,10 +347,12 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
   );
 };
 
+const statusBarHeight = getStatusBarHeight();
+
 const DataLoader = styled(Loader)`
   position: absolute;
-  top: ${getStatusBarHeight() + 5};
-  left: 5;
+  top: ${statusBarHeight + 5}px;
+  left: 5px;
 
   padding: ${space.xs};
   border-radius: ${borderRadius.round};
@@ -363,7 +365,7 @@ const Container = styled.View`
 
 const Panel = styled.View`
   position: absolute;
-  bottom: ${getInset("bottom")};
+  bottom: ${getInset("bottom")}px;
   width: 100%;
 
   padding: ${space.xs};
@@ -389,22 +391,22 @@ const UtilityButtons = styled.View`
 
 export const CloseButton = styled(CircleIconButton).attrs({ iconSize: 20 })`
   position: absolute;
-  top: ${getStatusBarHeight() + 5};
-  right: 5;
+  top: ${statusBarHeight + 5}px;
+  right: 5px;
 
   background-color: ${({ theme }) => theme.backgroundLight};
 `;
 
 const LocationButton = styled(CircleIconButton).attrs({ iconSize: 20 })`
   position: absolute;
-  top: ${getStatusBarHeight() + 55};
-  right: 5;
+  top: ${statusBarHeight + 55}px;
+  right: 5px;
 
   background-color: ${({ theme }) => theme.backgroundLight};
 `;
 
 const CalloutView = styled.View`
-  width: 160;
+  width: 160px;
   padding: ${space.md};
   margin-bottom: ${space.md};
 

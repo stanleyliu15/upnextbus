@@ -39,6 +39,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
   const agency = useSelector(selectAgency);
   const showRouteIdForDisplay = useSelector(selectShowRouteIdForDisplay);
   const showInactivePredictions = useSelector(selectShowInactivePredictions);
+  const isLightTheme = settings.themeColor === ThemeColor.LIGHT;
   const toggleShowRouteIdForDisplay = useCallback(
     _event => dispatch(setShowRouteIdForDisplay(!showRouteIdForDisplay)),
     [dispatch, showRouteIdForDisplay]
@@ -84,7 +85,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
               prioritizePropertySpace
             />
             <LinkItem
-              icon={<Icon icon="FontAwesome" name="heart" size={20} color="orange" />}
+              icon={<Icon icon="FontAwesome" name="heart" size={20} color="red" />}
               title="Favorites"
               onPress={_event => navigate("ChangeFavoriteStopLabelsScreen")}
             />
@@ -95,7 +96,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
             />
             <LinkItem
               title="Predictions Limit"
-              description="the number of predictions per bus"
+              description="the number of predictions to show"
               value={settings.predictionListLimit.toString()}
               onPress={_event => navigate("ChangePredictionsLimitScreen")}
               prioritizePropertySpace
@@ -129,9 +130,9 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
               icon={
                 <Icon
                   icon="FontAwesome5"
-                  name="adjust"
+                  name={isLightTheme ? "sun" : "moon"}
+                  color={isLightTheme ? "orange" : "purple"}
                   size={20}
-                  color={settings.themeColor === ThemeColor.LIGHT ? "orange" : "purple"}
                 />
               }
               onPress={_event => navigate("ChangeThemeScreen")}
@@ -144,7 +145,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
           <SectionContent>
             <LinkItem
               title="Rate Us"
-              icon={<Icon icon="AntDesign" name="star" size={20} color="primary" />}
+              icon={<Icon icon="AntDesign" name="star" size={20} color="yellow" />}
               description="help us on the store!"
               onPress={_event => StoreReview.requestReview()}
               externalLink
@@ -160,7 +161,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
             <LinkItem
               title="Contact Us"
               description="tell us what you think!"
-              icon={<Icon icon="Feather" name="mail" size={20} color="yellow" />}
+              icon={<Icon icon="Feather" name="mail" size={20} color="blueIndigo" />}
               onPress={_event => Linking.openURL("mailto://upnextbus@gmail.com")}
               externalLink
               prioritizePropertySpace

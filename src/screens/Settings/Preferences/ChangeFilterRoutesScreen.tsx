@@ -15,7 +15,7 @@ import { Loader, Icon, SafeArea, SelectItem, ErrorInfo } from "../../../componen
 import { SaveButton } from "../settingStyles";
 import { normalizeRouteName, useToggle } from "../../../utils";
 import { space } from "../../../styles";
-import { SettingsStackParamList, RootStackParamList, NextBus } from "../../../../types";
+import { SettingsStackParamList, RootStackParamList } from "../../../../types";
 
 type ChangeFilterRoutesScreenProps = {
   navigation: CompositeNavigationProp<

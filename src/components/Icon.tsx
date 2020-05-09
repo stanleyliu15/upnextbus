@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { ThemeContext } from "styled-components/native";
+import React from "react";
+import { useTheme } from "styled-components/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -30,7 +30,7 @@ type IconProps = {
 };
 
 const Icon: React.FC<IconProps> = ({ icon, color, ...props }) => {
-  const theme = useContext(ThemeContext);
+  const theme = useTheme();
   const IconComponent = icons[icon];
 
   return <IconComponent {...props} color={theme[color] || color} />;

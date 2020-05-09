@@ -53,9 +53,7 @@ const ErrorInfo: React.FC<ErrorInfoProps> = ({
           <Strong iconSpace={externalLink} hasIconRight>
             {onRetryTitle || "Try Again"}
           </Strong>
-          {externalLink && (
-            <Icon icon="AntDesign" name="arrowright" size={fontSize.md} color="white" />
-          )}
+          {externalLink && <Icon icon="AntDesign" name="arrowright" size={15} color="white" />}
         </View>
       </RetryButton>
     )}

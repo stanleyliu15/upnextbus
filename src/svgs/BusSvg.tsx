@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Svg, Path, Rect, Text, TSpan, SvgProps } from "react-native-svg";
-import { ThemeContext } from "styled-components/native";
+import { useTheme } from "styled-components/native";
 
 import { fontSize, fontFamily } from "../styles";
 
@@ -9,7 +9,7 @@ type BusSvgProps = SvgProps & {
 };
 
 const BusSvg: React.FC<BusSvgProps> = ({ label, ...svgProps }) => {
-  const theme = useContext(ThemeContext);
+  const theme = useTheme();
 
   return (
     <Svg width={36} height={38} {...svgProps}>

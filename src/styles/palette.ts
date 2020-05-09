@@ -31,6 +31,7 @@ export const colors = {
   gray: "#999",
   grayLight: "#d3d3d3",
   green: "#99cc33",
+  red: "#d63447",
   yellow: "#ffcc00",
   blue: "#0d47a1",
   blueLight: "#2979ff",

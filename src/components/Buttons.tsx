@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
   Platform,
   TouchableOpacity,
@@ -11,22 +11,21 @@ import {
   StyleProp,
   TouchableHighlightProps
 } from "react-native";
-import styled, { ThemeContext } from "styled-components/native";
+import styled, { useTheme } from "styled-components/native";
 
-import { Theme } from "@react-navigation/native/lib/typescript/src/types";
-import { space, borderRadius } from "../styles";
+import { space, borderRadius, Theme } from "../styles";
 
 type ButtonProps =
   | Pick<TouchableOpacityProps, keyof TouchableOpacityProps>
   | Pick<TouchableNativeFeedbackProps, keyof TouchableNativeFeedbackProps>;
 
 export const Button: React.FC<ButtonProps> = ({ children, style, ...rest }) => {
-  const theme = useContext(ThemeContext);
+  const theme = useTheme();
   const buttonStyle = StyleSheet.flatten([
     {
       paddingVertical: parseInt(space.md, 10),
       paddingHorizontal: parseInt(space.xxxlg, 10),
-      borderRadius: borderRadius.round,
+      borderRadius: parseInt(borderRadius.round, 10),
       backgroundColor: theme.primary
     },
     style
@@ -69,7 +68,7 @@ export const CircleIconButton: React.FC<CircleIconButtonProps> = ({
       alignItems: "center",
       width: iconSize * 2,
       height: iconSize * 2,
-      borderRadius: borderRadius.full
+      borderRadius: parseInt(borderRadius.full, 10)
     },
     style
   ]) as StyleProp<ViewStyle>;

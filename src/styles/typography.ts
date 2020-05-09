@@ -1,10 +1,10 @@
 export const fontSize = {
-  xxs: 8,
-  xs: 10,
-  sm: 12,
-  md: 14,
-  lg: 18,
-  xlg: 22
+  xxs: "8px",
+  xs: "10px",
+  sm: "12px",
+  md: "14px",
+  lg: "18px",
+  xlg: "22px"
 };
 
 export const fontFamily = {
