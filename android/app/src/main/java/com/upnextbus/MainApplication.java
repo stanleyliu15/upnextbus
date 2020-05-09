@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.facebook.react.ReactApplication;
+import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
@@ -42,7 +43,8 @@ public class MainApplication extends Application implements ReactApplication {
 
     @Override
     protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(new MainReactPackage(), new SvgPackage(), new MapsPackage(),
+      return Arrays.<ReactPackage>asList(new MainReactPackage(),
+            new SafeAreaContextPackage(), new SvgPackage(), new MapsPackage(),
           new VectorIconsPackage(), new ReanimatedPackage(), new RNGestureHandlerPackage(), new RNScreensPackage(),
           new ModuleRegistryAdapter(mModuleRegistryProvider));
     }

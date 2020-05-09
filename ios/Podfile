@@ -103,6 +103,8 @@ target 'upnextbus' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'react-native-safe-area-context', :path => '../node_modules/react-native-safe-area-context'
+
   # target 'upnextbusTests' do
   #   inherit! :complete
      # Pods for testing
