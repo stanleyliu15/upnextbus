@@ -2,7 +2,9 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import SettingsScreen from "../screens/Settings/SettingsScreen";
-import ChangeFilterRoutesScreen from "../screens/Settings/Preferences/ChangeFilterRoutesScreen";
+import ChangeFilterRoutesScreen, {
+  ChangeFilterRoutesHeaderRight
+} from "../screens/Settings/Preferences/ChangeFilterRoutesScreen";
 import ChangeAgencyScreen from "../screens/Settings/Preferences/ChangeAgencyScreen";
 import ChangeDistanceLimitScreen from "../screens/Settings/Preferences/ChangeDistanceLimitScreen";
 import ChangePredictionsLimitScreen from "../screens/Settings/Preferences/ChangePredictionsLimitScreen";
@@ -36,7 +38,7 @@ const createSettingsNavigator = (parentStackConfig, _theme: Theme) => {
           component={ChangeFilterRoutesScreen}
           options={{
             headerTitle: "Configure Routes",
-            headerRight: _props => <ChangeFilterRoutesScreen.HeaderRight />
+            headerRight: _props => <ChangeFilterRoutesHeaderRight />
           }}
         />
         <Stack.Screen

@@ -1,8 +1,8 @@
-import React, { useState, useEffect, Dispatch, SetStateAction, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { FlatList } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components/native";
-import { RouteProp, CompositeNavigationProp } from "@react-navigation/native";
+import { RouteProp, CompositeNavigationProp, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { selectRoutes, getRoutes } from "../../../store/features/nextbus";
@@ -11,7 +11,14 @@ import {
   filterRouteIds as setFilterRouteIds,
   selectShowRouteIdForDisplay
 } from "../../../store/features/settings";
-import { Loader, Icon, SafeArea, SelectItem, ErrorInfo } from "../../../components";
+import {
+  Loader,
+  Icon,
+  SafeArea,
+  SelectItem,
+  ErrorInfo,
+  HighlightButton
+} from "../../../components";
 import { SaveButton } from "../settingStyles";
 import { normalizeRouteName, useToggle } from "../../../utils";
 import { space } from "../../../styles";
@@ -25,10 +32,10 @@ type ChangeFilterRoutesScreenProps = {
   route: RouteProp<SettingsStackParamList, "ChangeFilterRoutesScreen">;
 };
 
-const ChangeFilterRoutesScreen: React.FC<ChangeFilterRoutesScreenProps> & {
-  setRouteIds: Dispatch<SetStateAction<string[]>>;
-  HeaderRight: React.FC;
-} = ({ navigation }) => {
+const ChangeFilterRoutesScreen: React.FC<ChangeFilterRoutesScreenProps> = ({
+  navigation,
+  route
+}) => {
   const dispatch = useDispatch();
   const routes = useSelector(selectRoutes);
   const filterRouteIds = useSelector(selectFilterRouteIds);
@@ -44,11 +51,10 @@ const ChangeFilterRoutesScreen: React.FC<ChangeFilterRoutesScreenProps> & {
   );
 
   useEffect(() => {
-    ChangeFilterRoutesScreen.setRouteIds = setRouteIds;
-    return () => {
-      ChangeFilterRoutesScreen.setRouteIds = null;
-    };
-  }, [dispatch]);
+    if (route.params?.routeIds) {
+      setRouteIds(route.params.routeIds);
+    }
+  }, [route.params?.routeIds]);
 
   if (routes.error) {
     return <ErrorInfo message={routes.error.message} onRetry={handleRetry} />;
@@ -87,38 +93,38 @@ const ChangeFilterRoutesScreen: React.FC<ChangeFilterRoutesScreenProps> & {
     </SafeArea>
   );
 };
-// todo: set params on navigation object instead of static variables
-ChangeFilterRoutesScreen.setRouteIds = null;
-ChangeFilterRoutesScreen.HeaderRight = function(_props) {
+
+export const ChangeFilterRoutesHeaderRight: React.FC = _props => {
+  const navigation = useNavigation();
   const routes = useSelector(selectRoutes);
   const routeIds = useMemo(() => routes.data.map(route => route.id), [routes.data]);
   const [toggled, toggle] = useToggle(false);
   const filterAll = useCallback(() => {
-    ChangeFilterRoutesScreen.setRouteIds([]);
+    navigation.setParams({ routeIds: [] });
     toggle();
-  }, [toggle]);
+  }, [navigation, toggle]);
   const filterNone = useCallback(() => {
-    ChangeFilterRoutesScreen.setRouteIds(routeIds);
+    navigation.setParams({ routeIds });
     toggle();
-  }, [routeIds, toggle]);
+  }, [navigation, routeIds, toggle]);
 
   if (routes.loading || routes.error) {
     return null;
   }
 
   return (
-    <HighlightButton onPress={toggled ? filterNone : filterAll}>
+    <CheckboxButton onPress={toggled ? filterNone : filterAll} highlightColor="background">
       <Icon
         icon="MaterialCommunityIcons"
         name={toggled ? "checkbox-multiple-blank-circle" : "checkbox-multiple-blank-circle-outline"}
         color="text"
         size={25}
       />
-    </HighlightButton>
+    </CheckboxButton>
   );
-} as React.FC;
+};
 
-const HighlightButton = styled.TouchableHighlight.attrs({ underlayColor: "background" })`
+const CheckboxButton = styled(HighlightButton)`
   margin-right: ${space.md};
 `;
 

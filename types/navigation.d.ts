@@ -37,7 +37,9 @@ export type DetailStackParamList = {
 export type SettingsStackParamList = {
   SettingsScreen: undefined;
   ChangeAgencyScreen: undefined;
-  ChangeFilterRoutesScreen: undefined;
+  ChangeFilterRoutesScreen: {
+    routeIds: string[];
+  };
   ChangeDistanceLimitScreen: undefined;
   ChangePredictionsLimitScreen: undefined;
   ChangeRouteNameOptionScreen: undefined;

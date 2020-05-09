@@ -5,7 +5,7 @@ import { View } from "react-native";
 import Icon from "./Icon";
 import { Strong, Text, Title } from "./Typography";
 import { Button } from "./Buttons";
-import { fontSize, space } from "../styles";
+import { space } from "../styles";
 import { OnPressHandler } from "../../types";
 
 const Container = styled.View`
