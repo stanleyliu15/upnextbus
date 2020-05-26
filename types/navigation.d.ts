@@ -5,6 +5,7 @@ import { NextBus } from "./nextBus";
 import { GeoLocation } from "./utils";
 
 export type RootStackParamList = {
+  Setup: undefined;
   Nearby: undefined;
   Detail: undefined;
   Settings: undefined;

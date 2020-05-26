@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from "react";
 import styled, { useTheme } from "styled-components/native";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { isEqual } from "lodash";
 import { transparentize } from "polished";
 
@@ -19,6 +19,7 @@ import {
 import { RouteName, PredictionTime, PredictionMinute, PredictionUnit } from "./itemStyles";
 import { space, fontFamily, borderRadius } from "../../styles";
 import { LinkItem } from "../UserItems";
+import { useDispatch } from "../../store";
 
 const Container = styled.View`
   background-color: ${({ theme }) => theme.backgroundLight};
@@ -62,9 +63,9 @@ const DetailItem: React.FC<DetailItemProps> = ({
   stopDistance,
   canRefresh,
   onRefreshPress,
-  onDirectionPress = undefined,
-  onStopPress = undefined,
-  onServiceAlertsPress = undefined
+  onDirectionPress = null,
+  onStopPress = null,
+  onServiceAlertsPress = null
 }) => {
   const { directionName, stopName, predictionList, stopLabel: predictionsStopLabel } = predictions;
   const dispatch = useDispatch();

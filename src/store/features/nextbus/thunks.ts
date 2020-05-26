@@ -1,13 +1,18 @@
-import { getAgenciesAsync, getRoutesAsync, getNearbyPredictionListAsync } from "./actions";
+import {
+  getAgenciesAsync,
+  getRoutesAsync,
+  getNearbyPredictionListAsync,
+  getNearestAgencyIdAsync
+} from "./actions";
 import { ThunkDispatch, ThunkAction } from "../../types";
 import * as NextBusService from "../../../services/nextbus-service";
 import NextBusAPI from "../../../api/NextBus/api";
 import { getLocationAsync } from "../../../services/location-service";
-import NextBusMobileAPI from "../../../api/NextBusMobile/api";
 import { selectFilterRouteIds, selectFavoriteStopLabels, selectAgencyId } from "../settings";
+import NextBusMobileAPI from "../../../api/NextBusMobile/api";
 
 export function getAgencies(): ThunkAction<Promise<void>> {
-  return async function(dispatch: ThunkDispatch, _getState) {
+  return async function(dispatch: ThunkDispatch, _) {
     dispatch(getAgenciesAsync.request());
     try {
       const agencies = await NextBusAPI.getAgencies();
@@ -20,9 +25,7 @@ export function getAgencies(): ThunkAction<Promise<void>> {
 
 export function getRoutes(): ThunkAction<Promise<void>> {
   return async function(dispatch: ThunkDispatch, getState) {
-    const {
-      settings: { selectedAgencyId }
-    } = getState();
+    const { selectedAgencyId } = getState().settings;
     dispatch(getRoutesAsync.request());
     try {
       const routes = await NextBusAPI.getRoutes({ agencyId: selectedAgencyId });
@@ -36,7 +39,6 @@ export function getRoutes(): ThunkAction<Promise<void>> {
 export function getNearbyPredictionsList(): ThunkAction<Promise<void>> {
   return async function(dispatch: ThunkDispatch, getState) {
     dispatch(getNearbyPredictionListAsync.request());
-
     try {
       const location = await getLocationAsync();
       const state = getState();
@@ -50,13 +52,6 @@ export function getNearbyPredictionsList(): ThunkAction<Promise<void>> {
         maxStopDistance,
         predictionListLimit
       } = settings;
-
-      // todo: this check should be done once
-      if (selectedAgencyId === null) {
-        const nearestAgencyId = await NextBusMobileAPI.getNearestAgencyIdByLocation(location);
-        dispatch(selectAgencyId(nearestAgencyId));
-        await dispatch(getRoutes());
-      }
 
       const predictionsList = await NextBusService.getNearbyPredictionsList(
         {
@@ -75,5 +70,26 @@ export function getNearbyPredictionsList(): ThunkAction<Promise<void>> {
     } catch (error) {
       dispatch(getNearbyPredictionListAsync.failure(error));
     }
+  };
+}
+
+export function getNearestAgencyId(): ThunkAction<Promise<void>> {
+  return async function(dispatch: ThunkDispatch, _) {
+    dispatch(getNearestAgencyIdAsync.request());
+    try {
+      const location = await getLocationAsync();
+      const nearestAgencyId = await NextBusMobileAPI.getNearestAgencyIdByLocation(location);
+      dispatch(getNearestAgencyIdAsync.success(nearestAgencyId));
+    } catch (error) {
+      dispatch(getNearestAgencyIdAsync.failure(error));
+    }
+  };
+}
+
+export function loadSelectedAgencyId(): ThunkAction<Promise<void>> {
+  return async function(dispatch: ThunkDispatch, getState) {
+    await dispatch(getNearestAgencyId());
+    const { nearestAgencyId } = getState().nextBus;
+    dispatch(selectAgencyId(nearestAgencyId.data));
   };
 }

@@ -5,7 +5,7 @@ export type RootState = StateType<typeof import("./root-reducer").default>;
 
 export type RootAction = ActionType<typeof import("./root-action").default>;
 
-export type ThunkAction<R> = ThunkActionBase<R, RootState, null, RootAction>;
+export type ThunkAction<ReturnType> = ThunkActionBase<ReturnType, RootState, null, RootAction>;
 
 export type ThunkDispatch = ThunkDispatchBase<RootState, null, RootAction>;
 

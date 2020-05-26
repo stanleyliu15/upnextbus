@@ -31,7 +31,7 @@ const ChangeDirectionScreen: React.FC<ChangeDirectionScreenProps> = ({ navigatio
               : directionToSelect.name
           }
           selected={directionToSelect.id === direction.id}
-          onPress={_event => {
+          onPress={() => {
             if (!location) return;
 
             const nearestStop = getNearestStop(directionToSelect.stops, location, distanceLimit);

@@ -42,17 +42,18 @@ const Block = styled.View`
 `;
 
 const GeneralSection = styled.View`
-  flex: 8.5;
+  flex: 8.4;
   padding: ${space.md};
 `;
 
 const VerticalSeperator = styled.View`
+  flex: 0.2;
   ${border({ direction: "left" })};
-  margin: ${space.md} ${space.xxs} ${space.xxs} ${space.md};
+  margin-vertical: ${space.md};
 `;
 
 export const PredictionTimeSection = styled.View`
-  flex: 1.5;
+  flex: 1.4;
   padding: ${space.md} ${space.md} ${space.xs};
 `;
 
@@ -73,10 +74,12 @@ const PredictionsItem: React.FC<PredictionsItemProps> = ({
       <Container>
         <GeneralSection>
           <RouteName>{routeName}</RouteName>
-          <DirectionName>{directionName}</DirectionName>
+          <DirectionName color="textLighter">{directionName}</DirectionName>
           <Block>
             {favorited && <Icon icon="FontAwesome" name="heart" size={15} color="red" />}
-            <StopName iconSpace={favorited}>{stopName}</StopName>
+            <StopName iconSpace={favorited} color="textLighter">
+              {stopName}
+            </StopName>
           </Block>
         </GeneralSection>
         <VerticalSeperator />

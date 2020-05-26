@@ -1,4 +1,4 @@
-import { isNil, startCase } from "lodash";
+import { isNil, startCase, isEqual } from "lodash";
 import { useState, useCallback, useEffect, useRef } from "react";
 import { NextBus } from "../../types";
 
@@ -110,3 +110,6 @@ export const findBusInfo = ({ routeId, stopId }: NextBus.StopLabel, routes: Next
     stop
   };
 };
+
+export const equalContains = (arrayA: any[], arrayB: any[]) =>
+  arrayA.every(a => arrayB.some(b => isEqual(a, b)));

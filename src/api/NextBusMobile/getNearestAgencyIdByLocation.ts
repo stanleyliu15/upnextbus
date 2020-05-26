@@ -1,7 +1,7 @@
 import { API_URL } from "./config";
 import { objectToQueryParameters } from "../../utils";
 import { GeoLocation } from "../../../types";
-import { NextBusNoNearbyAgencyError } from "../../errors";
+import { NextBusUnableFindNearestAgencyError } from "../../errors";
 
 const extractNearestAgencyId = (responseJson: any) => {
   const { preds } = responseJson;
@@ -10,7 +10,7 @@ const extractNearestAgencyId = (responseJson: any) => {
     return preds[0].agency_tag;
   }
 
-  throw new NextBusNoNearbyAgencyError();
+  throw new NextBusUnableFindNearestAgencyError();
 };
 
 const getNearestAgencyIdByLocation = async (location: GeoLocation) => {
@@ -19,9 +19,9 @@ const getNearestAgencyIdByLocation = async (location: GeoLocation) => {
 
   const response = await fetch(url);
   const responseJson = await response.json();
-  const agencyId = extractNearestAgencyId(responseJson);
+  const nearestAgencyId = extractNearestAgencyId(responseJson);
 
-  return agencyId;
+  return nearestAgencyId;
 };
 
 export default getNearestAgencyIdByLocation;

@@ -19,17 +19,9 @@ import {
   selectPredictionListLimit,
   selectSelectedAgencyId
 } from "../../store/features/settings";
-import { ThemeColor, space, borderRadius, fontSize } from "../../styles";
+import { ThemeColor, space, borderRadius } from "../../styles";
 import { DARK_MAP_STYLE } from "../../config/mapStyles";
-import {
-  Loader,
-  Icon,
-  Text,
-  Strong,
-  ErrorInfo,
-  CircleIconButton,
-  DetailItem
-} from "../../components";
+import { Loader, Icon, Strong, ErrorInfo, CircleIconButton, DetailItem } from "../../components";
 import { getDistanceBetween } from "../../utils/geolocation";
 import NextBusAPI from "../../api/NextBus/api";
 import { StartPointSvg, EndPointSvg, PointSvg, BusSvg } from "../../svgs";
@@ -69,7 +61,7 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
     navigation
   ]);
   const setStop = useCallback(stop => navigation.setParams({ stop }), [navigation]);
-  const handleRefreshPress = useCallback(_event => setAutoRefresh(false), []);
+  const handleRefreshPress = useCallback(() => setAutoRefresh(false), []);
   const closeScreen = useCallback(() => {
     setAutoRefresh(false);
     stopTimer();
@@ -98,14 +90,11 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
     });
   }, [stops, navigation, stop]);
 
-  const handleServiceAlertsPress = useCallback(
-    _event => {
-      navigation.navigate("ServiceAlertsScreen", {
-        serviceAlerts: predictions.serviceAlerts
-      });
-    },
-    [navigation, predictions.serviceAlerts]
-  );
+  const handleServiceAlertsPress = useCallback(() => {
+    navigation.navigate("ServiceAlertsScreen", {
+      serviceAlerts: predictions.serviceAlerts
+    });
+  }, [navigation, predictions.serviceAlerts]);
 
   const handleLocationButtonPress = useCallback(() => {
     if (!location) return;
@@ -129,14 +118,18 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
       let watchPositionSubscription;
 
       async function watchPosition() {
-        watchPositionSubscription = await Location.watchPositionAsync(
-          { distanceInterval: 20 },
-          locationData =>
-            setLocation({
-              lat: locationData.coords.latitude,
-              lon: locationData.coords.longitude
-            })
-        );
+        try {
+          watchPositionSubscription = await Location.watchPositionAsync(
+            { distanceInterval: 20 },
+            locationData =>
+              setLocation({
+                lat: locationData.coords.latitude,
+                lon: locationData.coords.longitude
+              })
+          );
+        } catch (error) {
+          setFetchError(error);
+        }
       }
 
       watchPosition();
@@ -232,7 +225,7 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
           key={stop.id}
           coordinate={coordinate}
           centerOffset={isStartPoint || isEndPoint ? { x: -35, y: -35 } : undefined}
-          onPress={_event => {
+          onPress={() => {
             setStop(stop);
           }}
         >
@@ -412,27 +405,6 @@ const CalloutView = styled.View`
 
   border-radius: ${borderRadius.round};
   background-color: ${({ theme }) => theme.backgroundLight};
-`;
-
-export const Distance = styled.View`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  padding: ${space.xxxs} ${space.xs};
-  background-color: ${({ theme }) => theme.primaryDark};
-  border-radius: ${borderRadius.full};
-`;
-
-export const DistanceValue = styled(Strong)`
-  color: ${({ theme }) => theme.primaryLight};
-  font-size: ${fontSize.md};
-`;
-
-export const DistanceUnit = styled(Text)`
-  color: ${({ theme }) => theme.primaryLight};
-  font-size: ${fontSize.xs};
-  margin-left: ${space.xxxs};
 `;
 
 export default DetailScreen;

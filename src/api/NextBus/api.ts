@@ -1,9 +1,9 @@
 import request from "./request";
 import { NextBus } from "../../../types";
 import {
-  NextBusSourceMaximumRouteError,
+  NextBusMaximumRoutesError,
   NextBusUnavaliableRouteError,
-  NextBusNoNearbyError
+  UnableFindNearbyBusesError
 } from "../../errors";
 
 const NextBusAPI = {
@@ -13,7 +13,7 @@ const NextBusAPI = {
       const routes = (await request("routeConfig", queryOptions)) as NextBus.Route[];
       return routes;
     } catch (error) {
-      if (error instanceof NextBusSourceMaximumRouteError) {
+      if (error instanceof NextBusMaximumRoutesError) {
         const routeInfos = (await request("routeList", queryOptions)) as NextBus.RouteInfo[];
         const routePromises: Promise<NextBus.Route>[] = routeInfos.map(async routeInfo => {
           const routeConfig = await request("routeConfig", {
@@ -42,7 +42,7 @@ const NextBusAPI = {
 
     while (true) {
       if (stopLabels.length === 0) {
-        throw new NextBusNoNearbyError();
+        throw new UnableFindNearbyBusesError();
       }
 
       try {

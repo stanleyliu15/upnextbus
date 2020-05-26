@@ -3,8 +3,8 @@ import { flow } from "lodash";
 import { COMMAND_PATH_MAP, COMMANDS } from "./config";
 import { arrayify } from "../../utils";
 import {
-  NextBusAPIError,
-  NextBusSourceMaximumRouteError,
+  NextBusError,
+  NextBusMaximumRoutesError,
   NextBusUnavaliableRouteError
 } from "../../errors";
 import parseError from "./parser/parseError";
@@ -17,19 +17,20 @@ const UNAVALIABLE_ROUTE_REGEX = /For agency=((?!\s*$).+) route r=((?!\s*$).+) is
 
 const checkResponseJsonForError = (responseJson: NextBusSource.ResponseJson) => {
   if (responseJson.Error) {
+    // todo: split up errors based on command?
     const error = parseError(responseJson.Error);
 
     const unavaliableRouteMatches = UNAVALIABLE_ROUTE_REGEX.exec(error.message);
     if (unavaliableRouteMatches) {
       const [, , routeId] = unavaliableRouteMatches;
-      throw new NextBusUnavaliableRouteError(error.message, routeId);
+      throw new NextBusUnavaliableRouteError(error.message, error.retriable, routeId);
     }
 
     if (error.message === MAXIMUM_ROUTES_ERROR_MESSAGE) {
-      throw new NextBusSourceMaximumRouteError(error.message);
+      throw new NextBusMaximumRoutesError(error.message, error.retriable);
     }
 
-    throw new NextBusAPIError(error.message, error.retriable);
+    throw new NextBusError(error.message, error.retriable);
   }
 
   return responseJson;
@@ -38,7 +39,7 @@ const checkResponseJsonForError = (responseJson: NextBusSource.ResponseJson) => 
 const extractResponseData = (
   command: NextBusSource.Command,
   responseJson: NextBusSource.ResponseJson
-): any => {
+) => {
   if (command === COMMANDS.vehicleLocations) {
     return responseJson;
   }
@@ -47,7 +48,7 @@ const extractResponseData = (
   return responseJson[path];
 };
 
-const uniformalizeResponseData = (command: NextBusSource.Command, responseData: any): any => {
+const uniformalizeResponseData = (command: NextBusSource.Command, responseData: any) => {
   if (command === COMMANDS.predictions) {
     return responseData;
   }

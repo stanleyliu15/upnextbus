@@ -26,7 +26,7 @@ const ChangeStopScreen: React.FC<ChangeStopScreenProps> = ({ navigation, route }
               key={stopToSelect.id}
               title={stopToSelect.name}
               selected={stopToSelect.id === stop.id}
-              onPress={_event => {
+              onPress={() => {
                 navigation.navigate("DetailScreen", { stop: stopToSelect });
               }}
               truncateTitle={false}

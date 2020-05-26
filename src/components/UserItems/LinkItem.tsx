@@ -17,8 +17,6 @@ export const ValueItem = styled.View<ValueItemProps>`
 
 export const Value = styled(Text)`
   flex-shrink: 1;
-
-  color: ${({ theme }) => theme.textLighter};
   margin-right: ${space.xxxs};
 `;
 
@@ -46,7 +44,11 @@ const LinkItem: React.FC<LinkItemProps> = ({
       {...itemProps}
       valueItem={
         <ValueItem prioritizePropertySpace={prioritizePropertySpace}>
-          {value && <Value numberOfLines={1}>{value}</Value>}
+          {value && (
+            <Value numberOfLines={1} color="textLighter">
+              {value}
+            </Value>
+          )}
           {onPress && !hideLinkIcon && (
             <Icon
               icon={externalLink ? "AntDesign" : "Entypo"}

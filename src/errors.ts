@@ -1,4 +1,4 @@
-export class NextBusAPIError extends Error {
+export class NextBusError extends Error {
   retriable: boolean;
 
   constructor(message: string, retriable: boolean) {
@@ -7,31 +7,31 @@ export class NextBusAPIError extends Error {
   }
 }
 
-export class NextBusNoNearbyError extends Error {
+export class NextBusUnableFindNearestAgencyError extends NextBusError {
   constructor() {
-    super("Unable to find any buses near you.");
+    super("Unable to find an agency near your location.", true);
   }
 }
 
-export class NextBusSourceMaximumRouteError extends Error {}
+export class NextBusMaximumRoutesError extends NextBusError {}
 
-export class NextBusUnavaliableRouteError extends Error {
+export class NextBusUnavaliableRouteError extends NextBusError {
   routeId: string;
 
-  constructor(message: string, routeId: string) {
-    super(message);
+  constructor(message: string, retriable: boolean, routeId: string) {
+    super(message, retriable);
     this.routeId = routeId;
+  }
+}
+
+export class UnableFindNearbyBusesError extends Error {
+  constructor() {
+    super("Unable to find any buses near your location.");
   }
 }
 
 export class LocationPermissionDeniedError extends Error {
   constructor() {
     super("Permissions to use location was denied");
-  }
-}
-
-export class NextBusNoNearbyAgencyError extends Error {
-  constructor() {
-    super("Unable to find any agencies near you.");
   }
 }

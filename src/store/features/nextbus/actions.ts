@@ -18,3 +18,9 @@ export const getNearbyPredictionListAsync = createAsyncAction(
   "@nextbus/GET_NEARBY_PREDICTION_LIST_SUCCESS",
   "@nextbus/GET_NEARBY_PREDICTION_LIST_FAILURE"
 )<void, NextBus.Predictions[], Error>();
+
+export const getNearestAgencyIdAsync = createAsyncAction(
+  "@nextbus/GET_NEAREST_AGENCY_ID_REQUEST",
+  "@nextbus/GET_NEAREST_AGENCY_ID_SUCCESS",
+  "@nextbus/GET_NEAREST_AGENCY_ID_FAILURE"
+)<void, string, Error>();

@@ -1,33 +1,22 @@
-import React, { useEffect, useState, useRef, useCallback, useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
+import { useSelector } from "react-redux";
 import { FlatList, RefreshControl, Linking } from "react-native";
 import { useTheme } from "styled-components/native";
 import { RouteProp, CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { isEqual } from "lodash";
 
-import {
-  AppLoader,
-  Icon,
-  SafeArea,
-  ErrorInfo,
-  FloatingButton,
-  PredictionsItem
-} from "../components";
+import { Icon, SafeArea, ErrorInfo, FloatButton, PredictionsItem } from "../components";
 import {
   getNearbyPredictionsList,
   selectNearbyPredictionList,
   selectRoutes
 } from "../store/features/nextbus";
-import {
-  LocationPermissionDeniedError,
-  NextBusNoNearbyError,
-  NextBusNoNearbyAgencyError,
-  NextBusAPIError
-} from "../errors";
+import { LocationPermissionDeniedError, UnableFindNearbyBusesError, NextBusError } from "../errors";
 import { RootStackParamList } from "../../types";
 import { selectFavoriteStopLabels } from "../store/features/settings";
 import { findBusInfo } from "../utils";
+import { useDispatch } from "../store";
 
 type NearbyScreenProps = {
   navigation: CompositeNavigationProp<
@@ -38,12 +27,11 @@ type NearbyScreenProps = {
 };
 
 const NearbyScreen: React.FC<NearbyScreenProps> = ({ navigation }) => {
+  const [refreshing, setRefreshing] = useState(false);
   const dispatch = useDispatch();
   const nearby = useSelector(selectNearbyPredictionList);
+  const routes = useSelector(selectRoutes);
   const theme = useTheme();
-  const firstUpdate = useRef(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const { data: routes } = useSelector(selectRoutes);
   const favoriteStopLabels = useSelector(selectFavoriteStopLabels);
   const handleRefresh = useCallback(() => setRefreshing(true), []);
   const fetchData = useCallback(() => dispatch(getNearbyPredictionsList()), [dispatch]);
@@ -58,29 +46,24 @@ const NearbyScreen: React.FC<NearbyScreenProps> = ({ navigation }) => {
         <ErrorInfo
           message={nearby.error.message}
           title="Location permissions"
-          onRetry={_event => Linking.openURL("app-settings:")}
+          onRetry={() => Linking.openURL("app-settings:")}
           onRetryTitle="Go to settings"
-          externalLink={true}
+          externalLink
         />
       );
     }
 
-    if (nearby.error instanceof NextBusNoNearbyError) {
-      return <ErrorInfo message={nearby.error.message} onRetry={fetchData} />;
-    }
-
-    if (nearby.error instanceof NextBusNoNearbyAgencyError) {
+    if (nearby.error instanceof UnableFindNearbyBusesError) {
       return (
         <ErrorInfo
           message={nearby.error.message}
-          onRetry={_event => navigation.navigate("ChangeAgencyScreen")}
-          onRetryTitle="Set Agency"
-          externalLink={true}
+          onRetry={fetchData}
+          retryLoading={nearby.loading}
         />
       );
     }
 
-    if (nearby.error instanceof NextBusAPIError) {
+    if (nearby.error instanceof NextBusError) {
       return (
         <ErrorInfo
           message={nearby.error.message}
@@ -90,15 +73,15 @@ const NearbyScreen: React.FC<NearbyScreenProps> = ({ navigation }) => {
     }
 
     return <ErrorInfo message={nearby.error.message} />;
-  }, [fetchData, navigation, nearby.error]);
+  }, [fetchData, nearby.error, nearby.loading]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   useEffect(() => {
     let didCancel = false;
 
-    if (firstUpdate.current) {
-      firstUpdate.current = false;
-      fetchData();
-    }
     if (refreshing) {
       fetchData();
       if (!didCancel) {
@@ -110,22 +93,18 @@ const NearbyScreen: React.FC<NearbyScreenProps> = ({ navigation }) => {
     };
   }, [fetchData, refreshing]);
 
-  if (nearby.loading && (firstUpdate.current || nearby.data.length === 0)) {
-    return <AppLoader />;
-  }
-
   return (
     <SafeArea>
-      <FloatingButton onPress={openSettings} iconSize={25} position="bottom-right">
+      <FloatButton onPress={openSettings} iconSize={25} position="bottom-right">
         <Icon icon="Feather" name="settings" size={25} color="primary" />
-      </FloatingButton>
+      </FloatButton>
       {nearby.error ? (
         renderNearbyError
       ) : (
         <>
-          <FloatingButton onPress={fetchData} iconSize={25} position="bottom-left">
+          <FloatButton onPress={fetchData} iconSize={25} position="bottom-left">
             <Icon icon="MaterialIcons" name="refresh" size={30} color="primary" />
-          </FloatingButton>
+          </FloatButton>
           <FlatList
             style={{ backgroundColor: theme.backgroundLight }}
             data={nearby.data}
@@ -134,14 +113,15 @@ const NearbyScreen: React.FC<NearbyScreenProps> = ({ navigation }) => {
               const favorited = favoriteStopLabels.some(stopLabel =>
                 isEqual(stopLabel, predictions.stopLabel)
               );
-              const handlePredictionsPress = _event =>
+              const handlePredictionsPress = () => {
                 navigation.navigate("Detail", {
                   screen: "DetailScreen",
                   params: {
                     predictions,
-                    ...findBusInfo(predictions.stopLabel, routes)
+                    ...findBusInfo(predictions.stopLabel, routes.data)
                   }
                 });
+              };
 
               return (
                 <PredictionsItem

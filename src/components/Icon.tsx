@@ -9,7 +9,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 
-import { Theme } from "../styles";
+import { Theme, colors } from "../styles";
 
 const icons = {
   AntDesign,
@@ -32,8 +32,9 @@ type IconProps = {
 const Icon: React.FC<IconProps> = ({ icon, color, ...props }) => {
   const theme = useTheme();
   const IconComponent = icons[icon];
+  const iconColor = theme[color] || colors[color] || color;
 
-  return <IconComponent {...props} color={theme[color] || color} />;
+  return <IconComponent {...props} color={iconColor} />;
 };
 
 export default Icon;

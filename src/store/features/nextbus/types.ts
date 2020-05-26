@@ -5,4 +5,5 @@ export interface NextBusState {
   agencies: AsyncResult<NextBus.Agency[]>;
   routes: AsyncResult<NextBus.Route[]>;
   nearbyPredictionsList: AsyncResult<NextBus.Predictions[]>;
+  nearestAgencyId: AsyncResult<string>;
 }

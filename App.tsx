@@ -6,11 +6,11 @@ import { enableScreens } from "react-native-screens";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 
-import configureStore from "./src/store";
-import RootScreen from "./src/screens/RootScreen";
+import store, { persistor } from "./src/store";
 import fonts from "./src/config/fonts";
 import images from "./src/config/images";
-import { AppLoader } from "./src/components";
+import Root from "./src/Root";
+import { Loader } from "./src/components";
 
 enableScreens();
 
@@ -27,10 +27,8 @@ function cacheImages(images) {
   });
 }
 
-function App() {
-  const { store, persistor } = configureStore();
+const App: React.FC = () => {
   const [ready, setReady] = useState(false);
-  const handleFinish = () => setReady(true);
 
   useEffect(() => {
     async function prepareApp() {
@@ -38,23 +36,23 @@ function App() {
       const fontAssets = cacheFonts(fonts);
 
       await Promise.all([...fontAssets, ...imageAssets]);
-      handleFinish();
+      setReady(true);
     }
 
     prepareApp();
   }, []);
 
-  if (ready) {
-    return (
-      <Provider store={store}>
-        <PersistGate loading={<AppLoader />} persistor={persistor}>
-          <RootScreen />
-        </PersistGate>
-      </Provider>
-    );
+  if (!ready) {
+    return <Loader />;
   }
 
-  return <AppLoader />;
-}
+  return (
+    <Provider store={store}>
+      <PersistGate loading={<Loader />} persistor={persistor}>
+        <Root />
+      </PersistGate>
+    </Provider>
+  );
+};
 
 export default App;

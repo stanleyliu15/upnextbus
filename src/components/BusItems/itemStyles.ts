@@ -9,13 +9,10 @@ export const RouteName = styled(Text)`
 `;
 
 export const DirectionName = styled(Text)`
-  color: ${({ theme }) => theme.textLighter};
   margin-top: ${space.md};
 `;
 
-export const StopName = styled(Text)`
-  color: ${({ theme }) => theme.textLighter};
-`;
+export const StopName = styled(Text)``;
 
 export const PredictionTime = styled.View`
   display: flex;

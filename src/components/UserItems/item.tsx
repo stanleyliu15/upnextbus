@@ -7,7 +7,7 @@ import { fontSize, space, border, borderRadius } from "../../styles";
 import { Text, Strong } from "../Typography";
 import { HighlightButton, HighlightButtonProps } from "../Buttons";
 import { OnPressHandler } from "../../../types";
-import { Loader } from "../Loaders";
+import Loader from "../Loader";
 
 const I = styled.View`
   display: flex;
@@ -40,7 +40,6 @@ const TitleAndDescription = styled.View`
 `;
 
 const Description = styled(Text)`
-  color: ${({ theme }) => theme.textLight};
   font-size: ${fontSize.sm};
 `;
 
@@ -113,6 +112,7 @@ const Item: React.FC<ItemProps> = ({
               <Description
                 iconSpace={iconSpace}
                 numberOfLines={truncateDescription ? 1 : 0}
+                color="textLight"
                 style={descriptionStyle}
               >
                 {description}

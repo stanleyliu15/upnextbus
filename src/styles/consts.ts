@@ -1,4 +1,5 @@
 import { Theme } from "./theme";
+import { colors } from "./palette";
 
 export const borderSize = {
   xs: "0.33px",
@@ -24,7 +25,7 @@ export const border = ({
   color = null,
   style = "solid"
 }: BorderProps) => ({ theme }) => `
-  border-color: ${theme[color] || color || theme.border};
+  border-color: ${theme[color] || colors[color] || color || theme.border};
   border-${direction ? `${direction}-` : ""}width: ${borderSize[size]};
   border-style: ${style};
 `;

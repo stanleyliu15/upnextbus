@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useEffect, useCallback } from "react";
 import { FlatList } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { RouteProp, CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { selectAgencies, getRoutes, getAgencies } from "../../../store/features/nextbus";
 import { Loader, SafeArea, ErrorInfo, SelectItem } from "../../../components";
-import { SaveButton } from "../settingStyles";
 import { SettingsStackParamList, RootStackParamList } from "../../../../types";
 import { selectSelectedAgencyId, selectAgencyId } from "../../../store/features/settings";
+import { useDispatch } from "../../../store";
 
 type ChangeAgencyScreenProps = {
   navigation: CompositeNavigationProp<
@@ -22,26 +22,18 @@ const ChangeAgencyScreen: React.FC<ChangeAgencyScreenProps> = ({ navigation }) =
   const dispatch = useDispatch();
   const agencies = useSelector(selectAgencies);
   const selectedAgencyId = useSelector(selectSelectedAgencyId);
-  const [agencyId, setAgencyId] = useState(selectedAgencyId);
-  const handleSave = useCallback(
-    _event => {
-      dispatch(selectAgencyId(agencyId));
-      dispatch(getRoutes());
-      navigation.goBack();
-    },
-    [agencyId, dispatch, navigation]
-  );
+  const fetchAgencies = useCallback(() => dispatch(getAgencies()), [dispatch]);
 
   useEffect(() => {
-    dispatch(getAgencies());
-  }, [dispatch]);
+    fetchAgencies();
+  }, [dispatch, fetchAgencies]);
 
   if (agencies.loading) {
     return <Loader />;
   }
 
   if (agencies.error) {
-    return <ErrorInfo message={agencies.error.message} />;
+    return <ErrorInfo message={agencies.error.message} onRetry={fetchAgencies} />;
   }
 
   return (
@@ -53,14 +45,16 @@ const ChangeAgencyScreen: React.FC<ChangeAgencyScreenProps> = ({ navigation }) =
           <SelectItem
             title={agency.name}
             description={agency.region}
-            selected={agency.id === agencyId}
-            onPress={() => setAgencyId(agency.id)}
+            selected={agency.id === selectedAgencyId}
+            onPress={() => {
+              dispatch(selectAgencyId(agency.id));
+              dispatch(getRoutes());
+              navigation.goBack();
+            }}
             showBottomBorder={index !== agencies.data.length - 1}
           />
         )}
-        extraData={agencyId}
       />
-      <SaveButton onPress={handleSave} />
     </SafeArea>
   );
 };

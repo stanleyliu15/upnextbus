@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { FlatList } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import styled from "styled-components/native";
 import { RouteProp, CompositeNavigationProp, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { isEqual } from "lodash";
 
 import { selectRoutes, getRoutes } from "../../../store/features/nextbus";
 import {
@@ -23,6 +24,7 @@ import { SaveButton } from "../settingStyles";
 import { normalizeRouteName, useToggle } from "../../../utils";
 import { space } from "../../../styles";
 import { SettingsStackParamList, RootStackParamList } from "../../../../types";
+import { useDispatch } from "../../../store";
 
 type ChangeFilterRoutesScreenProps = {
   navigation: CompositeNavigationProp<
@@ -41,14 +43,11 @@ const ChangeFilterRoutesScreen: React.FC<ChangeFilterRoutesScreenProps> = ({
   const filterRouteIds = useSelector(selectFilterRouteIds);
   const showRouteIdForDisplay = useSelector(selectShowRouteIdForDisplay);
   const [routeIds, setRouteIds] = useState(filterRouteIds);
-  const handleRetry = useCallback(_event => dispatch(getRoutes()), [dispatch]);
-  const handleSave = useCallback(
-    _event => {
-      dispatch(setFilterRouteIds(routeIds));
-      navigation.goBack();
-    },
-    [dispatch, navigation, routeIds]
-  );
+  const fetchRoutes = useCallback(() => dispatch(getRoutes()), [dispatch]);
+  const handleSave = useCallback(() => {
+    dispatch(setFilterRouteIds(routeIds));
+    navigation.goBack();
+  }, [dispatch, navigation, routeIds]);
 
   useEffect(() => {
     if (route.params?.routeIds) {
@@ -56,12 +55,12 @@ const ChangeFilterRoutesScreen: React.FC<ChangeFilterRoutesScreenProps> = ({
     }
   }, [route.params?.routeIds]);
 
-  if (routes.error) {
-    return <ErrorInfo message={routes.error.message} onRetry={handleRetry} />;
-  }
-
   if (routes.loading) {
     return <Loader />;
+  }
+
+  if (routes.error) {
+    return <ErrorInfo message={routes.error.message} onRetry={fetchRoutes} />;
   }
 
   return (
@@ -89,12 +88,12 @@ const ChangeFilterRoutesScreen: React.FC<ChangeFilterRoutesScreenProps> = ({
         }}
         extraData={routeIds}
       />
-      <SaveButton onPress={handleSave} />
+      <SaveButton onPress={handleSave} disabled={isEqual(filterRouteIds, routeIds)} />
     </SafeArea>
   );
 };
 
-export const ChangeFilterRoutesHeaderRight: React.FC = _props => {
+export const ChangeFilterRoutesHeaderRight: React.FC = () => {
   const navigation = useNavigation();
   const routes = useSelector(selectRoutes);
   const routeIds = useMemo(() => routes.data.map(route => route.id), [routes.data]);

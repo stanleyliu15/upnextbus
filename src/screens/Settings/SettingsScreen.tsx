@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from "react";
 import { Linking, ScrollView } from "react-native";
 import styled from "styled-components/native";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import * as StoreReview from "expo-store-review";
 import Constants from "expo-constants";
 import { capitalize } from "lodash";
@@ -21,6 +21,7 @@ import {
 import { getAgencies, selectAgencies, getRoutes, selectRoutes } from "../../store/features/nextbus";
 import { SettingsStackParamList, RootStackParamList } from "../../../types";
 import { ThemeColor } from "../../styles";
+import { useDispatch } from "../../store";
 
 type SettingsScreenProps = {
   navigation: CompositeNavigationProp<
@@ -41,11 +42,11 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
   const showInactivePredictions = useSelector(selectShowInactivePredictions);
   const isLightTheme = settings.themeColor === ThemeColor.LIGHT;
   const toggleShowRouteIdForDisplay = useCallback(
-    _event => dispatch(setShowRouteIdForDisplay(!showRouteIdForDisplay)),
+    () => dispatch(setShowRouteIdForDisplay(!showRouteIdForDisplay)),
     [dispatch, showRouteIdForDisplay]
   );
   const toggleShowInactivePredictions = useCallback(
-    _event => dispatch(setShowInactivePredictions(!showInactivePredictions)),
+    () => dispatch(setShowInactivePredictions(!showInactivePredictions)),
     [dispatch, showInactivePredictions]
   );
   const goBack = useCallback(() => {
@@ -75,30 +76,30 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
               title="Agency"
               loading={agencies.loading}
               value={agencies.loading || agencies.error || !agency ? null : agency.name}
-              onPress={_event => navigate("ChangeAgencyScreen")}
+              onPress={() => navigate("ChangeAgencyScreen")}
             />
             <LinkItem
               icon={<Icon icon="FontAwesome5" name="route" size={20} color="orange" />}
               title="Routes"
               description="choose which routes you want to see"
-              onPress={_event => navigate("ChangeFilterRoutesScreen")}
+              onPress={() => navigate("ChangeFilterRoutesScreen")}
               prioritizePropertySpace
             />
             <LinkItem
               icon={<Icon icon="FontAwesome" name="heart" size={20} color="red" />}
               title="Favorites"
-              onPress={_event => navigate("ChangeFavoriteStopLabelsScreen")}
+              onPress={() => navigate("ChangeFavoriteStopLabelsScreen")}
             />
             <LinkItem
               title="Distance Limit"
               value={`${settings.maxStopDistance} miles`}
-              onPress={_event => navigate("ChangeDistanceLimitScreen")}
+              onPress={() => navigate("ChangeDistanceLimitScreen")}
             />
             <LinkItem
               title="Predictions Limit"
               description="the number of predictions to show"
               value={settings.predictionListLimit.toString()}
-              onPress={_event => navigate("ChangePredictionsLimitScreen")}
+              onPress={() => navigate("ChangePredictionsLimitScreen")}
               prioritizePropertySpace
             />
             <SwitchItem
@@ -115,7 +116,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
             <LinkItem
               title="Update Routes"
               loading={routes.loading}
-              onPress={_event => dispatch(getRoutes())}
+              onPress={() => dispatch(getRoutes())}
               hideLinkIcon={true}
               showBottomBorder={false}
             />
@@ -135,7 +136,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                   size={20}
                 />
               }
-              onPress={_event => navigate("ChangeThemeScreen")}
+              onPress={() => navigate("ChangeThemeScreen")}
               showBottomBorder={false}
             />
           </SectionContent>
@@ -147,13 +148,13 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
               title="Rate Us"
               icon={<Icon icon="AntDesign" name="star" size={20} color="yellow" />}
               description="help us on the store!"
-              onPress={_event => StoreReview.requestReview()}
+              onPress={() => StoreReview.requestReview()}
               externalLink
               prioritizePropertySpace
               showBottomBorder={false}
             />
           </SectionContent>
-          <Version center>{`Version: ${Constants.nativeAppVersion}`}</Version>
+          <Version center color="gray">{`Version: ${Constants.nativeAppVersion}`}</Version>
         </Section>
         <Section>
           <GroupTitle>Support</GroupTitle>
@@ -162,7 +163,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
               title="Contact Us"
               description="tell us what you think!"
               icon={<Icon icon="Feather" name="mail" size={20} color="blueIndigo" />}
-              onPress={_event => Linking.openURL("mailto://upnextbus@gmail.com")}
+              onPress={() => Linking.openURL("mailto://upnextbus@gmail.com")}
               externalLink
               prioritizePropertySpace
               showBottomBorder={false}

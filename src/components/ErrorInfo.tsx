@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components/native";
-import { View } from "react-native";
 
 import Icon from "./Icon";
 import { Strong, Text, Title } from "./Typography";
@@ -10,6 +9,7 @@ import { OnPressHandler } from "../../types";
 
 const Container = styled.View`
   flex: 1;
+  display: flex;
   justify-content: center;
   align-items: center;
 `;
@@ -17,21 +17,19 @@ const Container = styled.View`
 const Message = styled(Text)`
   margin: ${space.lg} 0 ${space.xxxlg};
   padding-horizontal: ${space.xxxlg};
-  color: ${({ theme }) => theme.textLight};
 `;
 
 const RetryButton = styled(Button)`
   display: flex;
   flex-direction: row;
   align-items: center;
-
-  background-color: ${({ theme }) => theme.background};
-  margin-top: ${space.xxxlg};
+  margin-top: ${space.md};
 `;
 
 type ErrorInfoProps = {
-  message: string;
+  message?: string;
   title?: string;
+  retryLoading?: boolean;
   onRetry?: OnPressHandler;
   onRetryTitle?: string;
   externalLink?: boolean;
@@ -40,21 +38,20 @@ type ErrorInfoProps = {
 const ErrorInfo: React.FC<ErrorInfoProps> = ({
   message,
   title = null,
+  retryLoading = false,
   onRetry = null,
   onRetryTitle = null,
   externalLink = false
 }) => (
   <Container>
-    <Title color="red">{title || "Something went wrong"}</Title>
-    {message && <Message>{message}</Message>}
+    <Title color="primary">{title || "Something went wrong"}</Title>
+    {message && <Message color="textLight">{message}</Message>}
     {onRetry && (
-      <RetryButton onPress={onRetry}>
-        <View>
-          <Strong iconSpace={externalLink} hasIconRight>
-            {onRetryTitle || "Try Again"}
-          </Strong>
-          {externalLink && <Icon icon="AntDesign" name="arrowright" size={15} color="white" />}
-        </View>
+      <RetryButton onPress={onRetry} loading={retryLoading}>
+        <Strong iconSpace={externalLink} hasIconRight color="white">
+          {onRetryTitle || "Try Again"}
+        </Strong>
+        {externalLink && <Icon icon="AntDesign" name="arrowright" size={15} color="text" />}
       </RetryButton>
     )}
   </Container>

@@ -1,13 +1,18 @@
 import { createStore, applyMiddleware } from "redux";
 import { persistStore } from "redux-persist";
-import thunk from "redux-thunk";
+import thunk, { ThunkMiddleware } from "redux-thunk";
+import { useDispatch as useDispatchBase } from "react-redux";
 
 import rootReducer from "./root-reducer";
+import { RootState, RootAction } from "./types";
 
-function configureStore() {
-  const store = createStore(rootReducer, applyMiddleware(thunk));
-  const persistor = persistStore(store);
-  return { store, persistor };
-}
+const store = createStore(
+  rootReducer,
+  applyMiddleware(thunk as ThunkMiddleware<RootState, RootAction>)
+);
 
-export default configureStore;
+export const persistor = persistStore(store);
+
+export const useDispatch = () => useDispatchBase<typeof store.dispatch>();
+
+export default store;

@@ -3,40 +3,29 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useTheme } from "styled-components/native";
 
-import createSettingsNavigator from "./createSettingsNavigator";
-import createDetailNavigator from "./createDetailNavigator";
 import NearbyScreen from "../screens/NearbyScreen";
-import { BackIcon } from "./styles";
+import SettingsNavigator from "./SettingsNavigator";
+import DetailNavigator from "./DetailNavigator";
 import { RootStackParamList } from "../../types";
+import { getBaseStackConfig } from "./config";
+import SetupScreen from "../screens/Setup/SetupScreen";
 
 const Stack = createStackNavigator<RootStackParamList>();
 
-const RootNavigator: React.FC = _props => {
+const Navigator: React.FC = () => {
   const theme = useTheme();
-  const baseStackConfig = {
-    screenOptions: {
-      headerStyle: {
-        backgroundColor: theme.background
-      },
-      headerTitleStyle: {
-        color: theme.text
-      },
-      headerBackTitleVisible: false,
-      headerBackImage: _props => <BackIcon color="text" />
-    },
-    mode: "modal" as "modal",
-    headerMode: "none" as "none"
-  };
+  const baseStackConfig = getBaseStackConfig(theme);
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Nearby" {...baseStackConfig}>
+      <Stack.Navigator {...baseStackConfig} headerMode="none">
+        <Stack.Screen name="Setup" component={SetupScreen} />
         <Stack.Screen name="Nearby" component={NearbyScreen} />
-        <Stack.Screen name="Settings" component={createSettingsNavigator(baseStackConfig, theme)} />
-        <Stack.Screen name="Detail" component={createDetailNavigator(baseStackConfig, theme)} />
+        <Stack.Screen name="Settings" component={SettingsNavigator} />
+        <Stack.Screen name="Detail" component={DetailNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
 
-export default RootNavigator;
+export default Navigator;

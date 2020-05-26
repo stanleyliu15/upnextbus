@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React from "react";
+import { useSelector } from "react-redux";
 import { ScrollView } from "react-native";
 import { capitalize } from "lodash";
 import { RouteProp, CompositeNavigationProp } from "@react-navigation/native";
@@ -7,9 +7,9 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { selectThemeColor, setThemeColor } from "../../../store/features/settings";
 import { SafeArea, SelectItem } from "../../../components";
-import { SaveButton } from "../settingStyles";
 import { ThemeColor } from "../../../styles";
 import { SettingsStackParamList, RootStackParamList } from "../../../../types";
+import { useDispatch } from "../../../store";
 
 type ChangeThemeScreenProps = {
   navigation: CompositeNavigationProp<
@@ -19,30 +19,27 @@ type ChangeThemeScreenProps = {
   route: RouteProp<SettingsStackParamList, "ChangeThemeScreen">;
 };
 
-const ChangeThemeScreen: React.FC<ChangeThemeScreenProps> = _props => {
+const ChangeThemeScreen: React.FC<ChangeThemeScreenProps> = ({ navigation }) => {
   const dispatch = useDispatch();
   const themeColor = useSelector(selectThemeColor);
-  const [selectedThemeColor, setSelectedThemeColor] = useState(themeColor);
-  const handleSave = useCallback(_event => dispatch(setThemeColor(selectedThemeColor)), [
-    dispatch,
-    selectedThemeColor
-  ]);
   const themeColors = Object.values(ThemeColor);
 
   return (
     <SafeArea>
       <ScrollView>
-        {themeColors.map((themeColor, index) => (
+        {themeColors.map((tColor, index) => (
           <SelectItem
-            key={themeColor}
-            title={capitalize(themeColor)}
-            selected={themeColor === selectedThemeColor}
-            onPress={() => setSelectedThemeColor(themeColor)}
+            key={tColor}
+            title={capitalize(tColor)}
+            selected={tColor === themeColor}
+            onPress={() => {
+              dispatch(setThemeColor(tColor));
+              navigation.goBack();
+            }}
             showBottomBorder={index !== themeColors.length - 1}
           />
         ))}
       </ScrollView>
-      <SaveButton onPress={handleSave} />
     </SafeArea>
   );
 };

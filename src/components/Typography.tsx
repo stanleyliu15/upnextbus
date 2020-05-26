@@ -1,9 +1,9 @@
 import styled from "styled-components/native";
 
-import { fontFamily, fontSize, space } from "../styles";
+import { fontFamily, fontSize, space, colors, Theme } from "../styles";
 
 type TextProps = {
-  color?: string;
+  color?: keyof Theme | string;
   iconSpace?: boolean;
   hasIconRight?: boolean;
   right?: boolean;
@@ -11,11 +11,11 @@ type TextProps = {
 };
 
 export const Text = styled.Text<TextProps>`
-  color: ${({ theme, color }) => theme[color] || color || theme.text};
+  color: ${({ theme, color }) => theme[color] || colors[color] || color || theme.text};
   font-family: ${fontFamily.normal};
   font-size: ${fontSize.md};
-  margin-right: ${({ iconSpace, hasIconRight }) => (iconSpace && hasIconRight ? space.md : 0)};
-  margin-left: ${({ iconSpace, hasIconRight }) => (iconSpace && !hasIconRight ? space.md : 0)};
+  margin-right: ${({ iconSpace, hasIconRight }) => (iconSpace && hasIconRight ? space.sm : 0)};
+  margin-left: ${({ iconSpace, hasIconRight }) => (iconSpace && !hasIconRight ? space.sm : 0)};
   text-align: ${props => {
     if (props.right) return "right";
     if (props.center) return "center";

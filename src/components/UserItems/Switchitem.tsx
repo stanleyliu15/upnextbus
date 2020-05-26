@@ -1,7 +1,12 @@
 import React from "react";
-import { Switch } from "react-native";
+import { Platform } from "react-native";
+import styled from "styled-components/native";
 
 import Item, { ItemProps } from "./item";
+
+const Switch = styled.Switch`
+  transform: scale(${Platform.OS === "ios" ? 0.7 : 1});
+`;
 
 type Props = {
   enabled: boolean;

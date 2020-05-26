@@ -35,7 +35,6 @@ export const ProSectionContent = styled(SectionContent)`
 
 export const Version = styled(Text)`
   margin-top: ${space.xxs};
-  color: ${({ theme }) => theme.gray};
   font-size: ${fontSize.sm};
 `;
 
