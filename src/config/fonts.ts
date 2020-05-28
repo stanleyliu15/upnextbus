@@ -3,7 +3,7 @@
 // Icon Library
 // https://oblador.github.io/react-native-vector-icons/
 
-// TODO: optimize fonts/icons
+// todo: optimize fonts/icons
 
 const fonts = [
   {
