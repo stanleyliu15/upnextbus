@@ -7,7 +7,6 @@ import { transparentize } from "polished";
 import Icon from "../Icon";
 import { Strong } from "../Typography";
 import { CircleIconButton } from "../Buttons";
-
 import { NextBus, OnPressHandler } from "../../../types";
 import { normalizeRouteName } from "../../utils";
 import {
@@ -128,7 +127,7 @@ const DetailItem: React.FC<DetailItemProps> = ({
           prioritizePropertySpace
           externalLink
           linkIconColor="yellow"
-          highlightColor={transparentize(0.4, theme.yellow)}
+          highlightColor={transparentize(0.6, theme.yellow)}
           showBottomBorder={false}
         />
       )}
