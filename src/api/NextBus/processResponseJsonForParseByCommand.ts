@@ -15,19 +15,25 @@ const MAXIMUM_ROUTES_ERROR_MESSAGE =
 
 const UNAVALIABLE_ROUTE_REGEX = /For agency=((?!\s*$).+) route r=((?!\s*$).+) is not currently available. It might be initializing still./;
 
-const checkResponseJsonForError = (responseJson: NextBusSource.ResponseJson) => {
+const checkResponseJsonForError = (
+  command: NextBusSource.Command,
+  responseJson: NextBusSource.ResponseJson
+) => {
   if (responseJson.Error) {
-    // todo: split up errors based on command?
     const error = parseError(responseJson.Error);
 
-    const unavaliableRouteMatches = UNAVALIABLE_ROUTE_REGEX.exec(error.message);
-    if (unavaliableRouteMatches) {
-      const [, , routeId] = unavaliableRouteMatches;
-      throw new NextBusUnavaliableRouteError(error.message, error.retriable, routeId);
+    if (command === COMMANDS.predictions || command === COMMANDS.predictionsForMultiStops) {
+      const unavaliableRouteMatches = UNAVALIABLE_ROUTE_REGEX.exec(error.message);
+      if (unavaliableRouteMatches) {
+        const [, , routeId] = unavaliableRouteMatches;
+        throw new NextBusUnavaliableRouteError(error.message, error.retriable, routeId);
+      }
     }
 
-    if (error.message === MAXIMUM_ROUTES_ERROR_MESSAGE) {
-      throw new NextBusMaximumRoutesError(error.message, error.retriable);
+    if (command === COMMANDS.routeConfig) {
+      if (error.message === MAXIMUM_ROUTES_ERROR_MESSAGE) {
+        throw new NextBusMaximumRoutesError(error.message, error.retriable);
+      }
     }
 
     throw new NextBusError(error.message, error.retriable);
@@ -69,7 +75,7 @@ const processResponseJsonForParseByCommand = (
   responseJson: NextBusSource.ResponseJson
 ) => {
   return flow(
-    checkResponseJsonForError,
+    checkResponseJsonForError.bind(this, command),
     extractResponseData.bind(this, command),
     uniformalizeResponseData.bind(this, command)
   )(responseJson);
