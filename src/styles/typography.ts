@@ -1,10 +1,12 @@
+import scale from "./scale";
+
 export const fontSize = {
-  xxs: "8px",
-  xs: "10px",
-  sm: "12px",
-  md: "14px",
-  lg: "18px",
-  xlg: "22px"
+  xxs: `${scale(8)}px`,
+  xs: `${scale(10)}px`,
+  sm: `${scale(12)}px`,
+  md: `${scale(14)}px`,
+  lg: `${scale(18)}px`,
+  xlg: `${scale(22)}px`
 };
 
 export const fontFamily = {

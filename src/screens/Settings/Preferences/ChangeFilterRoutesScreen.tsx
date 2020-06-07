@@ -117,7 +117,7 @@ export const ChangeFilterRoutesHeaderRight: React.FC = () => {
         icon="MaterialCommunityIcons"
         name={toggled ? "checkbox-multiple-blank-circle" : "checkbox-multiple-blank-circle-outline"}
         color="text"
-        size={25}
+        size="md"
       />
     </CheckboxButton>
   );

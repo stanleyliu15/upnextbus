@@ -12,13 +12,12 @@ import {
 import styled, { useTheme } from "styled-components/native";
 
 import Loader from "./Loader";
-import { space, borderRadius, Theme, colors } from "../styles";
+import { space, borderRadius, Theme, colors, iconSize } from "../styles";
 
 type BaseButtonProps =
   | Pick<TouchableOpacityProps, keyof TouchableOpacityProps>
   | Pick<TouchableNativeFeedbackProps, keyof TouchableNativeFeedbackProps>;
-type ButtonProps = BaseButtonProps & { loading?: boolean };
-
+export type ButtonProps = BaseButtonProps & { loading?: boolean };
 export const Button: React.FC<ButtonProps> = ({ children, style, loading, disabled, ...rest }) => {
   const theme = useTheme();
   const buttonStyle = StyleSheet.flatten([
@@ -47,24 +46,24 @@ export const Button: React.FC<ButtonProps> = ({ children, style, loading, disabl
   );
 };
 
-type CircleIconButtonProps = ButtonProps & { iconSize: number };
+export type CircleIconButtonProps = ButtonProps & { iconSize: keyof typeof iconSize };
 export const CircleIconButton = styled(Button)<CircleIconButtonProps>`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: ${({ iconSize }) => iconSize * 2}px;
-  height: ${({ iconSize }) => iconSize * 2}px;
+  width: ${({ iconSize: iSize }) => iconSize[iSize] * 2}px;
+  height: ${({ iconSize: iSize }) => iconSize[iSize] * 2}px;
   padding: 0;
 
   border-radius: ${borderRadius.full};
 `;
 
-type FloatButtonProps = { position: "bottom-left" | "bottom-right" };
-export const FloatButton = styled(CircleIconButton)<FloatButtonProps>`
+export type FloatCircleIconButtonProps = { position: "left" | "right" };
+export const FloatCircleIconButton = styled(CircleIconButton)<FloatCircleIconButtonProps>`
   position: absolute;
   bottom: ${space.md};
-  left: ${({ position }) => (position === "bottom-left" ? space.md : "auto")};
-  right: ${({ position }) => (position === "bottom-right" ? space.md : "auto")};
+  left: ${({ position }) => (position === "left" ? space.md : "auto")};
+  right: ${({ position }) => (position === "right" ? space.md : "auto")};
   z-index: 1;
 
   background-color: ${({ theme }) => theme.background};

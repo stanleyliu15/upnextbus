@@ -6,8 +6,6 @@ import Navigator from "./Navigator";
 import { selectThemeColor } from "./store/features/settings";
 import { fromThemeColor } from "./styles";
 
-// todo: consistent sizing of all elements based on screenW/screenH
-
 const Root: React.FC = () => {
   const themeColor = useSelector(selectThemeColor);
 

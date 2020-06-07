@@ -64,29 +64,29 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
       <ScrollView>
         <Header>
           <Title>Settings</Title>
-          <CloseButton onPress={goBack}>
-            <Icon icon="MaterialCommunityIcons" name="close" size={20} color="text" />
+          <CloseButton onPress={goBack} iconSize="sm">
+            <Icon icon="MaterialCommunityIcons" name="close" size="sm" color="text" />
           </CloseButton>
         </Header>
         <Section>
           <GroupTitle>Preferences</GroupTitle>
           <SectionContent>
             <LinkItem
-              icon={<Icon icon="FontAwesome5" name="building" size={20} color="green" />}
+              icon={<Icon icon="FontAwesome5" name="building" size="sm" color="green" />}
               title="Agency"
               loading={agencies.loading}
               value={agencies.loading || agencies.error || !agency ? null : agency.name}
               onPress={() => navigate("ChangeAgencyScreen")}
             />
             <LinkItem
-              icon={<Icon icon="FontAwesome5" name="route" size={20} color="orange" />}
+              icon={<Icon icon="FontAwesome5" name="route" size="sm" color="orange" />}
               title="Routes"
               description="choose which routes you want to see"
               onPress={() => navigate("ChangeFilterRoutesScreen")}
               prioritizePropertySpace
             />
             <LinkItem
-              icon={<Icon icon="FontAwesome" name="heart" size={20} color="red" />}
+              icon={<Icon icon="FontAwesome" name="heart" size="sm" color="red" />}
               title="Favorites"
               onPress={() => navigate("ChangeFavoriteStopLabelsScreen")}
             />
@@ -133,7 +133,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
                   icon="FontAwesome5"
                   name={isLightTheme ? "sun" : "moon"}
                   color={isLightTheme ? "orange" : "purple"}
-                  size={20}
+                  size="sm"
                 />
               }
               onPress={() => navigate("ChangeThemeScreen")}
@@ -146,7 +146,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
           <SectionContent>
             <LinkItem
               title="Rate Us"
-              icon={<Icon icon="AntDesign" name="star" size={20} color="yellow" />}
+              icon={<Icon icon="AntDesign" name="star" size="sm" color="yellow" />}
               description="help us on the store!"
               onPress={() => StoreReview.requestReview()}
               externalLink
@@ -162,7 +162,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
             <LinkItem
               title="Contact Us"
               description="tell us what you think!"
-              icon={<Icon icon="Feather" name="mail" size={20} color="blueIndigo" />}
+              icon={<Icon icon="Feather" name="mail" size="sm" color="blueIndigo" />}
               onPress={() => Linking.openURL("mailto://upnextbus@gmail.com")}
               externalLink
               prioritizePropertySpace
@@ -175,7 +175,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
   );
 };
 
-const CloseButton = styled(CircleIconButton).attrs({ iconSize: 20 })`
+const CloseButton = styled(CircleIconButton)`
   background-color: ${({ theme }) => theme.backgroundLight};
 `;
 

@@ -38,11 +38,11 @@ const RowBetween = styled.View`
   justify-content: space-between;
 `;
 
-const RefreshButton = styled(CircleIconButton).attrs({ iconSize: 20 })`
+const RefreshButton = styled(CircleIconButton)`
   background-color: transparent;
 `;
 
-export const FavoriteButton = styled(CircleIconButton).attrs({ iconSize: 20 })`
+export const FavoriteButton = styled(CircleIconButton)`
   align-self: flex-start;
   background-color: ${({ theme }) => theme.backgroundLight};
 `;
@@ -97,8 +97,8 @@ const DetailItem: React.FC<DetailItemProps> = ({
     <Container>
       <RowBetween>
         <DetailRouteName>{routeName}</DetailRouteName>
-        <FavoriteButton onPress={handleFavorite}>
-          <Icon icon="FontAwesome" name={`heart${favorited ? "" : "-o"}`} size={25} color="red" />
+        <FavoriteButton onPress={handleFavorite} iconSize="md">
+          <Icon icon="FontAwesome" name={`heart${favorited ? "" : "-o"}`} size="md" color="red" />
         </FavoriteButton>
       </RowBetween>
       <LinkItem
@@ -120,7 +120,7 @@ const DetailItem: React.FC<DetailItemProps> = ({
       />
       {onServiceAlertsPress && (
         <LinkItem
-          icon={<Icon icon="Ionicons" name="ios-warning" size={20} color="yellow" />}
+          icon={<Icon icon="Ionicons" name="ios-warning" size="md" color="yellow" />}
           title="Service Alerts"
           onPress={onServiceAlertsPress}
           titleStyle={{ fontFamily: fontFamily.normal }}
@@ -132,8 +132,8 @@ const DetailItem: React.FC<DetailItemProps> = ({
         />
       )}
       <RowBetween>
-        <RefreshButton onPress={canRefresh ? onRefreshPress : undefined}>
-          <Icon icon="MaterialIcons" name="refresh" size={30} color="primary" />
+        <RefreshButton onPress={canRefresh ? onRefreshPress : undefined} iconSize="md">
+          <Icon icon="MaterialIcons" name="refresh" size="lg" color="primary" />
         </RefreshButton>
         <PredictionTime>
           {predictionList.length > 0 ? (

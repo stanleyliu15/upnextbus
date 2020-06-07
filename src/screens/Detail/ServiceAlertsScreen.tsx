@@ -22,7 +22,7 @@ const ServiceAlertsScreen: React.FC<ServiceAlertsScreenProps> = ({ route }) => {
     <SafeArea>
       {serviceAlerts.map(serviceAlert => (
         <AlertItem key={serviceAlert.message}>
-          <Icon icon="AntDesign" name="warning" size={20} color="yellow" />
+          <Icon icon="AntDesign" name="warning" size="sm" color="yellow" />
           <VerticalSeperator />
           <Message>{`${serviceAlert.message}`}</Message>
         </AlertItem>

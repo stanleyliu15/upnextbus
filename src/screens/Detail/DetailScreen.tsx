@@ -316,11 +316,11 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
       </Map>
       {fetching && <DataLoader />}
       <UtilityButtons>
-        <CloseButton onPress={closeScreen}>
-          <Icon icon="MaterialCommunityIcons" name="close" size={20} color="text" />
+        <CloseButton onPress={closeScreen} iconSize="sm">
+          <Icon icon="MaterialCommunityIcons" name="close" size="sm" color="text" />
         </CloseButton>
-        <LocationButton onPress={handleLocationButtonPress}>
-          <Icon icon="MaterialCommunityIcons" name="near-me" size={20} color="green" />
+        <LocationButton onPress={handleLocationButtonPress} iconSize="sm">
+          <Icon icon="MaterialCommunityIcons" name="near-me" size="sm" color="green" />
         </LocationButton>
       </UtilityButtons>
       <Panel>
@@ -341,6 +341,7 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
 };
 
 const statusBarHeight = getStatusBarHeight();
+const bottomInset = getInset("bottom");
 
 const DataLoader = styled(Loader)`
   position: absolute;
@@ -358,7 +359,7 @@ const Container = styled.View`
 
 const Panel = styled.View`
   position: absolute;
-  bottom: ${getInset("bottom")}px;
+  bottom: ${bottomInset}px;
   width: 100%;
 
   padding: ${space.xs};
@@ -382,7 +383,7 @@ const UtilityButtons = styled.View`
   align-items: center;
 `;
 
-export const CloseButton = styled(CircleIconButton).attrs({ iconSize: 20 })`
+export const CloseButton = styled(CircleIconButton)`
   position: absolute;
   top: ${statusBarHeight + 5}px;
   right: 5px;
@@ -390,7 +391,7 @@ export const CloseButton = styled(CircleIconButton).attrs({ iconSize: 20 })`
   background-color: ${({ theme }) => theme.backgroundLight};
 `;
 
-const LocationButton = styled(CircleIconButton).attrs({ iconSize: 20 })`
+const LocationButton = styled(CircleIconButton)`
   position: absolute;
   top: ${statusBarHeight + 55}px;
   right: 5px;
@@ -402,7 +403,6 @@ const CalloutView = styled.View`
   width: 160px;
   padding: ${space.md};
   margin-bottom: ${space.md};
-
   border-radius: ${borderRadius.round};
   background-color: ${({ theme }) => theme.backgroundLight};
 `;

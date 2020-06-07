@@ -120,7 +120,7 @@ const Item: React.FC<ItemProps> = ({
             )}
           </TitleAndDescription>
         </PropertyItem>
-        {loading ? <ValueLoader size={15} /> : valueItem}
+        {loading ? <ValueLoader size="xs" /> : valueItem}
       </ItemContainer>
     </I>
   );

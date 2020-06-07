@@ -76,7 +76,7 @@ const PredictionsItem: React.FC<PredictionsItemProps> = ({
           <RouteName>{routeName}</RouteName>
           <DirectionName color="textLighter">{directionName}</DirectionName>
           <Block>
-            {favorited && <Icon icon="FontAwesome" name="heart" size={15} color="red" />}
+            {favorited && <Icon icon="FontAwesome" name="heart" size="xs" color="red" />}
             <StopName iconSpace={favorited} color="textLighter">
               {stopName}
             </StopName>

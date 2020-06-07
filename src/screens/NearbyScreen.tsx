@@ -6,7 +6,7 @@ import { RouteProp, CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { isEqual } from "lodash";
 
-import { Icon, SafeArea, ErrorInfo, FloatButton, PredictionsItem } from "../components";
+import { Icon, SafeArea, ErrorInfo, FloatCircleIconButton, PredictionsItem } from "../components";
 import {
   getNearbyPredictionsList,
   selectNearbyPredictionList,
@@ -95,16 +95,16 @@ const NearbyScreen: React.FC<NearbyScreenProps> = ({ navigation }) => {
 
   return (
     <SafeArea>
-      <FloatButton onPress={openSettings} iconSize={25} position="bottom-right">
-        <Icon icon="Feather" name="settings" size={25} color="primary" />
-      </FloatButton>
+      <FloatCircleIconButton onPress={openSettings} position="right" iconSize="md">
+        <Icon icon="Feather" name="settings" size="md" color="primary" />
+      </FloatCircleIconButton>
       {nearby.error ? (
         renderNearbyError
       ) : (
         <>
-          <FloatButton onPress={fetchData} iconSize={25} position="bottom-left">
-            <Icon icon="MaterialIcons" name="refresh" size={30} color="primary" />
-          </FloatButton>
+          <FloatCircleIconButton onPress={fetchData} position="left" iconSize="md">
+            <Icon icon="MaterialIcons" name="refresh" size="lg" color="primary" />
+          </FloatCircleIconButton>
           <FlatList
             style={{ backgroundColor: theme.backgroundLight }}
             data={nearby.data}

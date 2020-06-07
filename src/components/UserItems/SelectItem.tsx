@@ -22,7 +22,7 @@ const SelectItem: React.FC<SelectItemProps> = ({ selected, ...itemProps }) => (
         icon="MaterialCommunityIcons"
         name={selected ? "checkbox-blank-circle" : "checkbox-blank-circle-outline"}
         color={selected ? "primary" : "gray"}
-        size={15}
+        size="xs"
       />
     }
     style={styles.item}

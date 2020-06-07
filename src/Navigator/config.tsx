@@ -13,9 +13,9 @@ import { Theme, space } from "../styles";
 export const BackIcon = styled(Icon).attrs({
   icon: "Entypo",
   name: "chevron-thin-left",
-  size: 20
+  size: "sm"
 })`
-  margin: 0 ${Platform.OS === "ios" ? space.sm : 0};
+  margin: 0 ${Platform.OS === "ios" ? space.md : 0};
 `;
 
 const getBaseStackHeaderOptions = (theme: Theme): StackHeaderOptions => ({
