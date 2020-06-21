@@ -8,6 +8,7 @@ export const space = {
   md: `${scale(12)}px`,
   lg: `${scale(16)}px`,
   xlg: `${scale(20)}px`,
+  xxlg: `${scale(30)}px`,
   xxxlg: `${scale(40)}px`
 };
 

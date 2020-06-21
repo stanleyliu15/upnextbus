@@ -1,4 +1,5 @@
 import React from "react";
+import { View } from "react-native";
 import styled from "styled-components/native";
 
 import Icon from "./Icon";
@@ -6,17 +7,15 @@ import { Strong, Text, Title } from "./Typography";
 import { Button } from "./Buttons";
 import { space } from "../styles";
 import { OnPressHandler } from "../../types";
+import { CenterColumn } from "./Center";
 
-const Container = styled.View`
-  flex: 1;
+const Message = styled.View`
   display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
-`;
 
-const Message = styled(Text)`
-  margin: ${space.lg} 0 ${space.xxxlg};
-  padding-horizontal: ${space.xxxlg};
+  margin: ${space.lg} 0 80px;
 `;
 
 const RetryButton = styled(Button)`
@@ -43,9 +42,20 @@ const ErrorInfo: React.FC<ErrorInfoProps> = ({
   onRetryTitle = null,
   externalLink = false
 }) => (
-  <Container>
-    <Title color="primary">{title || "Something went wrong"}</Title>
-    {message && <Message color="textLight">{message}</Message>}
+  <CenterColumn>
+    <View>
+      <Title center color="primary">
+        {title || "Something went wrong"}
+      </Title>
+      {message && (
+        <Message>
+          <Icon icon="Ionicons" name="ios-warning" size="md" color="text" />
+          <Text color="textLight" iconSpace>
+            {message}
+          </Text>
+        </Message>
+      )}
+    </View>
     {onRetry && (
       <RetryButton onPress={onRetry} loading={retryLoading}>
         <Strong iconSpace={externalLink} hasIconRight color="white">
@@ -54,7 +64,7 @@ const ErrorInfo: React.FC<ErrorInfoProps> = ({
         {externalLink && <Icon icon="AntDesign" name="arrowright" size="xs" color="white" />}
       </RetryButton>
     )}
-  </Container>
+  </CenterColumn>
 );
 
 export default ErrorInfo;

@@ -28,11 +28,6 @@ export const SectionContent = styled.View`
   padding: ${space.xxs};
 `;
 
-export const ProSectionContent = styled(SectionContent)`
-  background-color: ${({ theme }) => theme.primaryDark};
-  padding: ${space.xlg};
-`;
-
 export const Version = styled(Text)`
   margin-top: ${space.xxs};
   font-size: ${fontSize.sm};

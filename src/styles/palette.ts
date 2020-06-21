@@ -27,9 +27,15 @@ type ThemeColors = {
 export const colors = {
   white: "#fff",
   black: "#000",
-  blackOff: "#333",
+
+  grayDarkest: "#404040",
+  grayDarker: "#4d4d4d",
+  grayDark: "#777",
   gray: "#999",
   grayLight: "#d3d3d3",
+  grayLighter: "#e0e0e0",
+  grayLightest: "#f4f4f4",
+
   green: "#99cc33",
   red: "#d63447",
   yellow: "#ffcc00",
@@ -51,32 +57,32 @@ export const themeColors: { [key in ThemeColor]: ThemeColors } = {
     secondaryLight: colors.blueIndigo,
 
     text: colors.black,
-    textLight: "#555",
-    textLighter: "#777",
+    textLight: colors.grayDarker,
+    textLighter: colors.grayDark,
 
-    background: "#f4f4f4",
+    background: colors.grayLightest,
     backgroundLight: colors.white,
-    backgroundDark: "#e0e0e0",
+    backgroundDark: colors.grayLighter,
 
     border: colors.grayLight,
-    highlight: "#e0e0e0"
+    highlight: colors.grayLighter
   },
   [ThemeColor.DARK]: {
-    primary: lighten(0.25, colors.blue),
-    primaryLight: lighten(0.25, colors.indigo),
-    primaryDark: lighten(0.2, colors.navyBlue),
-    secondary: colors.blueLight,
+    primary: lighten(0.3, colors.blue),
+    primaryLight: lighten(0.3, colors.indigo),
+    primaryDark: lighten(0.3, colors.navyBlue),
+    secondary: lighten(0.3, colors.blueLight),
     secondaryLight: colors.blueIndigo,
 
     text: colors.white,
     textLight: colors.grayLight,
-    textLighter: "#e0e0e0",
+    textLighter: colors.grayLighter,
 
-    background: "#4d4d4d",
-    backgroundDark: colors.blackOff,
-    backgroundLight: "#404040",
+    background: colors.grayDarkest,
+    backgroundDark: colors.grayLighter,
+    backgroundLight: colors.grayDarker,
 
     border: colors.grayLight,
-    highlight: colors.blackOff
+    highlight: colors.grayDarkest
   }
 };

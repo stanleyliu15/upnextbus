@@ -11,7 +11,7 @@ import {
   setFavoriteStopLabels,
   selectShowRouteIdForDisplay
 } from "../../../store/features/settings";
-import { SafeArea, SelectItem } from "../../../components";
+import { SafeArea, SelectItem, CenterColumn, Text } from "../../../components";
 import { selectRoutes } from "../../../store/features/nextbus";
 import { normalizeRouteName, findBusInfo, equalContains } from "../../../utils";
 import { SaveButton } from "../settingStyles";
@@ -40,7 +40,11 @@ const ChangeFavoriteStopLabelsScreen: React.FC<ChangeFavoriteStopLabelsScreenPro
 
   return (
     <SafeArea>
-      {favoriteStopLabels.length > 0 && (
+      {favoriteStopLabels.length === 0 ? (
+        <CenterColumn>
+          <Text>You currently have 0 favorites.</Text>
+        </CenterColumn>
+      ) : (
         <>
           <FlatList
             data={favoriteStopLabels}

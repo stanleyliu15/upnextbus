@@ -3,11 +3,12 @@ import { StyleProp, TextStyle, View, StyleSheet, ViewStyle, ViewProps } from "re
 import styled from "styled-components/native";
 import { noop } from "lodash";
 
+import Loader from "../Loader";
 import { fontSize, space, border, borderRadius } from "../../styles";
 import { Text, Strong } from "../Typography";
 import { HighlightButton, HighlightButtonProps } from "../Buttons";
 import { OnPressHandler } from "../../../types";
-import Loader from "../Loader";
+import { CenterRow } from "../Center";
 
 const I = styled.View`
   display: flex;
@@ -24,12 +25,7 @@ const Container = styled.View`
   justify-content: space-between;
 `;
 
-const PropertyItem = styled.View`
-  flex: 1;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
+const PropertyItem = styled(CenterRow)`
   margin-right: ${space.xxs};
 `;
 
@@ -50,10 +46,6 @@ const ValueLoader = styled(Loader)`
 
   background-color: transparent;
 `;
-
-const styles = StyleSheet.create({
-  hiddenBorderBottom: { borderBottomWidth: 0 }
-});
 
 type Props = {
   title: string;
@@ -94,7 +86,7 @@ const Item: React.FC<ItemProps> = ({
   const itemProps = pressable ? { onPress: loading ? noop : onPress } : {};
   const itemStyle = StyleSheet.flatten([
     { flexDirection: pressable ? "column" : "row" },
-    showBottomBorder ? null : styles.hiddenBorderBottom,
+    !showBottomBorder && { borderBottomWidth: 0 },
     style
   ]);
   const ItemContainer = pressable ? Container : React.Fragment;
