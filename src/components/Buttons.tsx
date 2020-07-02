@@ -10,6 +10,7 @@ import {
   TouchableHighlightProps
 } from "react-native";
 import styled, { useTheme } from "styled-components/native";
+import { getInset } from "react-native-safe-area-view";
 
 import Loader from "./Loader";
 import { space, borderRadius, Theme, colors, iconSize } from "../styles";
@@ -61,7 +62,7 @@ export const CircleIconButton = styled(Button)<CircleIconButtonProps>`
 export type FloatCircleIconButtonProps = { position: "left" | "right" };
 export const FloatCircleIconButton = styled(CircleIconButton)<FloatCircleIconButtonProps>`
   position: absolute;
-  bottom: ${space.md};
+  bottom: ${getInset("bottom") + parseInt(space.md, 10)}px;
   left: ${({ position }) => (position === "left" ? space.md : "auto")};
   right: ${({ position }) => (position === "right" ? space.md : "auto")};
   z-index: 1;

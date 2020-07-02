@@ -4,7 +4,7 @@ import MapView, { Marker, Polyline, Callout, PROVIDER_GOOGLE } from "react-nativ
 import styled, { useTheme } from "styled-components/native";
 import { useSelector } from "react-redux";
 import * as Location from "expo-location";
-import { getStatusBarHeight, getInset } from "react-native-safe-area-view";
+import { getStatusBarHeight } from "react-native-safe-area-view";
 import {
   CommonActions,
   RouteProp,
@@ -135,7 +135,7 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
       watchPosition();
 
       return () => {
-        watchPositionSubscription.remove();
+        watchPositionSubscription?.remove();
         watchPositionSubscription = null;
       };
     }, [])
@@ -323,30 +323,27 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
           <Icon icon="MaterialCommunityIcons" name="near-me" size="sm" color="green" />
         </LocationButton>
       </UtilityButtons>
-      <Panel>
-        <DetailItem
-          predictions={predictions}
-          stopDistance={distance}
-          canRefresh={!fetching}
-          onDirectionPress={directions.length > 1 ? handleChangeDirectionPress : undefined}
-          onStopPress={direction.stops.length > 1 ? handleChangeStopPress : undefined}
-          onRefreshPress={handleRefreshPress}
-          onServiceAlertsPress={
-            predictions.serviceAlerts.length > 0 ? handleServiceAlertsPress : undefined
-          }
-        />
-      </Panel>
+      <DetailItem
+        predictions={predictions}
+        stopDistance={distance}
+        canRefresh={!fetching}
+        onDirectionPress={directions.length > 1 ? handleChangeDirectionPress : undefined}
+        onStopPress={direction.stops.length > 1 ? handleChangeStopPress : undefined}
+        onRefreshPress={handleRefreshPress}
+        onServiceAlertsPress={
+          predictions.serviceAlerts.length > 0 ? handleServiceAlertsPress : undefined
+        }
+      />
     </Container>
   );
 };
 
 const statusBarHeight = getStatusBarHeight();
-const bottomInset = getInset("bottom");
 
 const DataLoader = styled(Loader)`
   position: absolute;
-  top: ${statusBarHeight + 5}px;
-  left: 5px;
+  top: ${statusBarHeight + parseInt(space.xs, 10)}px;
+  left: ${space.xs};
 
   padding: ${space.xs};
   border-radius: ${borderRadius.round};
@@ -355,14 +352,6 @@ const DataLoader = styled(Loader)`
 
 const Container = styled.View`
   flex: 1;
-`;
-
-const Panel = styled.View`
-  position: absolute;
-  bottom: ${bottomInset}px;
-  width: 100%;
-
-  padding: ${space.xs};
 `;
 
 const Map = styled(MapView)`
@@ -376,26 +365,21 @@ const Map = styled(MapView)`
 `;
 
 const UtilityButtons = styled.View`
-  position: relative;
+  position: absolute;
+  top: ${statusBarHeight + parseInt(space.xs, 10)}px;
+  right: ${space.xs};
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
 `;
 
 export const CloseButton = styled(CircleIconButton)`
-  position: absolute;
-  top: ${statusBarHeight + 5}px;
-  right: 5px;
-
   background-color: ${({ theme }) => theme.backgroundLight};
 `;
 
 const LocationButton = styled(CircleIconButton)`
-  position: absolute;
-  top: ${statusBarHeight + 55}px;
-  right: 5px;
-
+  margin-top: ${space.sm};
   background-color: ${({ theme }) => theme.backgroundLight};
 `;
 

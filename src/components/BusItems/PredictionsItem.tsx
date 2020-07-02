@@ -92,7 +92,7 @@ const PredictionsItem: React.FC<PredictionsItemProps> = ({
               </PredictionTime>
             ))
           ) : (
-            <Strong center>--</Strong>
+            <Strong center>- -</Strong>
           )}
         </PredictionTimeSection>
       </Container>
