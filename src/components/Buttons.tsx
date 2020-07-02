@@ -47,8 +47,8 @@ export const Button: React.FC<ButtonProps> = ({ children, style, loading, disabl
   );
 };
 
-export type CircleIconButtonProps = ButtonProps & { iconSize: keyof typeof iconSize };
-export const CircleIconButton = styled(Button)<CircleIconButtonProps>`
+export type IconButtonProps = ButtonProps & { iconSize: keyof typeof iconSize };
+export const IconButton = styled(Button)<IconButtonProps>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -56,11 +56,11 @@ export const CircleIconButton = styled(Button)<CircleIconButtonProps>`
   height: ${({ iconSize: iSize }) => iconSize[iSize] * 2}px;
   padding: 0;
 
-  border-radius: ${borderRadius.full};
+  border-radius: ${borderRadius.round};
 `;
 
-export type FloatCircleIconButtonProps = { position: "left" | "right" };
-export const FloatCircleIconButton = styled(CircleIconButton)<FloatCircleIconButtonProps>`
+export type FloatIconButtonProps = { position: "left" | "right" };
+export const FloatIconButton = styled(IconButton)<FloatIconButtonProps>`
   position: absolute;
   bottom: ${getInset("bottom") + parseInt(space.md, 10)}px;
   left: ${({ position }) => (position === "left" ? space.md : "auto")};

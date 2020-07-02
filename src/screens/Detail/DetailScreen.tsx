@@ -21,7 +21,7 @@ import {
 } from "../../store/features/settings";
 import { ThemeColor, space, borderRadius } from "../../styles";
 import { DARK_MAP_STYLE } from "../../config/mapStyles";
-import { Loader, Icon, Strong, ErrorInfo, CircleIconButton, DetailItem } from "../../components";
+import { Loader, Icon, Strong, ErrorInfo, IconButton, DetailItem } from "../../components";
 import { getDistanceBetween } from "../../utils/geolocation";
 import NextBusAPI from "../../api/NextBus/api";
 import { StartPointSvg, EndPointSvg, PointSvg, BusSvg } from "../../svgs";
@@ -374,11 +374,11 @@ const UtilityButtons = styled.View`
   align-items: center;
 `;
 
-export const CloseButton = styled(CircleIconButton)`
+export const CloseButton = styled(IconButton)`
   background-color: ${({ theme }) => theme.backgroundLight};
 `;
 
-const LocationButton = styled(CircleIconButton)`
+const LocationButton = styled(IconButton)`
   margin-top: ${space.sm};
   background-color: ${({ theme }) => theme.backgroundLight};
 `;

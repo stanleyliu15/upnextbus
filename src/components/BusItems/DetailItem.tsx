@@ -8,7 +8,7 @@ import GestureRecognizer from "react-native-swipe-gestures";
 
 import Icon from "../Icon";
 import { Strong } from "../Typography";
-import { CircleIconButton } from "../Buttons";
+import { IconButton } from "../Buttons";
 import { NextBus, OnPressHandler } from "../../../types";
 import { normalizeRouteName } from "../../utils";
 import {
@@ -73,11 +73,11 @@ const Slider = styled.View`
   border-top-right-radius: ${borderRadius.round};
 `;
 
-const RefreshButton = styled(CircleIconButton)`
+const RefreshButton = styled(IconButton)`
   background-color: transparent;
 `;
 
-export const FavoriteButton = styled(CircleIconButton)`
+export const FavoriteButton = styled(IconButton)`
   align-self: flex-start;
   background-color: ${({ theme }) => theme.backgroundLight};
 `;

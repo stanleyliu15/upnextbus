@@ -8,7 +8,7 @@ import { capitalize } from "lodash";
 import { CommonActions, CompositeNavigationProp, RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import { LinkItem, Title, Icon, SafeArea, CircleIconButton, SwitchItem } from "../../components";
+import { LinkItem, Title, Icon, SafeArea, IconButton, SwitchItem } from "../../components";
 import { Header, Section, GroupTitle, SectionContent, Version } from "./settingStyles";
 import { selectAgency } from "../../store/features/root-selectors";
 import {
@@ -175,7 +175,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
   );
 };
 
-const CloseButton = styled(CircleIconButton)`
+const CloseButton = styled(IconButton)`
   background-color: ${({ theme }) => theme.backgroundLight};
 `;
 
