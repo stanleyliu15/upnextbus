@@ -56,7 +56,7 @@ const Prediction = styled.View`
   margin-top: ${space.sm};
   border-radius: ${borderRadius.round};
   background-color: ${({ theme }) => theme.backgroundLight};
-  padding: ${space.xs} ${space.sm} ${space.xs} ${space.xxxs};
+  padding: ${space.sm} ${space.md} ${space.sm} ${space.xs};
 `;
 
 const DetailPredictionTime = styled(PredictionTime)`

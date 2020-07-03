@@ -19,13 +19,13 @@ import {
   selectPredictionListLimit,
   selectSelectedAgencyId
 } from "../../store/features/settings";
-import { ThemeColor, space, borderRadius } from "../../styles";
+import { ThemeColor, space, borderRadius, border } from "../../styles";
 import { DARK_MAP_STYLE } from "../../config/mapStyles";
 import { Loader, Icon, Strong, ErrorInfo, IconButton, DetailItem } from "../../components";
 import { getDistanceBetween } from "../../utils/geolocation";
 import NextBusAPI from "../../api/NextBus/api";
 import { StartPointSvg, EndPointSvg, PointSvg, BusSvg } from "../../svgs";
-import { useInterval, useTimer } from "../../utils";
+import { useInterval, useTimer, useToggle } from "../../utils";
 
 const LAT_DELTA = 0.05;
 const LON_DELTA = 0.05;
@@ -54,6 +54,7 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
   const [fetchError, setFetchError] = useState(null);
   const [autoRefresh, setAutoRefresh] = useState(false);
   const { seconds, stopTimer, restartTimer } = useTimer();
+  const [showVehicles, toggleShowVehicles] = useToggle(false);
   const theme = useTheme();
   const themeColor = useSelector(selectThemeColor);
   const isDarkMap = themeColor === ThemeColor.DARK && MAP_PROVIDER === PROVIDER_GOOGLE;
@@ -105,6 +106,10 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
       }
     });
   }, [location]);
+
+  const handleShowVehiclesButtonPress = useCallback(() => toggleShowVehicles(), [
+    toggleShowVehicles
+  ]);
 
   useInterval(handleRefreshPress, autoRefresh ? AUTO_REFRESH_DATA_TIME : null);
 
@@ -312,16 +317,20 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
         {renderWalkPolyline()}
         {renderRoutePolyline}
         {renderStopMarkers}
-        {vehicles.map(vehicle => renderBusMarker(vehicle))}
+        {showVehicles && vehicles.map(vehicle => renderBusMarker(vehicle))}
       </Map>
       {fetching && <DataLoader />}
       <UtilityButtons>
-        <CloseButton onPress={closeScreen} iconSize="sm">
+        <UtilityButton onPress={closeScreen} iconSize="sm">
           <Icon icon="MaterialCommunityIcons" name="close" size="sm" color="text" />
-        </CloseButton>
-        <LocationButton onPress={handleLocationButtonPress} iconSize="sm">
+        </UtilityButton>
+        <UtilityButton onPress={handleLocationButtonPress} iconSize="sm">
           <Icon icon="MaterialCommunityIcons" name="near-me" size="sm" color="green" />
-        </LocationButton>
+        </UtilityButton>
+        <UtilityButton onPress={handleShowVehiclesButtonPress} iconSize="sm">
+          {showVehicles && <Slash />}
+          <Icon icon="FontAwesome5" name="bus" size="sm" color="green" />
+        </UtilityButton>
       </UtilityButtons>
       <DetailItem
         predictions={predictions}
@@ -374,13 +383,9 @@ const UtilityButtons = styled.View`
   align-items: center;
 `;
 
-export const CloseButton = styled(IconButton)`
+export const UtilityButton = styled(IconButton)`
   background-color: ${({ theme }) => theme.backgroundLight};
-`;
-
-const LocationButton = styled(IconButton)`
-  margin-top: ${space.sm};
-  background-color: ${({ theme }) => theme.backgroundLight};
+  margin-bottom: ${space.sm};
 `;
 
 const CalloutView = styled.View`
@@ -389,6 +394,17 @@ const CalloutView = styled.View`
   margin-bottom: ${space.md};
   border-radius: ${borderRadius.round};
   background-color: ${({ theme }) => theme.backgroundLight};
+`;
+
+const Slash = styled.View`
+  position: absolute;
+  top: 0;
+  right: 50%;
+
+  width: 1%;
+  height: 100%;
+  transform: rotate(45deg);
+  ${border({ color: "green", size: "md" })};
 `;
 
 export default DetailScreen;

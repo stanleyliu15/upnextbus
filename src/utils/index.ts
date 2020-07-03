@@ -43,10 +43,6 @@ export function useToggle(initialState: boolean = false) {
   return [toggled, toggle] as const; // use of `as const` for correct type inference
 }
 
-export const enumKeyFromValue = (enumParam, enumValue) => {
-  return Object.keys(enumParam).find(key => enumParam[key] === enumValue);
-};
-
 export function useInterval(callback, delay) {
   const savedCallback = useRef<Function>();
 
