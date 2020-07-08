@@ -16,7 +16,7 @@ import {
   PredictionMinute,
   PredictionUnit
 } from "./itemStyles";
-import { space, border } from "../../styles";
+import { space, mixins } from "../../styles";
 
 type PredictionsItemProps = {
   predictions: NextBus.Predictions;
@@ -25,7 +25,7 @@ type PredictionsItemProps = {
 };
 
 const ItemButton = styled(HighlightButton)`
-  ${border({ direction: "bottom" })}
+  ${mixins.border({ direction: "bottom" })}
 `;
 
 const Container = styled.View`
@@ -48,7 +48,7 @@ const GeneralSection = styled.View`
 
 const VerticalSeperator = styled.View`
   flex: 0.2;
-  ${border({ direction: "left" })};
+  ${mixins.border({ direction: "left" })};
   margin-vertical: ${space.md};
 `;
 
@@ -92,7 +92,7 @@ const PredictionsItem: React.FC<PredictionsItemProps> = ({
               </PredictionTime>
             ))
           ) : (
-            <Strong center>- -</Strong>
+            <Strong align="center">- -</Strong>
           )}
         </PredictionTimeSection>
       </Container>

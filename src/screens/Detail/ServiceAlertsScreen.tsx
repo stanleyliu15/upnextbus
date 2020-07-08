@@ -4,7 +4,7 @@ import { RouteProp, CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { SafeArea, Text, Icon } from "../../components";
-import { space, borderRadius, border } from "../../styles";
+import { space, borderRadius, mixins } from "../../styles";
 import { DetailStackParamList, RootStackParamList } from "../../../types";
 
 type ServiceAlertsScreenProps = {
@@ -37,7 +37,7 @@ const AlertItem = styled.View`
 
   margin: ${space.lg} ${space.sm} 0;
   padding: ${space.md};
-  ${border({ color: "yellow" })};
+  ${mixins.border({ color: "yellow" })};
   border-radius: ${borderRadius.round};
 `;
 
@@ -46,7 +46,7 @@ const Message = styled(Text)`
 `;
 
 const VerticalSeperator = styled.View`
-  ${border({ direction: "left", color: "yellow" })};
+  ${mixins.border({ direction: "left", color: "yellow" })};
   margin-horizontal: ${space.md};
 `;
 

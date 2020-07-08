@@ -3,10 +3,10 @@ import { Linking, ScrollView } from "react-native";
 import styled from "styled-components/native";
 import { useSelector } from "react-redux";
 import * as StoreReview from "expo-store-review";
-import Constants from "expo-constants";
 import { capitalize } from "lodash";
 import { CommonActions, CompositeNavigationProp, RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import * as Application from "expo-application";
 
 import { LinkItem, Title, Icon, SafeArea, IconButton, SwitchItem } from "../../components";
 import { Header, Section, GroupTitle, SectionContent, Version } from "./settingStyles";
@@ -145,30 +145,25 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
           <GroupTitle>App</GroupTitle>
           <SectionContent>
             <LinkItem
-              title="Rate Us"
+              title={`Rate ${Application.applicationName}`}
               icon={<Icon icon="AntDesign" name="star" size="sm" color="yellow" />}
-              description="help us on the store!"
               onPress={() => StoreReview.requestReview()}
               externalLink
               prioritizePropertySpace
-              showBottomBorder={false}
             />
-          </SectionContent>
-          <Version center color="gray">{`Version: ${Constants.nativeAppVersion}`}</Version>
-        </Section>
-        <Section>
-          <GroupTitle>Support</GroupTitle>
-          <SectionContent>
             <LinkItem
-              title="Contact Us"
-              description="tell us what you think!"
+              title={`Contact ${Application.applicationName}`}
               icon={<Icon icon="Feather" name="mail" size="sm" color="blueIndigo" />}
-              onPress={() => Linking.openURL("mailto://upnextbus@gmail.com")}
+              onPress={() => Linking.openURL("mailto://stanleyliu15.dev@gmail.com")}
               externalLink
               prioritizePropertySpace
               showBottomBorder={false}
             />
           </SectionContent>
+          <Version
+            align="center"
+            color="gray"
+          >{`Version: ${Application.nativeApplicationVersion}`}</Version>
         </Section>
       </ScrollView>
     </SafeArea>

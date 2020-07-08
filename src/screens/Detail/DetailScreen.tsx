@@ -19,7 +19,7 @@ import {
   selectPredictionListLimit,
   selectSelectedAgencyId
 } from "../../store/features/settings";
-import { ThemeColor, space, borderRadius, border } from "../../styles";
+import { ThemeColor, space, borderRadius, mixins } from "../../styles";
 import { DARK_MAP_STYLE } from "../../config/mapStyles";
 import { Loader, Icon, Strong, ErrorInfo, IconButton, DetailItem } from "../../components";
 import { getDistanceBetween } from "../../utils/geolocation";
@@ -54,7 +54,7 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
   const [fetchError, setFetchError] = useState(null);
   const [autoRefresh, setAutoRefresh] = useState(false);
   const { seconds, stopTimer, restartTimer } = useTimer();
-  const [showVehicles, toggleShowVehicles] = useToggle(false);
+  const [showVehicles, toggleShowVehicles] = useToggle(true);
   const theme = useTheme();
   const themeColor = useSelector(selectThemeColor);
   const isDarkMap = themeColor === ThemeColor.DARK && MAP_PROVIDER === PROVIDER_GOOGLE;
@@ -331,6 +331,11 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
           {showVehicles && <Slash />}
           <Icon icon="FontAwesome5" name="bus" size="sm" color="green" />
         </UtilityButton>
+        {predictions.serviceAlerts.length > 0 && (
+          <UtilityButton onPress={handleServiceAlertsPress} iconSize="sm">
+            <Icon icon="Ionicons" name="ios-warning" size="md" color="yellow" />
+          </UtilityButton>
+        )}
       </UtilityButtons>
       <DetailItem
         predictions={predictions}
@@ -339,9 +344,6 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
         onDirectionPress={directions.length > 1 ? handleChangeDirectionPress : undefined}
         onStopPress={direction.stops.length > 1 ? handleChangeStopPress : undefined}
         onRefreshPress={handleRefreshPress}
-        onServiceAlertsPress={
-          predictions.serviceAlerts.length > 0 ? handleServiceAlertsPress : undefined
-        }
       />
     </Container>
   );
@@ -365,7 +367,6 @@ const Container = styled.View`
 
 const Map = styled(MapView)`
   flex: 1;
-
   position: absolute;
   top: 0;
   left: 0;
@@ -400,11 +401,11 @@ const Slash = styled.View`
   position: absolute;
   top: 0;
   right: 50%;
-
   width: 1%;
   height: 100%;
   transform: rotate(45deg);
-  ${border({ color: "green", size: "md" })};
+
+  ${mixins.border({ color: "green", size: "md" })};
 `;
 
 export default DetailScreen;

@@ -2,7 +2,6 @@ import React, { useCallback, useMemo, useState } from "react";
 import styled, { useTheme } from "styled-components/native";
 import { useSelector } from "react-redux";
 import { isEqual } from "lodash";
-import { transparentize } from "polished";
 import { getInset } from "react-native-safe-area-view";
 import GestureRecognizer from "react-native-swipe-gestures";
 
@@ -22,11 +21,9 @@ import { space, fontFamily, borderRadius } from "../../styles";
 import { LinkItem } from "../UserItems";
 import { useDispatch } from "../../store";
 
-const bottomInset = getInset("bottom");
-
 const Panel = styled.View`
   position: absolute;
-  bottom: ${bottomInset}px;
+  bottom: ${getInset("bottom")}px;
   width: 100%;
 
   padding: ${space.xs};
@@ -89,7 +86,6 @@ type DetailItemProps = {
   onRefreshPress: OnPressHandler;
   onDirectionPress?: OnPressHandler;
   onStopPress?: OnPressHandler;
-  onServiceAlertsPress?: OnPressHandler;
 };
 
 const DetailItem: React.FC<DetailItemProps> = ({
@@ -98,8 +94,7 @@ const DetailItem: React.FC<DetailItemProps> = ({
   canRefresh,
   onRefreshPress,
   onDirectionPress = null,
-  onStopPress = null,
-  onServiceAlertsPress = null
+  onStopPress = null
 }) => {
   const { directionName, stopName, predictionList, stopLabel: predictionsStopLabel } = predictions;
   const dispatch = useDispatch();
@@ -173,19 +168,6 @@ const DetailItem: React.FC<DetailItemProps> = ({
                 value={stopDistance && `${stopDistance.toFixed(2)} miles`}
                 showBottomBorder={false}
               />
-              {onServiceAlertsPress && (
-                <LinkItem
-                  icon={<Icon icon="Ionicons" name="ios-warning" size="md" color="yellow" />}
-                  title="Service Alerts"
-                  onPress={onServiceAlertsPress}
-                  titleStyle={{ fontFamily: fontFamily.normal }}
-                  prioritizePropertySpace
-                  externalLink
-                  linkIconColor="yellow"
-                  highlightColor={transparentize(0.6, theme.yellow)}
-                  showBottomBorder={false}
-                />
-              )}
             </>
           )}
         </RouteInfo>
@@ -201,7 +183,7 @@ const DetailItem: React.FC<DetailItemProps> = ({
               <PredictionUnit>min</PredictionUnit>
             </>
           ) : (
-            <Strong center>- -</Strong>
+            <Strong align="center">- -</Strong>
           )}
         </DetailPredictionTime>
       </Prediction>

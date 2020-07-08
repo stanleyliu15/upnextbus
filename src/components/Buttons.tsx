@@ -13,7 +13,7 @@ import styled, { useTheme } from "styled-components/native";
 import { getInset } from "react-native-safe-area-view";
 
 import Loader from "./Loader";
-import { space, borderRadius, Theme, colors, iconSize } from "../styles";
+import { space, borderRadius, Theme, colors, iconSize, mixins } from "../styles";
 
 type BaseButtonProps =
   | Pick<TouchableOpacityProps, keyof TouchableOpacityProps>
@@ -49,9 +49,7 @@ export const Button: React.FC<ButtonProps> = ({ children, style, loading, disabl
 
 export type IconButtonProps = ButtonProps & { iconSize: keyof typeof iconSize };
 export const IconButton = styled(Button)<IconButtonProps>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  ${mixins.flexColumnCenter};
   width: ${({ iconSize: iSize }) => iconSize[iSize] * 2}px;
   height: ${({ iconSize: iSize }) => iconSize[iSize] * 2}px;
   padding: 0;

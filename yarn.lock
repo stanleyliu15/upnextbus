@@ -3359,6 +3359,11 @@ expect@^24.9.0:
     jest-message-util "^24.9.0"
     jest-regex-util "^24.9.0"
 
+expo-application@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/expo-application/-/expo-application-2.2.1.tgz#f14b83ae0b07e4922850f8856a56f141c168d6d0"
+  integrity sha512-YyYB2EPWmFmXgmnul9AMdZ6Ze290BWaez7RhUfAMq2gQU84EdpvL3vkO9SV5E4zI7Rj2jfS0VcCDpxrcdlBW/w==
+
 expo-asset@^8.1.4, expo-asset@~8.1.0:
   version "8.1.4"
   resolved "https://registry.yarnpkg.com/expo-asset/-/expo-asset-8.1.4.tgz#5265c28c1c279b2f9779269195bec4caf250ba5d"

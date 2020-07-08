@@ -5,16 +5,16 @@ import styled from "styled-components/native";
 import Icon from "./Icon";
 import { Strong, Text, Title } from "./Typography";
 import { Button } from "./Buttons";
-import { space } from "../styles";
+import { space, mixins } from "../styles";
 import { OnPressHandler } from "../../types";
-import { CenterColumn } from "./Center";
+
+const Container = styled.View`
+  ${mixins.flexColumnCenter};
+  flex: 1;
+`;
 
 const Message = styled.View`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-
+  ${mixins.flexRowCenter};
   margin: ${space.lg} 0 80px;
 `;
 
@@ -42,9 +42,9 @@ const ErrorInfo: React.FC<ErrorInfoProps> = ({
   onRetryTitle = null,
   externalLink = false
 }) => (
-  <CenterColumn>
+  <Container>
     <View>
-      <Title center color="primary">
+      <Title align="center" color="primary">
         {title || "Something went wrong"}
       </Title>
       {message && (
@@ -64,7 +64,7 @@ const ErrorInfo: React.FC<ErrorInfoProps> = ({
         {externalLink && <Icon icon="AntDesign" name="arrowright" size="xs" color="white" />}
       </RetryButton>
     )}
-  </CenterColumn>
+  </Container>
 );
 
 export default ErrorInfo;

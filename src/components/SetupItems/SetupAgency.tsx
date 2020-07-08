@@ -48,7 +48,7 @@ const SetupAgency: React.FC = () => {
       />
       {agencyId && (
         <SetButton onPress={handleSetup}>
-          <Text center color="white">
+          <Text align="center" color="white">
             Done
           </Text>
         </SetButton>
