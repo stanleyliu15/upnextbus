@@ -9,7 +9,7 @@
     "eslint:fix": "eslint . --fix --ext .js,.ts,.tsx",
     "prettier": "prettier --write '**/*.{js,ts,tsx,json,md}'",
     "jest": "jest",
-    "generate:icon": "react-native set-icon --path assets/icon.png"
+    "generate:icon:ios": "react-native set-icon --platform ios --path assets/icon.ios.png"
   },
   "private": true,
   "dependencies": {
