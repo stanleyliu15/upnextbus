@@ -8,8 +8,7 @@
     "ios-6s": "react-native run-ios --simulator \"iPhone 6s\" && react-native log-ios",
     "eslint:fix": "eslint . --fix --ext .js,.ts,.tsx",
     "prettier": "prettier --write '**/*.{js,ts,tsx,json,md}'",
-    "jest": "jest",
-    "generate:icon:ios": "react-native set-icon --platform ios --path assets/icon.ios.png"
+    "jest": "jest"
   },
   "private": true,
   "dependencies": {
@@ -45,7 +44,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
-    "@bam.tech/react-native-make": "^1.0.3",
     "@react-native-community/eslint-config": "^0.0.5",
     "@types/jest": "^24.0.23",
     "@types/lodash": "^4.14.149",
