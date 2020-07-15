@@ -60,11 +60,11 @@ def flipper_post_install(installer)
   installer.pods_project.save
 end
 
-target 'upnextbus' do
+target 'Upnextbus' do
   rn_path = '../node_modules/react-native'
   rn_maps_path = '../node_modules/react-native-maps'
 
-  # Pods for upnextbus
+  # Pods for Upnextbus
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -105,7 +105,7 @@ target 'upnextbus' do
 
   pod 'react-native-safe-area-context', :path => '../node_modules/react-native-safe-area-context'
 
-  # target 'upnextbusTests' do
+  # target 'UpnextbusTests' do
   #   inherit! :complete
      # Pods for testing
   # end
