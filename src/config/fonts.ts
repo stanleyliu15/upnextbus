@@ -1,10 +1,5 @@
 /* eslint-disable @typescript-eslint/camelcase */
 
-// Icon Library
-// https://oblador.github.io/react-native-vector-icons/
-
-// todo: optimize fonts/icons
-
 const fonts = [
   {
     FontAwesome: require("../../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"),

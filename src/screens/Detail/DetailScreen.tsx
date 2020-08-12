@@ -218,6 +218,7 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
       };
       const isStartPoint = index === 0;
       const isEndPoint = index === direction.stops.length - 1;
+      const isStartOrEndPoint = isStartPoint || isEndPoint;
 
       function getMarkerComponent() {
         if (isStartPoint) return <StartPointSvg />;
@@ -229,10 +230,11 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
         <Marker
           key={stop.id}
           coordinate={coordinate}
-          centerOffset={isStartPoint || isEndPoint ? { x: -35, y: -35 } : undefined}
+          centerOffset={isStartOrEndPoint ? { x: -35, y: -35 } : undefined}
           onPress={() => {
             setStop(stop);
           }}
+          zIndex={isStartOrEndPoint ? 1 : 0}
         >
           {getMarkerComponent()}
           <Callout tooltip>

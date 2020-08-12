@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from "react";
-import styled, { useTheme } from "styled-components/native";
+import styled from "styled-components/native";
 import { useSelector } from "react-redux";
 import { isEqual } from "lodash";
 import { getInset } from "react-native-safe-area-view";
@@ -20,6 +20,7 @@ import { RouteName, PredictionTime, PredictionMinute, PredictionUnit } from "./i
 import { space, fontFamily, borderRadius } from "../../styles";
 import { LinkItem } from "../UserItems";
 import { useDispatch } from "../../store";
+import { swipeConfig } from "../../config/consts";
 
 const Panel = styled.View`
   position: absolute;
@@ -31,6 +32,7 @@ const Panel = styled.View`
 
 const RouteInfo = styled.View`
   padding: ${space.xs};
+  background-color: ${({ theme }) => theme.backgroundLight};
 `;
 
 const Route = styled.View`
@@ -98,7 +100,6 @@ const DetailItem: React.FC<DetailItemProps> = ({
 }) => {
   const { directionName, stopName, predictionList, stopLabel: predictionsStopLabel } = predictions;
   const dispatch = useDispatch();
-  const theme = useTheme();
   const [showExtraData, setShowExtraData] = useState(true);
   const showRouteIdForDisplay = useSelector(selectShowRouteIdForDisplay);
   const favoriteStopLabels = useSelector(selectFavoriteStopLabels);
@@ -127,51 +128,47 @@ const DetailItem: React.FC<DetailItemProps> = ({
   return (
     <Panel>
       <GestureRecognizer
-        style={{
-          backgroundColor: theme.backgroundLight,
-          borderRadius: parseInt(borderRadius.round, 10)
+        config={swipeConfig}
+        onSwipeUp={() => {
+          setShowExtraData(true);
         }}
-        onSwipeUp={() => setShowExtraData(true)}
-        onSwipeDown={() => setShowExtraData(false)}
+        onSwipeDown={() => {
+          setShowExtraData(false);
+        }}
       >
         <Slider>
           <Icon icon="MaterialIcons" name="drag-handle" size="md" color="grey" />
         </Slider>
-        <RouteInfo>
-          <Route>
-            <DetailRouteName>{routeName}</DetailRouteName>
-            <FavoriteButton onPress={handleFavorite} iconSize="md">
-              <Icon
-                icon="FontAwesome"
-                name={`heart${favorited ? "" : "-o"}`}
-                size="md"
-                color="red"
-              />
-            </FavoriteButton>
-          </Route>
-          {showExtraData && (
-            <>
-              <LinkItem
-                title={directionName}
-                onPress={onDirectionPress}
-                titleStyle={{ fontFamily: fontFamily.normal }}
-                prioritizePropertySpace
-                externalLink
-                showBottomBorder={false}
-              />
-              <LinkItem
-                title={stopName}
-                onPress={onStopPress}
-                titleStyle={{ fontFamily: fontFamily.normal }}
-                prioritizePropertySpace
-                externalLink
-                value={stopDistance && `${stopDistance.toFixed(2)} miles`}
-                showBottomBorder={false}
-              />
-            </>
-          )}
-        </RouteInfo>
       </GestureRecognizer>
+      <RouteInfo>
+        <Route>
+          <DetailRouteName>{routeName}</DetailRouteName>
+          <FavoriteButton onPress={handleFavorite} iconSize="md">
+            <Icon icon="FontAwesome" name={`heart${favorited ? "" : "-o"}`} size="md" color="red" />
+          </FavoriteButton>
+        </Route>
+        {showExtraData && (
+          <>
+            <LinkItem
+              title={directionName}
+              onPress={onDirectionPress}
+              titleStyle={{ fontFamily: fontFamily.normal }}
+              prioritizePropertySpace
+              externalLink
+              showBottomBorder={false}
+            />
+            <LinkItem
+              title={stopName}
+              onPress={onStopPress}
+              titleStyle={{ fontFamily: fontFamily.normal }}
+              prioritizePropertySpace
+              externalLink
+              value={stopDistance && `${stopDistance.toFixed(2)} miles`}
+              showBottomBorder={false}
+            />
+          </>
+        )}
+      </RouteInfo>
       <Prediction>
         <RefreshButton onPress={canRefresh ? onRefreshPress : undefined} iconSize="sm">
           <Icon icon="MaterialIcons" name="refresh" size="lg" color="primary" />

@@ -2,7 +2,7 @@ import React from "react";
 import { Platform } from "react-native";
 import styled from "styled-components/native";
 
-import Item, { ItemProps } from "./item";
+import Item, { ItemProps } from "./Item";
 
 const Switch = styled.Switch`
   transform: scale(${Platform.OS === "ios" ? 0.7 : 1});
