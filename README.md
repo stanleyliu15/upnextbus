@@ -1,4 +1,4 @@
-# upnextbus
+# Upnextbus
 
 modern nextbus app built with react-native &amp; typescript
 
@@ -11,7 +11,7 @@ modern nextbus app built with react-native &amp; typescript
 
 ## description
 
-Get around the city with real-time predictions using upnextbus.
+Bus around the city with real-time predictions
 
 - view nearby buses by distance from your location
 - favorite the stops you need for quick-access
@@ -29,7 +29,7 @@ Supports:
 
 ## installation
 
-- follow general guidelines under React Native CLI Quickstart:
+- follow guidelines under React Native CLI Quickstart:
   https://reactnative.dev/docs/environment-setup
 
 * clone the project `git clone https://github.com/stanleyliu15/upnextbus.git`
@@ -37,17 +37,19 @@ Supports:
 * download dependencies
 
   - `npm install` or `yarn install`
-  - for ios users: `cd ios && pod install`
+  - (ios) `cd ios && pod install`
 
 * run the project
 
-  - ios: `yarn ios`
-  - android: `yarn android`
+  - `yarn ios` or `yarn android`
 
-* instructions to get google maps for android: https://developers.google.com/maps/documentation/javascript/get-api-key
+## additional
+
+- instructions to get google maps working for android:
 
 ```
-# insert the api key
+# get api key from: https://developers.google.com/maps/documentation/javascript/get-api-key
+# insert the api key to:
 # android/app/src/main/AndroidManifest.xml
 <meta-data
   android:name="com.google.android.geo.API_KEY"
