@@ -49,6 +49,22 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
     () => dispatch(setShowInactivePredictions(!showInactivePredictions)),
     [dispatch, showInactivePredictions]
   );
+  const sendEmail = useCallback(() => {
+    const openEmailUrl = async () => {
+      try {
+        const emailUrl = "mailto://stanleyliu15.dev@gmail.com";
+        const supports = await Linking.canOpenURL(emailUrl);
+        if (supports) {
+          Linking.openURL(emailUrl);
+        } else {
+          console.log("Email url is not supported");
+        }
+      } catch (error) {
+        console.error(`Unable to open email url: ${error.message}`);
+      }
+    };
+    openEmailUrl();
+  }, []);
   const goBack = useCallback(() => {
     navigation.dispatch(CommonActions.goBack());
   }, [navigation]);
@@ -154,7 +170,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
             <LinkItem
               title={`Contact ${Application.applicationName}`}
               icon={<Icon icon="Feather" name="mail" size="sm" color="blueIndigo" />}
-              onPress={() => Linking.openURL("mailto://stanleyliu15.dev@gmail.com")}
+              onPress={sendEmail}
               externalLink
               prioritizePropertySpace
               showBottomBorder={false}
