@@ -13,10 +13,14 @@ const LOCATION_OPTIONS =
     : {};
 
 export const getLocationAsync = async (): Promise<GeoLocation> => {
-  const { status } = await Location.requestPermissionsAsync();
+  const { status } = await Location.getPermissionsAsync();
 
   if (status !== "granted") {
-    throw new LocationPermissionDeniedError();
+    const { status } = await Location.requestPermissionsAsync();
+
+    if (status !== "granted") {
+      throw new LocationPermissionDeniedError();
+    }
   }
 
   const { coords } = await Location.getCurrentPositionAsync(LOCATION_OPTIONS);
