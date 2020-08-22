@@ -86,12 +86,10 @@
   "lint-staged": {
     "*.{js,ts,tsx}": [
       "yarn eslint:fix",
-      "yarn prettier",
-      "git add"
+      "yarn prettier"
     ],
     "*.{json,md}": [
-      "yarn prettier",
-      "git add"
+      "yarn prettier"
     ]
   }
 }
