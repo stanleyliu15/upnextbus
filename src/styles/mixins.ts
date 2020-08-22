@@ -22,7 +22,7 @@ const mixins = {
     justify-content: center;
     align-items: center;
   `,
-  border: ({ direction = null, size = "xs", color = null, style = "solid" }: BorderProps) => ({
+  border: ({ direction = null, size = "sm", color = null, style = "solid" }: BorderProps) => ({
     theme
   }) => `
     border-color: ${theme[color] || colors[color] || color || theme.border};
