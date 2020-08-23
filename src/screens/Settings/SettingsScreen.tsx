@@ -22,6 +22,7 @@ import { getAgencies, selectAgencies, getRoutes, selectRoutes } from "../../stor
 import { SettingsStackParamList, RootStackParamList } from "../../../types";
 import { ThemeColor } from "../../styles";
 import { useDispatch } from "../../store";
+import { email } from "../../config/consts";
 
 type SettingsScreenProps = {
   navigation: CompositeNavigationProp<
@@ -52,7 +53,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
   const sendEmail = useCallback(() => {
     const openEmailUrl = async () => {
       try {
-        const emailUrl = "mailto://stanleyliu15.dev@gmail.com";
+        const emailUrl = `mailto://${email}`;
         const supports = await Linking.canOpenURL(emailUrl);
         if (supports) {
           Linking.openURL(emailUrl);
@@ -120,7 +121,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ navigation }) => {
             />
             <SwitchItem
               title="Route Name"
-              description="display route names using the route ID "
+              description="display route names using the route ID"
               enabled={showRouteIdForDisplay}
               onSwitch={toggleShowRouteIdForDisplay}
             />
