@@ -3,29 +3,19 @@ package com.upnextbus;
 import android.app.Application;
 import android.content.Context;
 
+import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
-import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
 import com.facebook.react.ReactInstanceManager;
-import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
-import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.upnextbus.generated.BasePackageList;
-import com.swmansion.reanimated.ReanimatedPackage;
-import com.swmansion.rnscreens.RNScreensPackage;
-import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
-import com.airbnb.android.react.maps.MapsPackage;
-import com.horcrux.svg.SvgPackage;
 
 import org.unimodules.adapters.react.ReactAdapterPackage;
 import org.unimodules.adapters.react.ModuleRegistryAdapter;
 import org.unimodules.adapters.react.ReactModuleRegistryProvider;
 import org.unimodules.core.interfaces.Package;
 import org.unimodules.core.interfaces.SingletonModule;
-import expo.modules.constants.ConstantsPackage;
-import expo.modules.permissions.PermissionsPackage;
-import expo.modules.filesystem.FileSystemPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,10 +33,17 @@ public class MainApplication extends Application implements ReactApplication {
 
     @Override
     protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(new MainReactPackage(),
-            new SafeAreaContextPackage(), new SvgPackage(), new MapsPackage(),
-          new VectorIconsPackage(), new ReanimatedPackage(), new RNGestureHandlerPackage(), new RNScreensPackage(),
-          new ModuleRegistryAdapter(mModuleRegistryProvider));
+      List<ReactPackage> packages = new PackageList(this).getPackages();
+
+      // Packages that cannot be autolinked yet can be added manually here, for
+      // example:
+      // packages.add(new MyReactNativePackage());
+
+      // Add unimodules
+      List<ReactPackage> unimodules = Arrays.<ReactPackage>asList(new ModuleRegistryAdapter(mModuleRegistryProvider));
+      packages.addAll(unimodules);
+
+      return packages;
     }
 
     @Override
