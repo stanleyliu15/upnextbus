@@ -1,8 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react";
-import styled, { useTheme } from "styled-components/native";
+import styled from "styled-components/native";
 import { useSelector } from "react-redux";
 import { isEqual } from "lodash";
-import { transparentize } from "polished";
 import { getInset } from "react-native-safe-area-view";
 import GestureRecognizer from "react-native-swipe-gestures";
 
@@ -21,12 +20,11 @@ import { RouteName, PredictionTime, PredictionMinute, PredictionUnit } from "./i
 import { space, fontFamily, borderRadius } from "../../styles";
 import { LinkItem } from "../UserItems";
 import { useDispatch } from "../../store";
-
-const bottomInset = getInset("bottom");
+import { swipeConfig } from "../../config/consts";
 
 const Panel = styled.View`
   position: absolute;
-  bottom: ${bottomInset}px;
+  bottom: ${getInset("bottom")}px;
   width: 100%;
 
   padding: ${space.xs};
@@ -34,6 +32,7 @@ const Panel = styled.View`
 
 const RouteInfo = styled.View`
   padding: ${space.xs};
+  background-color: ${({ theme }) => theme.backgroundLight};
 `;
 
 const Route = styled.View`
@@ -89,7 +88,6 @@ type DetailItemProps = {
   onRefreshPress: OnPressHandler;
   onDirectionPress?: OnPressHandler;
   onStopPress?: OnPressHandler;
-  onServiceAlertsPress?: OnPressHandler;
 };
 
 const DetailItem: React.FC<DetailItemProps> = ({
@@ -98,12 +96,10 @@ const DetailItem: React.FC<DetailItemProps> = ({
   canRefresh,
   onRefreshPress,
   onDirectionPress = null,
-  onStopPress = null,
-  onServiceAlertsPress = null
+  onStopPress = null
 }) => {
   const { directionName, stopName, predictionList, stopLabel: predictionsStopLabel } = predictions;
   const dispatch = useDispatch();
-  const theme = useTheme();
   const [showExtraData, setShowExtraData] = useState(true);
   const showRouteIdForDisplay = useSelector(selectShowRouteIdForDisplay);
   const favoriteStopLabels = useSelector(selectFavoriteStopLabels);
@@ -132,64 +128,47 @@ const DetailItem: React.FC<DetailItemProps> = ({
   return (
     <Panel>
       <GestureRecognizer
-        style={{
-          backgroundColor: theme.backgroundLight,
-          borderRadius: parseInt(borderRadius.round, 10)
+        config={swipeConfig}
+        onSwipeUp={() => {
+          setShowExtraData(true);
         }}
-        onSwipeUp={() => setShowExtraData(true)}
-        onSwipeDown={() => setShowExtraData(false)}
+        onSwipeDown={() => {
+          setShowExtraData(false);
+        }}
       >
         <Slider>
           <Icon icon="MaterialIcons" name="drag-handle" size="md" color="grey" />
         </Slider>
-        <RouteInfo>
-          <Route>
-            <DetailRouteName>{routeName}</DetailRouteName>
-            <FavoriteButton onPress={handleFavorite} iconSize="md">
-              <Icon
-                icon="FontAwesome"
-                name={`heart${favorited ? "" : "-o"}`}
-                size="md"
-                color="red"
-              />
-            </FavoriteButton>
-          </Route>
-          {showExtraData && (
-            <>
-              <LinkItem
-                title={directionName}
-                onPress={onDirectionPress}
-                titleStyle={{ fontFamily: fontFamily.normal }}
-                prioritizePropertySpace
-                externalLink
-                showBottomBorder={false}
-              />
-              <LinkItem
-                title={stopName}
-                onPress={onStopPress}
-                titleStyle={{ fontFamily: fontFamily.normal }}
-                prioritizePropertySpace
-                externalLink
-                value={stopDistance && `${stopDistance.toFixed(2)} miles`}
-                showBottomBorder={false}
-              />
-              {onServiceAlertsPress && (
-                <LinkItem
-                  icon={<Icon icon="Ionicons" name="ios-warning" size="md" color="yellow" />}
-                  title="Service Alerts"
-                  onPress={onServiceAlertsPress}
-                  titleStyle={{ fontFamily: fontFamily.normal }}
-                  prioritizePropertySpace
-                  externalLink
-                  linkIconColor="yellow"
-                  highlightColor={transparentize(0.6, theme.yellow)}
-                  showBottomBorder={false}
-                />
-              )}
-            </>
-          )}
-        </RouteInfo>
       </GestureRecognizer>
+      <RouteInfo>
+        <Route>
+          <DetailRouteName>{routeName}</DetailRouteName>
+          <FavoriteButton onPress={handleFavorite} iconSize="md">
+            <Icon icon="FontAwesome" name={`heart${favorited ? "" : "-o"}`} size="md" color="red" />
+          </FavoriteButton>
+        </Route>
+        {showExtraData && (
+          <>
+            <LinkItem
+              title={directionName}
+              onPress={onDirectionPress}
+              titleStyle={{ fontFamily: fontFamily.normal }}
+              prioritizePropertySpace
+              externalLink
+              showBottomBorder={false}
+            />
+            <LinkItem
+              title={stopName}
+              onPress={onStopPress}
+              titleStyle={{ fontFamily: fontFamily.normal }}
+              prioritizePropertySpace
+              externalLink
+              value={stopDistance && `${stopDistance.toFixed(2)} miles`}
+              showBottomBorder={false}
+            />
+          </>
+        )}
+      </RouteInfo>
       <Prediction>
         <RefreshButton onPress={canRefresh ? onRefreshPress : undefined} iconSize="sm">
           <Icon icon="MaterialIcons" name="refresh" size="lg" color="primary" />
@@ -201,7 +180,7 @@ const DetailItem: React.FC<DetailItemProps> = ({
               <PredictionUnit>min</PredictionUnit>
             </>
           ) : (
-            <Strong center>- -</Strong>
+            <Strong align="center">- -</Strong>
           )}
         </DetailPredictionTime>
       </Prediction>

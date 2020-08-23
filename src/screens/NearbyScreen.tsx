@@ -46,7 +46,7 @@ const NearbyScreen: React.FC<NearbyScreenProps> = ({ navigation }) => {
         <ErrorInfo
           message={nearby.error.message}
           title="Location permissions"
-          onRetry={() => Linking.openURL("app-settings:")}
+          onRetry={() => Linking.openSettings()}
           onRetryTitle="Go to settings"
           externalLink
         />

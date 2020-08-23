@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
-import { AsyncStorage } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
 
 import { nextBusReducer } from "./features/nextbus/reducer";
 import { settingsReducer } from "./features/settings/reducer";

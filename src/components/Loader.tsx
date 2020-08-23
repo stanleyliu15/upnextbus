@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 
-import { iconSize, colors, Theme } from "../styles";
+import { iconSize, colors, Theme, mixins } from "../styles";
 
 type LoaderProps = {
   noExpand?: boolean;
@@ -13,10 +13,7 @@ const Loader = styled.ActivityIndicator.attrs(({ theme, color, size }) => ({
   size: iconSize[size] || iconSize.sm
 }))<LoaderProps>`
   flex: ${({ noExpand }) => (noExpand ? 0 : 1)};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
+  ${mixins.flexColumnCenter}
   background-color: ${({ theme }) => theme.background || colors.white};
 `;
 

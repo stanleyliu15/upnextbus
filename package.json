@@ -3,29 +3,29 @@
   "scripts": {
     "start": "react-native start",
     "android": "react-native run-android && react-native log-android",
+    "android:release": "react-native run-android --variant=release",
+    "android:build:release": "cd android && ./gradlew clean && ./gradlew bundleRelease",
     "ios": "react-native run-ios && react-native log-ios",
-    "ios-5s": "react-native run-ios --simulator \"iPhone 5s\" && react-native log-ios",
-    "ios-6s": "react-native run-ios --simulator \"iPhone 6s\" && react-native log-ios",
     "eslint:fix": "eslint . --fix --ext .js,.ts,.tsx",
     "prettier": "prettier --write '**/*.{js,ts,tsx,json,md}'",
-    "jest": "jest",
-    "generate:icon": "react-native set-icon --path assets/icon.png"
+    "jest": "jest"
   },
   "private": true,
   "dependencies": {
+    "@react-native-community/async-storage": "^1.12.0",
     "@react-native-community/masked-view": "^0.1.9",
     "@react-navigation/native": "^5.1.6",
     "@react-navigation/stack": "^5.2.11",
+    "expo-application": "^2.2.1",
     "expo-asset": "^8.1.4",
-    "expo-constants": "~9.0.0",
     "expo-font": "^8.1.0",
     "expo-location": "^8.1.0",
     "expo-store-review": "^2.1.0",
     "lodash": "^4.17.15",
     "polished": "^3.4.1",
-    "react": "^16.11.0",
+    "react": "16.13.1",
     "react-dom": "^16.8.6",
-    "react-native": "0.62.2",
+    "react-native": "0.63.2",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-maps": "^0.27.1",
     "react-native-reanimated": "^1.8.0",
@@ -44,9 +44,9 @@
     "typesafe-actions": "^5.1.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0",
-    "@bam.tech/react-native-make": "^1.0.3",
-    "@react-native-community/eslint-config": "^0.0.5",
+    "@babel/core": "^7.8.4",
+    "@babel/runtime": "^7.8.4",
+    "@react-native-community/eslint-config": "^1.1.0",
     "@types/jest": "^24.0.23",
     "@types/lodash": "^4.14.149",
     "@types/react": "^16.9.34",
@@ -70,13 +70,14 @@
     "eslint-plugin-react-hooks": "^1.6.1",
     "eslint-plugin-react-native": "^3.7.0",
     "husky": ">=1",
-    "jest": "^24.8.0",
+    "babel-jest": "^25.1.0",
+    "jest": "^25.1.0",
     "jest-fetch-mock": "^2.1.2",
     "lint-staged": ">=8",
-    "metro-react-native-babel-preset": "^0.58.0",
+    "metro-react-native-babel-preset": "^0.59.0",
     "prettier": "^1.18.2",
     "react-native-testing-library": "^1.11.0",
-    "react-test-renderer": "16.11.0",
+    "react-test-renderer": "16.13.1",
     "ts-jest": "^24.1.0",
     "typescript": "^3.8.3"
   },
@@ -88,12 +89,10 @@
   "lint-staged": {
     "*.{js,ts,tsx}": [
       "yarn eslint:fix",
-      "yarn prettier",
-      "git add"
+      "yarn prettier"
     ],
     "*.{json,md}": [
-      "yarn prettier",
-      "git add"
+      "yarn prettier"
     ]
   }
 }

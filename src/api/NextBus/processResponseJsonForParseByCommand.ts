@@ -5,7 +5,8 @@ import { arrayify } from "../../utils";
 import {
   NextBusError,
   NextBusMaximumRoutesError,
-  NextBusUnavaliableRouteError
+  NextBusUnavaliableRouteError,
+  NextBusUnavaliableStopError
 } from "../../errors";
 import parseError from "./parser/parseError";
 import { NextBusSource } from "../../../types";
@@ -14,6 +15,7 @@ const MAXIMUM_ROUTES_ERROR_MESSAGE =
   'Command would return more routes than the maximum: 100.\n Try specifying batches of routes from "routeList".';
 
 const UNAVALIABLE_ROUTE_REGEX = /For agency=((?!\s*$).+) route r=((?!\s*$).+) is not currently available. It might be initializing still./;
+const UNAVALIABLE_STOP_REGEX = /For agency=((?!\s*$).+) stop s=((?!\s*$).+) is on none of the directions for r=((?!\s*$).+) so cannot determine which stop to provide data for./;
 
 const checkResponseJsonForError = (
   command: NextBusSource.Command,
@@ -27,6 +29,12 @@ const checkResponseJsonForError = (
       if (unavaliableRouteMatches) {
         const [, , routeId] = unavaliableRouteMatches;
         throw new NextBusUnavaliableRouteError(error.message, error.retriable, routeId);
+      }
+
+      const unavaliableStopMatches = UNAVALIABLE_STOP_REGEX.exec(error.message);
+      if (unavaliableStopMatches) {
+        const [, , stopId, routeId] = unavaliableStopMatches;
+        throw new NextBusUnavaliableStopError(error.message, error.retriable, routeId, stopId);
       }
     }
 

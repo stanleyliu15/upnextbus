@@ -4,6 +4,7 @@ import { RouteProp, CompositeNavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useSelector } from "react-redux";
 import { isEqual } from "lodash";
+import styled from "styled-components/native";
 
 import { SettingsStackParamList, RootStackParamList } from "../../../../types";
 import {
@@ -11,11 +12,17 @@ import {
   setFavoriteStopLabels,
   selectShowRouteIdForDisplay
 } from "../../../store/features/settings";
-import { SafeArea, SelectItem, CenterColumn, Text } from "../../../components";
+import { SafeArea, SelectItem, Text } from "../../../components";
 import { selectRoutes } from "../../../store/features/nextbus";
 import { normalizeRouteName, findBusInfo, equalContains } from "../../../utils";
 import { SaveButton } from "../settingStyles";
 import { useDispatch } from "../../../store";
+import { mixins } from "../../../styles";
+
+const ZeroFavoriteStopLabels = styled.View`
+  ${mixins.flexColumnCenter};
+  flex: 1;
+`;
 
 type ChangeFavoriteStopLabelsScreenProps = {
   navigation: CompositeNavigationProp<
@@ -41,9 +48,9 @@ const ChangeFavoriteStopLabelsScreen: React.FC<ChangeFavoriteStopLabelsScreenPro
   return (
     <SafeArea>
       {favoriteStopLabels.length === 0 ? (
-        <CenterColumn>
+        <ZeroFavoriteStopLabels>
           <Text>You currently have 0 favorites.</Text>
-        </CenterColumn>
+        </ZeroFavoriteStopLabels>
       ) : (
         <>
           <FlatList

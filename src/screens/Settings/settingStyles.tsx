@@ -35,7 +35,7 @@ export const Version = styled(Text)`
 
 export const SaveButton = styled(Button).attrs({
   children: (
-    <Text center color="white">
+    <Text align="center" color="white">
       Save Changes
     </Text>
   )

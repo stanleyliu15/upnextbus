@@ -4,17 +4,16 @@ import styled from "styled-components/native";
 import { noop } from "lodash";
 
 import Loader from "../Loader";
-import { fontSize, space, border, borderRadius } from "../../styles";
+import { fontSize, space, borderRadius, mixins } from "../../styles";
 import { Text, Strong } from "../Typography";
 import { HighlightButton, HighlightButtonProps } from "../Buttons";
 import { OnPressHandler } from "../../../types";
-import { CenterRow } from "../Center";
 
 const I = styled.View`
   display: flex;
   justify-content: space-between;
 
-  ${border({ direction: "bottom" })};
+  ${mixins.border({ direction: "bottom" })};
   border-radius: ${borderRadius.round};
   padding: ${space.lg} ${space.xs} ${space.lg} ${space.md};
 `;
@@ -25,7 +24,9 @@ const Container = styled.View`
   justify-content: space-between;
 `;
 
-const PropertyItem = styled(CenterRow)`
+const PropertyItem = styled.View`
+  ${mixins.flexRowCenter};
+  flex: 1;
   margin-right: ${space.xxs};
 `;
 

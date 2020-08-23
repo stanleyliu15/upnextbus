@@ -82,7 +82,7 @@ export const themeColors: { [key in ThemeColor]: ThemeColors } = {
     backgroundDark: colors.grayLighter,
     backgroundLight: colors.grayDarker,
 
-    border: colors.grayLight,
+    border: colors.grayDark,
     highlight: colors.grayDarkest
   }
 };

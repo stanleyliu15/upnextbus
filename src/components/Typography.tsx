@@ -6,8 +6,7 @@ type TextProps = {
   color?: keyof Theme | string;
   iconSpace?: boolean;
   hasIconRight?: boolean;
-  right?: boolean;
-  center?: boolean;
+  align?: "right" | "center" | "left";
 };
 
 export const Text = styled.Text<TextProps>`
@@ -16,11 +15,7 @@ export const Text = styled.Text<TextProps>`
   font-size: ${fontSize.md};
   margin-right: ${({ iconSpace, hasIconRight }) => (iconSpace && hasIconRight ? space.sm : 0)};
   margin-left: ${({ iconSpace, hasIconRight }) => (iconSpace && !hasIconRight ? space.sm : 0)};
-  text-align: ${props => {
-    if (props.right) return "right";
-    if (props.center) return "center";
-    return "left";
-  }};
+  text-align: ${props => props.align || "left"};
 `;
 
 export const Strong = styled(Text)`
