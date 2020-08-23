@@ -24,6 +24,18 @@ export class NextBusUnavaliableRouteError extends NextBusError {
   }
 }
 
+export class NextBusUnavaliableStopError extends NextBusError {
+  routeId: string;
+
+  stopId: string;
+
+  constructor(message: string, retriable: boolean, routeId: string, stopId: string) {
+    super(message, retriable);
+    this.routeId = routeId;
+    this.stopId = stopId;
+  }
+}
+
 export class UnableFindNearbyBusesError extends Error {
   constructor() {
     super("Unable to find any buses near your location.");

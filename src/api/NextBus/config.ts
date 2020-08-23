@@ -5,7 +5,7 @@ export const COMMANDS = {
   routeConfig: "routeConfig",
   routeList: "routeList",
   predictions: "predictions",
-  predictionsForMultiStops: "predictions",
+  predictionsForMultiStops: "predictionsForMultiStops",
   vehicleLocations: "vehicleLocations"
 };
 

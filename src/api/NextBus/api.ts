@@ -3,7 +3,8 @@ import { NextBus } from "../../../types";
 import {
   NextBusMaximumRoutesError,
   NextBusUnavaliableRouteError,
-  UnableFindNearbyBusesError
+  UnableFindNearbyBusesError,
+  NextBusUnavaliableStopError
 } from "../../errors";
 
 const NextBusAPI = {
@@ -57,6 +58,12 @@ const NextBusAPI = {
       } catch (error) {
         if (error instanceof NextBusUnavaliableRouteError) {
           stopLabels = stopLabels.filter(stopLabel => stopLabel.routeId !== error.routeId);
+          // eslint-disable-next-line no-continue
+          continue;
+        }
+
+        if (error instanceof NextBusUnavaliableStopError) {
+          stopLabels = stopLabels.filter(stopLabel => stopLabel.stopId !== error.stopId);
           // eslint-disable-next-line no-continue
           continue;
         }
