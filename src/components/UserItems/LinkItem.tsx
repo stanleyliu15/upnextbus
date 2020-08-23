@@ -4,7 +4,7 @@ import styled from "styled-components/native";
 import Icon from "../Icon";
 import { Text } from "../Typography";
 import { space, Theme } from "../../styles";
-import Item, { ItemProps } from "./Item";
+import Item, { ItemProps } from "./item";
 
 type ValueItemProps = { prioritizePropertySpace?: boolean };
 export const ValueItem = styled.View<ValueItemProps>`

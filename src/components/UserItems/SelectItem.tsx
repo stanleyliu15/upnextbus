@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet } from "react-native";
 
 import Icon from "../Icon";
-import Item, { ItemProps } from "./Item";
+import Item, { ItemProps } from "./item";
 
 const styles = StyleSheet.create({
   item: { borderRadius: 0 },
