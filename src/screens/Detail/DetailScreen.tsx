@@ -407,7 +407,7 @@ const Slash = styled.View`
   height: 100%;
   transform: rotate(45deg);
 
-  ${mixins.border({ color: "green", size: "md" })};
+  ${mixins.border({ color: "green" })};
 `;
 
 export default DetailScreen;

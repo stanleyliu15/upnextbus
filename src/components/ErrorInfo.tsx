@@ -15,7 +15,7 @@ const Container = styled.View`
 
 const Message = styled.View`
   ${mixins.flexRowCenter};
-  margin: ${space.lg} 0 80px;
+  margin: ${space.lg} ${space.xxxlg} 80px;
 `;
 
 const RetryButton = styled(Button)`
@@ -49,7 +49,7 @@ const ErrorInfo: React.FC<ErrorInfoProps> = ({
       </Title>
       {message && (
         <Message>
-          <Icon icon="Ionicons" name="ios-warning" size="md" color="text" />
+          <Icon icon="Ionicons" name="ios-warning" size="md" color="primary" />
           <Text color="textLight" iconSpace>
             {message}
           </Text>
