@@ -8,7 +8,7 @@ import {
 import { invert } from "polished";
 
 import { Icon } from "../components";
-import { Theme, space } from "../styles";
+import { Theme, space, fontSize } from "../styles";
 
 export const BackIcon = styled(Icon).attrs({
   icon: "Entypo",
@@ -23,7 +23,8 @@ const getBaseStackHeaderOptions = (theme: Theme): StackHeaderOptions => ({
     backgroundColor: theme.background
   },
   headerTitleStyle: {
-    color: theme.text
+    color: theme.text,
+    fontSize: parseInt(fontSize.lg, 10)
   },
   headerTitleAlign: "center",
   headerBackTitleVisible: false,

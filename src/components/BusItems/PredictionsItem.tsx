@@ -88,7 +88,7 @@ const PredictionsItem: React.FC<PredictionsItemProps> = ({
             predictionList.map((prediction, index) => (
               <PredictionTime key={`${prediction.epochTime + index}`}>
                 <PredictionMinute>{prediction.minutes}</PredictionMinute>
-                <PredictionUnit>min</PredictionUnit>
+                <PredictionUnit> min</PredictionUnit>
               </PredictionTime>
             ))
           ) : (

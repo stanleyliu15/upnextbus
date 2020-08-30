@@ -354,7 +354,7 @@ const DataLoader = styled(Loader)`
 
   padding: ${space.xs};
   border-radius: ${borderRadius.round};
-  background-color: ${({ theme }) => (Platform.OS === "ios" ? "transparent" : theme.background)};
+  background-color: transparent;
 `;
 
 const Container = styled.View`

@@ -1,5 +1,6 @@
 import styled from "styled-components/native";
 
+import { Platform } from "react-native";
 import { Text } from "../Typography";
 import { space, fontFamily, fontSize } from "../../styles";
 
@@ -14,7 +15,7 @@ export const DirectionName = styled(Text)`
 
 export const StopName = styled(Text)``;
 
-export const PredictionTime = styled.View`
+export const PredictionTime = styled[Platform.OS === "ios" ? "View" : "Text"]`
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
@@ -29,5 +30,4 @@ export const PredictionMinute = styled(Text)`
 
 export const PredictionUnit = styled(Text)`
   font-size: ${fontSize.xs};
-  margin-left: ${space.xxxs};
 `;

@@ -177,7 +177,7 @@ const DetailItem: React.FC<DetailItemProps> = ({
           {predictionList.length > 0 ? (
             <>
               <PredictionMinute>{predictionMinutes}</PredictionMinute>
-              <PredictionUnit>min</PredictionUnit>
+              <PredictionUnit> min</PredictionUnit>
             </>
           ) : (
             <Strong align="center">- -</Strong>

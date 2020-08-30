@@ -9,7 +9,7 @@ type LoaderProps = {
 };
 
 const Loader = styled.ActivityIndicator.attrs(({ theme, color, size }) => ({
-  color: theme[color] || colors[color] || color,
+  color: theme[color] || colors[color] || theme.primary,
   size: iconSize[size] || iconSize.sm
 }))<LoaderProps>`
   flex: ${({ noExpand }) => (noExpand ? 0 : 1)};
