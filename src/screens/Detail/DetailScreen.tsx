@@ -165,6 +165,7 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
 
           const newVehicles = await NextBusAPI.getVehicles({
             agencyId,
+            directionId: direction.id,
             routeId: route.id,
             lastTime: "-1"
           });
@@ -193,6 +194,7 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
     }, [
       agencyId,
       autoRefresh,
+      direction.id,
       predictionsListLimit,
       restartTimer,
       route.id,
@@ -200,15 +202,6 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
       stop.id
     ])
   );
-
-  useEffect(() => {
-    mapRef.current.animateCamera({
-      center: {
-        latitude: stop.location.lat,
-        longitude: stop.location.lon
-      }
-    });
-  }, [stop.location.lat, stop.location.lon]);
 
   const renderStopMarkers = useMemo(() => {
     return direction.stops.map((stop, index) => {
@@ -229,6 +222,7 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
       return (
         <Marker
           key={stop.id}
+          tracksViewChanges={false}
           coordinate={coordinate}
           centerOffset={isStartOrEndPoint ? { x: -35, y: -35 } : undefined}
           onPress={() => {
@@ -239,7 +233,7 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
           {getMarkerComponent()}
           <Callout tooltip>
             <CalloutView>
-              <Strong>{stop.name}</Strong>
+              <Strong align="center">{stop.name}</Strong>
             </CalloutView>
           </Callout>
         </Marker>
@@ -274,7 +268,7 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
     );
   };
 
-  const renderWalkPolyline = () => {
+  const renderWalkPolyline = useMemo(() => {
     if (!location) {
       return null;
     }
@@ -296,7 +290,7 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
         lineDashPattern={[5, 5]}
       />
     );
-  };
+  }, [location, stop.location.lat, stop.location.lon, theme.primary]);
 
   if (fetchError) {
     return <ErrorInfo message={fetchError.message} />;
@@ -316,7 +310,7 @@ const DetailScreen: React.FC<DetailScreenProps> = ({ navigation, route: navigati
         showsUserLocation={true}
         customMapStyle={isDarkMap ? DARK_MAP_STYLE : undefined}
       >
-        {renderWalkPolyline()}
+        {renderWalkPolyline}
         {renderRoutePolyline}
         {renderStopMarkers}
         {showVehicles && vehicles.map(vehicle => renderBusMarker(vehicle))}

@@ -72,8 +72,18 @@ const NextBusAPI = {
       }
     }
   },
-  getVehicles: (queryOptions: NextBus.VehiclesQueryOptions) =>
-    request("vehicleLocations", queryOptions) as Promise<NextBus.Vehicle[]>
+  getVehicles: async (queryOptions: NextBus.VehiclesQueryOptions) => {
+    try {
+      const vehicles = (await request("vehicleLocations", queryOptions)) as NextBus.Vehicle[];
+      const vehiclesByDirectionId = vehicles.filter(
+        vehicle => vehicle.directionId === queryOptions.directionId
+      );
+
+      return vehiclesByDirectionId;
+    } catch (error) {
+      throw error;
+    }
+  }
 };
 
 export default NextBusAPI;

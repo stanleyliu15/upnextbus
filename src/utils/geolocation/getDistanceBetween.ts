@@ -3,7 +3,7 @@ import { EARTHS_RADIUS_MILES } from "./constants";
 import { GeoLocation } from "../../../types";
 
 /**
- * Calculates the shortest distance between two geolocations in miles
+ * Calculates the distance between two geolocations in miles
  *
  * Attribution - Credits to anthonymartin
  * https://github.com/anthonymartin/GeoLocation.php

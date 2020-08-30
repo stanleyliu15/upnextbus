@@ -141,6 +141,7 @@ export declare namespace NextBus {
 
   interface VehiclesQueryOptions {
     agencyId: string;
+    directionId: string;
     routeId: string;
     lastTime?: string;
   }
